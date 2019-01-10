@@ -121,4 +121,56 @@ public class OI implements SmartDashboardSource {
         return driveSpeedMultiplier;
     }
 
+    private static double snapDriveJoysticks(double value) {
+        if(Math.abs(value) < JOYSTICK_DEAD_ZONE) {
+            value = 0;
+        }else if (value > 0) {
+            value -= JOYSTICK_DEAD_ZONE;
+        } else {
+            value += JOYSTICK_DEAD_ZONE;
+        }
+        value /= 1 - JOYSTICK_DEAD_ZONE;
+        return value;
+    }
+
+    public double getRawMove() {
+        return driveLeft.getY();
+    }
+
+    public double getRawTurn() {
+        return driveRight.getX();
+    }
+
+    private double getTurnAdjust() {
+        //do with buttons
+    }
+
+    public void smartDashboardInfo() {
+        //add in sensor values for whatever we need
+    }
+
+    public boolean isTankNonZero() {
+        return getTankLeftValue() != 0 || getTankRightValue() != 0 || getTankHValue() != 0;
+    } 
+
+    public boolean isArcadeNonZero() {
+        return getArcadeMoveValue() != 0 || getArcadeTurnValue() != 0 || getArcadeHValue() != 0;
+    }
+
+    public boolean isDriveNonZero() {
+        return getDriveLeftXValue() != 0 || getDriveRightXValue() != 0 || getDriveLeftYValue() != 0
+        || getDriveRightYValue() != 0;
+    }
+
+    public boolean isElevatorNonZero() {
+        return getElevatorJoystickValue() != 0;
+    }
+    
+    public boolean isHDriveZero() {
+        return snapDriveJoysticks(driveLeft.getX()) == 0;
+    }
+
+    public boolean isKidModeOn(){
+        //do later if needed
+    }
 }
