@@ -1,4 +1,4 @@
-package edu.nr.lib.talons;
+package edu.nr.lib.motorcontollers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;

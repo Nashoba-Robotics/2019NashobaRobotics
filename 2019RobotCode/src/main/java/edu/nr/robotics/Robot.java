@@ -1,10 +1,10 @@
 package edu.nr.robotics;
 
 import edu.nr.lib.network.LimelightNetworkTable;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 
 private double prevTime = 0;
 
@@ -15,8 +15,9 @@ public synchronized static Robot getInstance(){
 }
 
 public void robotInit(){
-
     singleton = this;
+
+    m_period = 0.01;
 
     smartDashboardInit();
     autoChooserInit();
@@ -57,7 +58,7 @@ public void robotInit(){
             }
         }
         @Override
-        public void testInit(){
+        public void testInit() {
 
         }
 
