@@ -96,11 +96,11 @@ public void robotInit(){
             }).start();
             
         }
-
+        @Override
         public void testPeriodic() {
 
         } 
-
+        @Override
         public void robotPeriodic() {
 
             Scheduler.getInstance().run();
@@ -108,7 +108,7 @@ public void robotInit(){
             SmartDashboardSource.runAll();
 
         }
-
+    
         
 
     }
