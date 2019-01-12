@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 
 import edu.nr.lib.interfaces.Periodic;
-import edu.nr.lib.talons.CTRECreator;
+import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;

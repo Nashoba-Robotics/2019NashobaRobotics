@@ -7,7 +7,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
-import edu.nr.lib.motorcontollers.CTRECreator;
+import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -26,29 +26,29 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private VictorSPX elevatorTalonFollowOne;
     private VictorSPX elevatorTalonFollowTwo; //follow may be other type of talon
     
-    public static final double END_TICK_PER_INCH_CARRIAGE;//find everything
+    public static final double END_TICK_PER_INCH_CARRIAGE = 0;//find everything
 
-    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed();//find
-    public static final Speed MAX_SPEED_ELEVATOR_DOWN = new Speed();
+    public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;//find
+    public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
 
-    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration();//find
-    public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = new Acceleration();
+    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = Acceleration.ZERO;//find
+    public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = Acceleration.ZERO;
 
-    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP;
+    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0;
 
-	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN ;
+	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP; //find
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN;
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0; //find
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
 
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP ;
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN ;
+    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0;
+    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
     
     public static Time VOLTAGE_RAMP_RATE_ELEVATOR = Time.ZERO;
 
-    public static double PROFILE_VEL_PERCENT_ELEVATOR ;
-    public static final double DROP_PERCENT_ELEVATOR ;
-    public static double PROFILE_ACCEL_PERCENT_ELEVATOR ;
+    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0;
+    public static final double DROP_PERCENT_ELEVATOR = 0;
+    public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0;
 
     public static double F_POS_ELEVATOR_UP = 0;
 
@@ -105,14 +105,14 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static double kP_DOWN = 0;
     public static double kD_DOWN = 0;
 
-    public static final Distance TOP_HEIGHT_ELEVATOR = new Distance();//find these
-    public static final Distance HATCH_PICKUP_GROUND_ELEVATOR = new Distance();
-    public static final Distance HATCH_PLACE_LOW_ELEVATOR = new Distance();
-    public static final Distance HATCH_PLACE_MIDDLE_ELEVATOR = new Distance();
-    public static final Distance HATCH_PLACE_TOp_ELEVATOR = new Distance();//find these
-    public static final Distance CARGO_PLACE_LOW_ELEVATOR = new Distance();
-    public static final Distance CARGO_PLACE_MIDDLE_ELEVATOR = new Distance();
-    public static final Distance CARGO_PLACE_TOP_ELEVATOR = new Distance();
+    public static final Distance TOP_HEIGHT_ELEVATOR = Distance.ZERO;//find these
+    public static final Distance HATCH_PICKUP_GROUND_ELEVATOR = Distance.ZERO;
+    public static final Distance HATCH_PLACE_LOW_ELEVATOR = Distance.ZERO;
+    public static final Distance HATCH_PLACE_MIDDLE_ELEVATOR = Distance.ZERO;
+    public static final Distance HATCH_PLACE_TOp_ELEVATOR = Distance.ZERO;//find these
+    public static final Distance CARGO_PLACE_LOW_ELEVATOR = Distance.ZERO;
+    public static final Distance CARGO_PLACE_MIDDLE_ELEVATOR = Distance.ZERO;
+    public static final Distance CARGO_PLACE_TOP_ELEVATOR = Distance.ZERO;
 
     private Speed velSetpoint = Speed.ZERO;
     private Distance posSetpoint = Distance.ZERO;

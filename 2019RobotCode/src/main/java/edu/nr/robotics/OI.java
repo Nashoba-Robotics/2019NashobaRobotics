@@ -12,8 +12,8 @@ public class OI implements SmartDashboardSource {
 
     public static final double SPEED_MULTIPLIER = 1.0;
 
-    private static final int CANCEL_ALL_BUTTON_NUMBER; //find all of these and make them too
-    private static final int KID_MODE_SWITCH ;
+    private static final int CANCEL_ALL_BUTTON_NUMBER = -1; //find all of these and make them too
+    private static final int KID_MODE_SWITCH = -1;
 
     private double driveSpeedMultiplier = 1;
 
@@ -25,10 +25,10 @@ public class OI implements SmartDashboardSource {
     private final Joystick operatorLeft;
     private final Joystick operatorRight;
 
-    private static final int STICK_LEFT; //find these
-    private static final int STICK_RIGHT; 
-    private static final int STICK_OPERATOR_LEFT;
-    private static final int STICK_OPERATOR_RIGHT;
+    private static final int STICK_LEFT = -1; //find these
+    private static final int STICK_RIGHT = -1; 
+    private static final int STICK_OPERATOR_LEFT = -1;
+    private static final int STICK_OPERATOR_RIGHT = -1;
 
     public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
 
