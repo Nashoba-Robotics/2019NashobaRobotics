@@ -10,6 +10,7 @@ import edu.nr.robotics.Robot;
 import edu.nr.robotics.subsystems.drive.Drive.DriveMode;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.OI;
+import edu.nr.robotics.subsystems.drive.Drive;
 
 
 public class DriveJoystickCommand extends JoystickCommand {
@@ -30,7 +31,7 @@ public class DriveJoystickCommand extends JoystickCommand {
         double dt = edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - prevTime;
         prevTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 
-        switch (OI.drivemode) {
+        switch (OI.driveMode) {
             case arcadeDrive:
                 double moveValue = OI.getInstance().getArcadeMoveValue();
                 double rotateValue = OI.getInstance().getArcadeTurnValue();
@@ -68,7 +69,7 @@ public class DriveJoystickCommand extends JoystickCommand {
                 case cheesyDrive:
                     double cheesyMoveValue = OI.getInstance().getArcadeMoveValue();
                     double cheesyRotateValue = OI.getInstance().getArcadeTurnValue();
-                    double cheesyHValue = NRMath.powWithSign(cheesyHValue, 3);    
+                    double cheesyHValue = OI.getInstance().getArcadeHValue();    
 
                     cheesyMoveValue = NRMath.powWithSign(cheesyMoveValue, 3);
                     cheesyRotateValue = NRMath.powWithSign(cheesyRotateValue, 3);
@@ -99,7 +100,7 @@ public class DriveJoystickCommand extends JoystickCommand {
     }
 
     public boolean shouldSwitchToJoystick() {
-        if (!(Drive.getInstance().getCurrentCommand()) && !Robot.getInstance().isAutonomous()) {
+        if (!(Drive.getInstance().getCurrentCommand() instanceof DriveToCargoCommand) && !Robot.getInstance().isAutonomous()) {
 
             if((OI.driveMode == Drive.DriveMode.arcadeDrive) || (OI.driveMode == Drive.DriveMode.cheesyDrive || OI.driveMode == Drive.DriveMode.fieldCentricDrive)) {
                 return OI.getInstance().isArcadeNonZero();

@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class EnabledSensors {
-    //do
+    
+    public static boolean limelightEnabled = true;
+
 }
 

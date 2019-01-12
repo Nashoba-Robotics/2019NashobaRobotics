@@ -7,7 +7,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.NRMath;
 import edu.nr.lib.gyro.Pigeon;
-import edu.nr.lib.commandbased.JoystickCommand;
+//import edu.nr.lib.commandbased.JoystickCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.gyro.ResetGyroCommand;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
@@ -50,11 +50,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 0;
 		public static final double EFFECCTIVE_ENC_TICK_PER_INCH_H_DRIVE = 0;
 
-		public static final Speed MAX_SPEED_DRIVE = new Speed();
-		public static final Speed MAX_SPEED_DRIVE_H = new Speed();
+		public static final Speed MAX_SPEED_DRIVE = Speed.ZERO;
+		public static final Speed MAX_SPEED_DRIVE_H = Speed.ZERO;
 
-		public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration();
-		public static final Acceleration MAX_ACCEL_DRIVE_H = new Acceleration();
+		public static final Acceleration MAX_ACCEL_DRIVE = Acceleration.ZERO;
+		public static final Acceleration MAX_ACCEL_DRIVE_H = Acceleration.ZERO;
 
 		public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0;
 		public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0;
@@ -68,8 +68,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H_LEFT = 0;
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H_RIGHT = 0;
 
-		public static Time DRIVE_RAMP_RATE = new Time();
-		public static Time H_DRIVE_RAMP_RATE = new Time();
+		public static Time DRIVE_RAMP_RATE = Time.ZERO;
+		public static Time H_DRIVE_RAMP_RATE = Time.ZERO;
 
 		public static double P_LEFT = 0;
 		public static double I_LEFT = 0;
@@ -114,7 +114,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public static final double SENSOR_STRAFE_PERCENT = 0;
 
-		public static final Distance END_THRESHOLD = new Distance();
+		public static final Distance END_THRESHOLD = Distance.ZERO;
 		public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
 		public static final Speed PROFILE_END_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(0.10);
 
@@ -486,7 +486,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public void enableMotionProfiler(Distance distX, Distance distY, double maxVelPercent, double maxAccelPercent) {
 			double minVel;
-			double minAccel;
+			double minAccel = 0;
 
 			if(distX.equals(Distance.ZERO) && !distY.equals(Distance.ZERO)) {
 				minVel = MAX_SPEED_DRIVE_H.mul(maxVelPercent).get(Distance.Unit.MAGNETIC_ENCODER_TICK_H, Time.Unit.HUNDRED_MILLISECOND);
