@@ -2,6 +2,7 @@ package edu.nr.lib.motorcontollers;
 
 import com.ctre.phoenix.motorcontrol.ControlFrame;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -96,9 +97,15 @@ public class CTRECreator {
         return talon;
     }
 
-    public static VictorSPX createFollowerVictor(int id, int master_id) {
+    public static TalonSRX createFollowerTalon(int id, IMotorController master) {
+        final TalonSRX talon = createTalon(id, slaveConfiguration);
+        talon.follow(master);
+        return talon;
+    }
+
+    public static VictorSPX createFollowerVictor(int id, IMotorController master) {
         final VictorSPX victor =  createVictor(id, slaveConfiguration);
-        victor.set(ControlMode.Follower, master_id);
+        victor.follow(master);
         return victor;
     }
     
