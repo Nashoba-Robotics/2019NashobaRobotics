@@ -1,6 +1,9 @@
 package edu.nr.robotics;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.nr.lib.interfaces.SmartDashboardSource;
+import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.Robot;
+import edu.nr.robotics.subsystems.elevator.Elevator;
 
 
 public class OI implements SmartDashboardSource {
@@ -10,7 +13,7 @@ public class OI implements SmartDashboardSource {
     public static final double SPEED_MULTIPLIER = 1.0;
 
     private static final int CANCEL_ALL_BUTTON_NUMBER; //find all of these and make them too
-    private static final int KID_MODE_SWITCH = 2;
+    private static final int KID_MODE_SWITCH ;
 
     private double driveSpeedMultiplier = 1;
 
@@ -27,11 +30,11 @@ public class OI implements SmartDashboardSource {
     private static final int STICK_OPERATOR_LEFT;
     private static final int STICK_OPERATOR_RIGHT;
 
-    public static final Drive.DriveMode drivemode = Drive.Drivemode.drive; // set default type of drive here
+    public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
 
     private OI() {
         driveLeft = new Joystick(STICK_LEFT);
-        driveRight = new Joystick(Stick_RIght);
+        driveRight = new Joystick(STICK_RIGHT);
 
         operatorLeft = new Joystick(STICK_OPERATOR_LEFT);
         operatorRight = new Joystick(STICK_OPERATOR_RIGHT);

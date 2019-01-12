@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Time;
+import edu.nr.lib.commandbased.NRSubsystem;
 
 public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
@@ -18,7 +19,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = new Speed();
 
     public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration();//find
-    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration();
+    public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = new Acceleration();
 
     public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP;
 

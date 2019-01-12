@@ -9,6 +9,10 @@ public class RobotMap {
     public static final int H_DRIVE_FOLLOW;
 
     public static final int ELEVATOR_TALON;
+    public static final int ELEVATOR_FOLLOW_ONE;
+    public static final int ELEVATOR_FOLLOW_TWO;
+
+    public static final int PIGEON_TALON;
 
     ///sensor ports too
 
