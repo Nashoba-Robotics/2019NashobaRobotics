@@ -123,8 +123,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			leftDrive = CTRECreator.createMasterTalon(RobotMap.DRIVE_LEFT);
 			rightDrive = CTRECreator.createMasterTalon(RobotMap.DRIVE_RIGHT);
 			
-			leftDriveFollow = CTRECreator.createFollowerVictor(RobotMap.DRIVE_LEFT_FOLLOW, leftDrive.getDeviceID());
-			rightDriveFollow = CTRECreator.createFollowerVictor(RobotMap.DRIVE_RIGHT_FOLLOW, rightDrive.getDeviceID());
+			leftDriveFollow = CTRECreator.createFollowerVictor(RobotMap.DRIVE_LEFT_FOLLOW, leftDrive);
+			rightDriveFollow = CTRECreator.createFollowerVictor(RobotMap.DRIVE_RIGHT_FOLLOW, rightDrive);
 			
 			pigeonTalon = CTRECreator.createMasterTalon(RobotMap.PIGEON_TALON);
 			
