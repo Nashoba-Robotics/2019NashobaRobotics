@@ -6,19 +6,19 @@ import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 
 public class EnableLimelightCommand extends NRCommand {
 
-	private boolean bool;
+	private boolean boo;
 
-	public EnableLimelightCommand(boolean bool) {
+	public EnableLimelightCommand(boolean boo) {
 
-		this.bool = bool;
+		this.boo = boo;
 
 	}	
 
 	protected void onStart() {
-		EnabledSensors.limelightEnabled = bool;
+		EnabledSensors.limelightEnabled = boo;
 		LimelightNetworkTable.getInstance().setPipeline(Pipeline.PowerCube);
 
-		if (bool) {
+		if (boo) {
 			LimelightNetworkTable.getInstance().lightLED(true);
 			LimelightNetworkTable.getInstance().enable();
 		} else {

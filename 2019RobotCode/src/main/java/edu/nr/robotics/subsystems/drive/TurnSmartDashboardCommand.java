@@ -6,6 +6,7 @@ import edu.nr.lib.interfaces.DoublePIDOutput;
 import edu.nr.lib.units.Angle;
 
 
+
 public class TurnSmartDashboardCommand extends NRCommand {
 
     private DoublePIDOutput out;
@@ -29,7 +30,7 @@ public class TurnSmartDashboardCommand extends NRCommand {
 
     public void onExecute() {
 
-        double headingAdjustment = new gyro.getTurnValue(true);
+        double headingAdjustment = gyro.getTurnValue(true);
         if(Math.abs(headingAdjustment) < Drive.MIN_PROFILE_TURN_PERCENT) {
             headingAdjustment = Drive.MIN_PROFILE_TURN_PERCENT * Math.signum(headingAdjustment);
         }
@@ -37,8 +38,8 @@ public class TurnSmartDashboardCommand extends NRCommand {
         double outputLeft, outputRight;
 
 
-        if((Drive.getInstance().getLeftVelocity().abs.div(Drive.MAX_SPEED_DRIVE)) > Math.abs(headingAdjustment)
-         || (Drive.getInstance().getRightVelocity().abs.div(Drive.MAX_SPEED_DRIVE)) > Math.abs(headingAdjustment)) {
+        if((Drive.getInstance().getLeftVelocity().abs().div(Drive.MAX_SPEED_DRIVE)) > Math.abs(headingAdjustment)
+         || (Drive.getInstance().getRightVelocity().abs().div(Drive.MAX_SPEED_DRIVE)) > Math.abs(headingAdjustment)) {
             reachedSetVel = true;
         }
 
