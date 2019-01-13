@@ -2,19 +2,22 @@ package edu.nr.robotics.subsystems.elevator;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource; 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import edu.nr.lib.units.Speed;
-import edu.nr.lib.units.Acceleration;
-import edu.nr.lib.units.Time;
-import edu.nr.robotics.RobotMap;
-import edu.nr.lib.motorcontrollers.CTRECreator;
-import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfiler;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.nr.lib.units.Speed;
+import edu.nr.lib.units.Acceleration;
+import edu.nr.lib.motorcontrollers.CTRECreator;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import edu.nr.lib.units.Time;
+import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 
@@ -23,8 +26,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private static Elevator singleton;
 
     private TalonSRX elevatorTalon;
-    private VictorSPX elevatorTalonFollowOne;
-    private VictorSPX elevatorTalonFollowTwo; //follow may be other type of talon
+    private VictorSPX elevatorVictorFollowOne;
+    private VictorSPX elevatorVictorFollowTwo; //follow may be other type of talon
     
     public static final double END_TICK_PER_INCH_CARRIAGE = 0;//find everything
 
@@ -126,13 +129,161 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private Elevator() {
         if(EnabledSubsystems.ELEVATOR_ENABLED) {
             elevatorTalon = CTRECreator.createMasterTalon(RobotMap.ELEVATOR_TALON);
-            elevatorTalonFollowOne = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
-            elevatorTalonFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
+            elevatorVictorFollowOne = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
+            elevatorVictorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
+            
+            elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+        
+            elevatorTalon.config_kF(VEL_UP_SLOT, 0, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kP(VEL_UP_SLOT, P_VEL_ELEVATOR_UP, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kI(VEL_UP_SLOT, I_VEL_ELEVATOR_UP, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kD(VEL_UP_SLOT, D_VEL_ELEVATOR_UP, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kF(MOTION_MAGIC_UP_SLOT, F_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kP(MOTION_MAGIC_UP_SLOT, P_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kI(MOTION_MAGIC_UP_SLOT, I_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kD(MOTION_MAGIC_UP_SLOT, D_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
+
+            elevatorTalon.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            elevatorTalon.setInverted(false);
+            elevatorTalon.setSensorPhase(true);
+
+            elevatorTalon.enableVoltageCompensation(true);
+            elevatorTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_ELEVATOR, DEFAULT_TIMEOUT);
+            
+            elevatorTalon.enableCurrentLimit(true);
+            elevatorTalon.configPeakCurrentLimit(PEAK_CURRENT_ELEVATOR, DEFAULT_TIMEOUT);
+            elevatorTalon.configPeakCurrentDuration(PEAK_CURRENT_DURATION_ELEVATOR, DEFAULT_TIMEOUT);
+			//elevTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_ELEVATOR, DEFAULT_TIMEOUT);
+
+            elevatorTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_ELEVATOR.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            elevatorTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_ELEVATOR.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+
+            elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+                Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+                DEFAULT_TIMEOUT);
+
+            elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+				Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
+                DEFAULT_TIMEOUT);
+                
+            elevatorVictorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            elevatorVictorFollowTwo.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+
+            elevatorTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+
+            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED){
+                elevatorTalon.set(ControlMode.PercentOutput, 0);
+            } else {
+                elevatorTalon.set(ControlMode.Velocity, 0);
+            }
+
+        }
+
+        smartDashboardInit();
+
+    }
+
+    public static Elevator getInstance(){
+        if(singleton == null)
+            init();
+            return singleton;
+
+
+    }
+
+    public synchronized static void init(){
+        if (singleton == null) {
+            singleton = new Elevator();
+            singleton.setJoystickCommand(new ElevatorJoystickCommand());
 
         }
     }
 
+    public Distance getPosition() {
+        if (elevatorTalon != null)
+            return new Distance(elevatorTalon.getSelectedSensorPosition(PID_TYPE), Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV);
+        return Distance.ZERO;    
+    }
+
+    public Speed getVelocity(){
+        if (elevatorTalon != null)
+        return new Speed(elevatorTalon.getSelectedSensorVelocity(PID_TYPE), Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+            Time.Unit.HUNDRED_MILLISECOND);
+        return Speed.ZERO;
+    }
+
+    public double getMasterCurrent(){
+        if (elevatorTalon != null)
+            return elevatorTalon.getOutputCurrent();
+            return 0;
+    }
+
+    public void setPosition(Distance position) {
+        if (elevatorTalon != null) {
+
+            posSetpoint = position;
+            velSetpoint = Speed.ZERO;
+
+            if (position.sub(getPosition()).greaterThan(Distance.ZERO) || position.sub(getPosition()).equals(Distance.ZERO)) {
+
+                elevatorTalon.selectProfileSlot(MOTION_MAGIC_UP_SLOT, DEFAULT_TIMEOUT);
+            
+                elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+                    Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+                        DEFAULT_TIMEOUT);
+            
+            }
+        }
+    }
 
 
+    public void setMotorPercentRaw(double percent){
+        if (elevatorTalon != null) {
+            elevatorTalon.set(ControlMode.PercentOutput, percent);
+
+        }
+
+    }
+
+    public void setMotorSpeedPercent(double percent) {
+        if (elevatorTalon != null) {
+            //elevTalon.set(ControlMode.PercentOutput, percent);
+            setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(percent));
+        }
+    }
+
+    public void setMotorSpeed(Speed speed) {
+
+        if(elevatorTalon != null) {
+
+            velSetpoint = speed;
+            posSetpoint = Distance.ZERO;
+
+            if (speed.greaterThan(Speed.ZERO)) {
+
+                elevatorTalon.selectProfileSlot(VEL_UP_SLOT, DEFAULT_TIMEOUT);
+
+                elevatorTalon.config_kF(VEL_UP_SLOT,
+                    ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
+                            + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP) * 1023.0)
+                            / velSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+                                    Time.Unit.HUNDRED_MILLISECOND),
+                    DEFAULT_TIMEOUT);
+
+                if(EnabledSubsystems.ELEVATOR_DUMB_ENABLED) {
+                    elevatorTalon.set(ControlMode.PercentOutput, velSetpoint.div(MAX_SPEED_ELEVATOR_UP));
+                } else {
+                    elevatorTalon.set(ControlMode.Velocity,
+                        velSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND));
+                }
+            } else {
+
+                elevatorTalon.selectProfileSlot(VEL_DOWN_SLOT, DEFAULT_TIMEOUT);
+
+                elevatorTalon.set(ControlMode.PercentOutput, speed.div(Elevator.MAX_SPEED_ELEVATOR_UP));
+                
+            }
+        }
+    }
 
 }
