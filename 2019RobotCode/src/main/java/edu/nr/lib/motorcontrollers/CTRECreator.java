@@ -1,13 +1,15 @@
-package edu.nr.lib.talons;
+package edu.nr.lib.motorcontrollers;
 
 import com.ctre.phoenix.motorcontrol.ControlFrame;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.IMotorController;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.ctre.phoenix.sensors.PigeonIMU_ControlFrame;
 import com.ctre.phoenix.sensors.PigeonIMU_StatusFrame;
@@ -94,6 +96,18 @@ public class CTRECreator {
         talon.set(ControlMode.Follower, master_id);
         return talon;
     }
+
+    public static TalonSRX createFollowerTalon(int id, IMotorController master) {
+        final TalonSRX talon = createTalon(id, slaveConfiguration);
+        talon.follow(master);
+        return talon;
+    }
+
+    public static VictorSPX createFollowerVictor(int id, IMotorController master) {
+        final VictorSPX victor =  createVictor(id, slaveConfiguration);
+        victor.follow(master);
+        return victor;
+    }
     
     /**
      * Creates a new CANTalon
@@ -143,6 +157,45 @@ public class CTRECreator {
         talon.setStatusFramePeriod(StatusFrame.Status_4_AinTempVbat, config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS, config.TIMEOUT);
 
         return talon;
+    }
+
+    public static VictorSPX createVictor(int id, Configuration config) {
+        EfficientVictorSPX victor = new EfficientVictorSPX(id);
+        victor.changeMotionControlFramePeriod(config.MOTION_CONTROL_FRAME_PERIOD_MS);
+        victor.setIntegralAccumulator(0, 0, config.TIMEOUT);
+        victor.clearMotionProfileHasUnderrun(config.TIMEOUT);
+        victor.clearMotionProfileTrajectories();
+        victor.clearStickyFaults(config.TIMEOUT);
+        victor.configForwardLimitSwitchSource(config.LIMIT_SWITCH_SOURCE, config.LIMIT_SWITCH_NORMAL, config.TIMEOUT);
+        victor.configVoltageCompSaturation(config.MAX_OUTPUT_VOLTAGE, 0);
+        victor.configNominalOutputForward(config.NOMINAL_VOLTAGE, config.TIMEOUT);
+        victor.configNominalOutputReverse(-config.NOMINAL_VOLTAGE, config.TIMEOUT);
+        victor.configPeakOutputForward(config.PEAK_VOLTAGE, config.TIMEOUT);
+        victor.configPeakOutputReverse(-config.PEAK_VOLTAGE, config.TIMEOUT);
+        victor.setNeutralMode(NeutralMode.Coast);
+        victor.configForwardSoftLimitEnable(config.ENABLE_SOFT_LIMIT, config.TIMEOUT);
+        victor.configReverseSoftLimitEnable(config.ENABLE_SOFT_LIMIT, config.TIMEOUT);
+        victor.setInverted(config.INVERTED);
+        victor.setSensorPhase(false);
+        victor.getSelectedSensorPosition(0);
+        victor.configForwardSoftLimitThreshold(config.FORWARD_SOFT_LIMIT, config.TIMEOUT);
+        victor.configReverseSoftLimitThreshold(config.REVERSE_SOFT_LIMIT, config.TIMEOUT);
+        victor.set(ControlMode.PercentOutput, 0);
+        victor.selectProfileSlot(0, 0);
+        victor.configVelocityMeasurementPeriod(config.VELOCITY_MEASUREMENT_PERIOD, config.TIMEOUT);
+        victor.configVelocityMeasurementWindow(config.VELOCITY_MEASUREMENT_ROLLING_AVERAGE_WINDOW, config.TIMEOUT);
+        victor.enableVoltageCompensation(config.ENABLE_VOLTAGE_COMPENSATION);
+        victor.configOpenloopRamp(config.VOLTAGE_RAMP_RATE, config.TIMEOUT);
+        victor.configClosedloopRamp(config.VOLTAGE_RAMP_RATE, config.TIMEOUT);
+        //victor.setControlFramePeriod(ControlFrame.Control_3_General, config.CONTROL_FRAME_PERIOD_MS);
+        //victor.setControlFramePeriod(ControlFrame.Control_4_Advanced, config.CONTROL_FRAME_PERIOD_MS);//TODO: Figure out how to change control frame
+        
+        victor.setStatusFramePeriod(StatusFrame.Status_1_General, config.GENERAL_STATUS_FRAME_RATE_MS, config.TIMEOUT);
+        victor.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, config.FEEDBACK_STATUS_FRAME_RATE_MS, config.TIMEOUT);
+        victor.setStatusFramePeriod(StatusFrame.Status_10_MotionMagic, config.FEEDBACK_STATUS_FRAME_RATE_MS, config.TIMEOUT);
+        victor.setStatusFramePeriod(StatusFrame.Status_12_Feedback1, config.FEEDBACK_STATUS_FRAME_RATE_MS, config.TIMEOUT);
+        victor.setStatusFramePeriod(StatusFrame.Status_4_AinTempVbat, config.ANALOG_TEMP_VBAT_STATUS_FRAME_RATE_MS, config.TIMEOUT);
+        return victor;
     }
     
     public static PigeonIMU createPigeon(TalonSRX talon) {

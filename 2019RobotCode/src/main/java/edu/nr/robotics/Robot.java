@@ -1,10 +1,24 @@
 package edu.nr.robotics;
 
 import edu.nr.lib.network.LimelightNetworkTable;
-import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
+import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
+import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.lib.interfaces.SmartDashboardSource;
+import edu.nr.lib.interfaces.Periodic;
+import edu.nr.lib.commandbased.NRSubsystem;
 
-public class Robot extends IterativeRobot {
+
+
+public class Robot extends TimedRobot {
 
 private double prevTime = 0;
 
@@ -15,8 +29,9 @@ public synchronized static Robot getInstance(){
 }
 
 public void robotInit(){
-
     singleton = this;
+
+    m_period = 0.01;
 
     smartDashboardInit();
     autoChooserInit();
@@ -49,6 +64,7 @@ public void robotInit(){
 			SmartDashboard.putData(new ElevatorMoveBasicSmartDashboardCommand());	
 			SmartDashboard.putData(new ElevatorProfileSmartDashboardCommand());
         }
+    }
 
         @Override
         public void disabledInit() {
@@ -57,7 +73,7 @@ public void robotInit(){
             }
         }
         @Override
-        public void testInit(){
+        public void testInit() {
 
         }
 
@@ -95,11 +111,11 @@ public void robotInit(){
             }).start();
             
         }
-
+        @Override
         public void testPeriodic() {
 
         } 
-
+        @Override
         public void robotPeriodic() {
 
             Scheduler.getInstance().run();
@@ -107,8 +123,8 @@ public void robotInit(){
             SmartDashboardSource.runAll();
 
         }
-
-        
+    
+    
 
     }
 
