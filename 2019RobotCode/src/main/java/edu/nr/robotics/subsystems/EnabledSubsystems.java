@@ -13,7 +13,9 @@ public class EnabledSubsystems {
     public static final boolean ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED  = false;
 
     public static final boolean LIFT_ENABLED                           = false;
-    
+
+	public static final boolean INAKE_ROLLERS_ENABLED                  = false;
+   
     public static boolean LIMELIGHT_ENABLED                            = false;
 
 }

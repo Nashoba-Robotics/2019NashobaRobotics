@@ -13,6 +13,8 @@ public class RobotMap {
     public static final int LIFT_FRONT = -1;
     public static final int LIFT_BACK = -1;
 
+    public static final int INTAKE_ROLLERS = -1;
+
     public static final int PIGEON_TALON = -1;
 
     public static final int ELEVATOR_SENSOR_PORT = -1;

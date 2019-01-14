@@ -15,7 +15,6 @@ import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.drive.Drive;
-import sun.util.resources.cldr.ext.CurrencyNames_zh_Hant_MO;
 
 public class Lift extends NRSubsystem {
 
