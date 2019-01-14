@@ -48,7 +48,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 0;
 
 		public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 0;
-		public static final double EFFECCTIVE_ENC_TICK_PER_INCH_H_DRIVE = 0;
+		public static final double EFFECTIVE_ENC_TICK_PER_INCH_H_DRIVE = 0;
 
 		public static final Speed MAX_SPEED_DRIVE = Speed.ZERO;
 		public static final Speed MAX_SPEED_DRIVE_H = Speed.ZERO;
@@ -167,35 +167,35 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		private Drive() {
 			if(EnabledSubsystems.DRIVE_ENABLED) {
-					leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
-					rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
-					hDrive = CTRECreator.createMasterTalon(RobotMap.H_DRIVE);
+				leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
+				rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
+				hDrive = CTRECreator.createMasterTalon(RobotMap.H_DRIVE);
 
-					leftDriveFollow = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW, leftDrive);
-					rightDriveFollow = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW, rightDrive);
-					hDriveFollow = CTRECreator.createFollowerVictor(RobotMap.H_DRIVE_FOLLOW, hDrive);
+				leftDriveFollow = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW, leftDrive);
+				rightDriveFollow = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW, rightDrive);
+				hDriveFollow = CTRECreator.createFollowerVictor(RobotMap.H_DRIVE_FOLLOW, hDrive);
 
-					pigeonTalon = CTRECreator.createMasterTalon(RobotMap.PIGEON_TALON);
+				pigeonTalon = CTRECreator.createMasterTalon(RobotMap.PIGEON_TALON);
 
 
-					if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
-						leftDrive.set(ControlMode.PercentOutput,0);
-						rightDrive.set(ControlMode.PercentOutput, 0);
-						hDrive.set(ControlMode.PercentOutput, 0);
-					} else {
-						leftDrive.set(ControlMode.Velocity, 0);
-						rightDrive.set(ControlMode.Velocity, 0);
-						hDrive.set(ControlMode.Velocity, 0);
-					}
+				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
+					leftDrive.set(ControlMode.PercentOutput,0);
+					rightDrive.set(ControlMode.PercentOutput, 0);
+					hDrive.set(ControlMode.PercentOutput, 0);
+				} else {
+					leftDrive.set(ControlMode.Velocity, 0);
+					rightDrive.set(ControlMode.Velocity, 0);
+					hDrive.set(ControlMode.Velocity, 0);
+				}
 
-					leftDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+				leftDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
 
-					leftDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
-					leftDrive.config_kP(VEL_SLOT, P_LEFT, DEFAULT_TIMEOUT);
-					leftDrive.config_kI(VEL_SLOT, I_LEFT, DEFAULT_TIMEOUT);
-					leftDrive.config_kD(VEL_SLOT, D_LEFT, DEFAULT_TIMEOUT);
+				leftDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
+				leftDrive.config_kP(VEL_SLOT, P_LEFT, DEFAULT_TIMEOUT);
+				leftDrive.config_kI(VEL_SLOT, I_LEFT, DEFAULT_TIMEOUT);
+				leftDrive.config_kD(VEL_SLOT, D_LEFT, DEFAULT_TIMEOUT);
 
-					leftDrive.setNeutralMode(NEUTRAL_MODE);
+				leftDrive.setNeutralMode(NEUTRAL_MODE);
 				leftDrive.setInverted(false);
 
 				leftDrive.setSensorPhase(false);
