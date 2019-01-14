@@ -6,6 +6,7 @@ import edu.nr.lib.units.Distance;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfiler;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
+import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Acceleration;
@@ -14,6 +15,8 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -104,6 +107,11 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final int MOTION_MAGIC_DOWN_SLOT = 3;
 
     public static final double kV_UP = 1 / MAX_SPEED_ELEVATOR_UP.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND);
+    public static double kA_UP = 0;
+	public static double kP_UP = 0;
+	public static double kD_UP = 0;
+
+	public static final double kV_DOWN = 1 / MAX_SPEED_ELEVATOR_DOWN.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND);
     public static double kA_DOWN = 0;
     public static double kP_DOWN = 0;
     public static double kD_DOWN = 0;
@@ -286,4 +294,91 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         }
     }
 
-}
+    public void setVoltageRamp(Time time){
+        if (elevatorTalon != null){
+            elevatorTalon.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+            elevatorTalon.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+
+
+        }
+    }
+    public void enableMotionProfiler(Distance dist,double maxVelPercent, double maxAccelPercent){
+        Distance tempDist = dist.mul(1.227).add(new Distance(-4.533, Distance.Unit.INCH));
+
+        if (dist.greaterThan(Distance.ZERO)) {
+
+			basicProfiler = new OneDimensionalMotionProfilerBasic(this, this, kV_UP, kA_UP, kP_UP, kD_UP);
+			basicProfiler.setTrajectory(new OneDimensionalTrajectoryRamped(
+					tempDist.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV),
+					MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+							Time.Unit.HUNDRED_MILLISECOND),
+					MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+							Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), RAMPED_PROFILE_TIME_MULT_ELEVATOR));
+		}else {
+
+			basicProfiler = new OneDimensionalMotionProfilerBasic(this, this, kV_DOWN, kA_DOWN, kP_DOWN, kD_DOWN);
+			basicProfiler.setTrajectory(new OneDimensionalTrajectoryRamped(
+					tempDist.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV),
+					MAX_SPEED_ELEVATOR_DOWN.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+							Time.Unit.HUNDRED_MILLISECOND),
+					MAX_ACCEL_ELEVATOR_DOWN.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+                            Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), RAMPED_PROFILE_TIME_MULT_ELEVATOR));
+        }
+
+        basicProfiler.enable();
+    }
+        public void disableProfiler(){
+            basicProfiler.disable();
+        }
+        public void setPIDSourceType(PIDSourceType pidSource) {
+            type = pidSource;
+        }
+        public PIDSourceType getPIDSourceType() {
+            return type;
+        }
+        
+        public double pidGet() {
+                if(type == PIDSourceType.kRate){
+                    return getInstance().getVelocity().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+					    Time.Unit.HUNDRED_MILLISECOND);
+                } else{
+                        return getInstance().getPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV);
+                }
+        }
+        public void pidWrite(double output){
+            setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(output));
+
+        }
+        public void smartDahsboardInit(){
+            if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
+                SmartDashboard.putNumber("Elevator Profile Delta Inches: ", 0);
+                SmartDashboard.putNumber("Voltage Ramp Rate Elevator Seconds: ",
+                        VOLTAGE_RAMP_RATE_ELEVATOR.get(Time.Unit.SECOND));
+    
+                SmartDashboard.putNumber("Elevator kA Up: ", kA_UP);
+                SmartDashboard.putNumber("Elevator kP Up: ", kP_UP);
+                SmartDashboard.putNumber("Elevator kD Up: ", kD_UP);
+                SmartDashboard.putNumber("F Pos Elevator Up: ", F_POS_ELEVATOR_UP);
+                SmartDashboard.putNumber("P Pos Elevator Up: ", P_POS_ELEVATOR_UP);
+                SmartDashboard.putNumber("I Pos Elevator Up: ", I_POS_ELEVATOR_UP);
+                SmartDashboard.putNumber("D Pos Elevator Up: ", D_POS_ELEVATOR_UP);
+                SmartDashboard.putNumber("P Vel Elevator Up: ", P_VEL_ELEVATOR_UP);
+                SmartDashboard.putNumber("I Vel Elevator Up: ", I_VEL_ELEVATOR_UP);
+                SmartDashboard.putNumber("D Vel Elevator Up: ", D_VEL_ELEVATOR_UP);
+    
+                SmartDashboard.putNumber("Elevator kA Down: ", kA_DOWN);
+                SmartDashboard.putNumber("Elevator kP Down: ", kP_DOWN);
+                SmartDashboard.putNumber("Elevator kD Down: ", kD_DOWN);
+                SmartDashboard.putNumber("F Pos Elevator Down: ", F_POS_ELEVATOR_DOWN);
+                SmartDashboard.putNumber("P Pos Elevator Down: ", P_POS_ELEVATOR_DOWN);
+                SmartDashboard.putNumber("I Pos Elevator Down: ", I_POS_ELEVATOR_DOWN);
+                SmartDashboard.putNumber("D Pos Elevator Down: ", D_POS_ELEVATOR_DOWN);
+                SmartDashboard.putNumber("P Vel Elevator Down: ", P_VEL_ELEVATOR_DOWN);
+                SmartDashboard.putNumber("I Vel Elevator Down: ", I_VEL_ELEVATOR_DOWN);
+                SmartDashboard.putNumber("D Vel Elevator Down: ", D_VEL_ELEVATOR_DOWN);
+    
+                SmartDashboard.putNumber("Profile Vel Percent Elevator: ", PROFILE_VEL_PERCENT_ELEVATOR);
+                SmartDashboard.putNumber("Profile Accel Percent Elevator: ", PROFILE_ACCEL_PERCENT_ELEVATOR);
+            }
+        }
+    } 
