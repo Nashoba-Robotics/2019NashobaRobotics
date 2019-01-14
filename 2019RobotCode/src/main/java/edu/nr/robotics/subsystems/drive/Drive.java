@@ -106,7 +106,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double TURN_JOYSTICK_MULTIPLIER = 0;
 		public static double MOVE_JOYSTICK_MULTIPLIER = 0;
 
-		public static final double MAX_PROFILLE_TURN_PERCENT = 0;
+		public static final double MAX_PROFILE_TURN_PERCENT = 0;
 		public static final double MIN_PROFILE_TURN_PERCENT = 0;
 
 		public static final double DRIVE_TO_HATCH_PERCENT = 0;
@@ -146,7 +146,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static boolean sniperModeEnabled = false;
 
 		//tracking drive motor setpoints
-
 		private Speed leftMotorSetpoint = Speed.ZERO;
 		private Speed rightMotorSetpoint = Speed.ZERO;
 		private Speed hMotorSetpoint = Speed.ZERO;
