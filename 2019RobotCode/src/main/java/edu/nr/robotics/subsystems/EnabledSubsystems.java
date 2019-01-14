@@ -11,6 +11,7 @@ public class EnabledSubsystems {
     public static final boolean ELEVATOR_DUMB_ENABLED                  = false;
     public static final boolean ELEVATOR_SMARTDASHBOARD_BASIC_ENABLED  = false;
     public static final boolean ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED  = false;
+	public static final boolean INAKE_ROLLERS_ENABLED                  = false;
     
     public static boolean LIMELIGHT_ENABLED                            = false;
 
