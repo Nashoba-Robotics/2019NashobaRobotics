@@ -15,6 +15,7 @@ import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lift extends NRSubsystem {
 
@@ -192,7 +193,19 @@ public class Lift extends NRSubsystem {
         return 0;
     }
 
-    public void setPosition() {
+    public void setPosition(Distance frontPos, Distance backPos) {
+        if (liftFront != null && liftBack != null) {
+            frontPosSetpoint = frontPos;
+            backPosSetpoint = backPos;
+            frontVelSetpoint = Speed.ZERO;
+            backVelSetpoint = Speed.ZERO;
+
+            liftFront.getPIDController().setOutputRange(min, max);
+            liftBack.getPIDController().setOutputRange(min, max);
+
+            liftFront.getPIDController().setReference(frontPos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);
+            liftBack.getPIDController().setReference(backPos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);
+        }
 
     }
 
@@ -232,10 +245,53 @@ public class Lift extends NRSubsystem {
     }
 
     private void smartDashboardInit() {
-
+        if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putNumber("Lift Front Profile Delta Inches: ", 0);
+            SmartDashboard.putNumber("Lift Back Profile Delta Inches: ", 0);
+			SmartDashboard.putNumber("Voltage Ramp Rate Lift Seconds: ",
+					VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND));
+			
+			SmartDashboard.putNumber("F Pos Elevator Up: ", F_POS_ELEVATOR_UP);
+			SmartDashboard.putNumber("P Pos Elevator Up: ", P_POS_ELEVATOR_UP);
+			SmartDashboard.putNumber("I Pos Elevator Up: ", I_POS_ELEVATOR_UP);
+			SmartDashboard.putNumber("D Pos Elevator Up: ", D_POS_ELEVATOR_UP);
+			SmartDashboard.putNumber("P Vel Elevator Up: ", P_VEL_ELEVATOR_UP);
+			SmartDashboard.putNumber("I Vel Elevator Up: ", I_VEL_ELEVATOR_UP);
+			SmartDashboard.putNumber("D Vel Elevator Up: ", D_VEL_ELEVATOR_UP);
+			
+			SmartDashboard.putNumber("Elevator kA Down: ", kA_DOWN);
+			SmartDashboard.putNumber("Elevator kP Down: ", kP_DOWN);
+			SmartDashboard.putNumber("Elevator kD Down: ", kD_DOWN);
+			SmartDashboard.putNumber("F Pos Elevator Down: ", F_POS_ELEVATOR_DOWN);
+			SmartDashboard.putNumber("P Pos Elevator Down: ", P_POS_ELEVATOR_DOWN);
+			SmartDashboard.putNumber("I Pos Elevator Down: ", I_POS_ELEVATOR_DOWN);
+			SmartDashboard.putNumber("D Pos Elevator Down: ", D_POS_ELEVATOR_DOWN);
+			SmartDashboard.putNumber("P Vel Elevator Down: ", P_VEL_ELEVATOR_DOWN);
+			SmartDashboard.putNumber("I Vel Elevator Down: ", I_VEL_ELEVATOR_DOWN);
+			SmartDashboard.putNumber("D Vel Elevator Down: ", D_VEL_ELEVATOR_DOWN);
+			
+			SmartDashboard.putNumber("Profile Vel Percent Elevator: ", PROFILE_VEL_PERCENT_ELEVATOR);
+			SmartDashboard.putNumber("Profile Accel Percent Elevator: ", PROFILE_ACCEL_PERCENT_ELEVATOR);
+		}
+    
     }
 
     public void smartDashboardInfo() {
+        if (EnabledSubsystems.LIFT_SMARTDASHBOARD_BASIC_ENABLED) {
+            SmartDashboard.putNumber("Lift Front Current: ", getFrontCurrent());
+            SmartDashboard.putNumber("Lift Back Current: ", getBackCurrent());
+
+            SmartDashboard.putNumberArray("Lift Front Velocity vs Set Velocity: ", new double[] {getFrontVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), frontVelSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
+            SmartDashboard.putNumberArray("Lift Back Velocity vs Set Velocity: ", new double[] {getBackVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), backVelSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
+        
+            SmartDashboard.putNumberArray("Lift Front Position vs Set Position: ", new double[] {getFrontPosition().get(Distance.Unit.FOOT), frontPosSetpoint.get(Distance.Unit.FOOT)});
+            SmartDashboard.putNumberArray("Lift Back Position vs Set Position: ", new double[] {getBackPosition().get(Distance.Unit.FOOT), backPosSetpoint.get(Distance.Unit.FOOT)});
+        
+        }
+
+        if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
+
+        }
 
     }
 
