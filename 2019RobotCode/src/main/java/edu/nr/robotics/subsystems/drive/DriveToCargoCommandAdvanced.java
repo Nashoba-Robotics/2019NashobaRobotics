@@ -35,7 +35,7 @@ public class DriveToCargoCommandAdvanced extends NRCommand {
         gyro.reset();
         
 		//manipulator logic, waiting on other elevator subsystems
-		if ((Elevator.getInstance().getPosition().sub(Elevator.CARGO_PICKUP_HEIGHT)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
+		if ((Elevator.getInstance().getPosition().sub(Elevator.CARGO_PICKUP_HEIGHT_ELEVATOR)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
 			finished = true;
 		} else {
 			finished = false;

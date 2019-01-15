@@ -439,10 +439,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 SmartDashboard.putNumber("Elevator Encoder Ticks: ", elevatorTalon.getSelectedSensorPosition(PID_TYPE));
             }
         }  
-    
-    public boolean isRevLimitSwitchClosed(){
-        return elevatorTalon.getSensorCollection().isRevLimitClosed();
-    }
+    //replace with Hall Effect Sensor
+   // public boolean isRevLimitSwitchClosed(){
+     //   return elevatorTalon.getSensorCollection().isRevLimitClosed();
+    //}
 
     @Override
     public void periodic(){

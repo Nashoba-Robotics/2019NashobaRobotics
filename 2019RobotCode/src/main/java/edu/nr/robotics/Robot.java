@@ -19,7 +19,7 @@ import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardComman
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.commandbased.NRSubsystem;
-import com.revrobtoics;
+//import com.revrobtoics.*;
 
 public class Robot extends TimedRobot {
 
@@ -34,8 +34,7 @@ public synchronized static Robot getInstance(){
 public void robotInit(){
     singleton = this;
 
-    m_period;
-    m_period = 0.01;
+    m_period = 0.01;  //period that code runs at
 
     smartDashboardInit();
     autoChooserInit();

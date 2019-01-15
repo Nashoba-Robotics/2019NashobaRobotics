@@ -31,7 +31,7 @@ public class DriveToCargoCommandBasic extends NRCommand {
 		new EnableLimelightCommand(true).start();
 		gyro.reset();
 
-		if ((Elevator.getInstance().getPosition().sub(Elevator.CARGO_PICKUP_HEIGHT)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
+		if ((Elevator.getInstance().getPosition().sub(Elevator.CARGO_PICKUP_HEIGHT_ELEVATOR)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
 			finished = true;
 		} else {
 			finished = false;
