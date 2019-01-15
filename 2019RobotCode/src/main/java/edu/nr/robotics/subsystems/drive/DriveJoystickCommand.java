@@ -98,7 +98,7 @@ public class DriveJoystickCommand extends JoystickCommand {
     }
 
     public boolean shouldSwitchToJoystick() {
-        if (!(Drive.getInstance().getCurrentCommand() instanceof DriveToCargoCommand) && !Robot.getInstance().isAutonomous()) {
+        if (!(Drive.getInstance().getCurrentCommand() instanceof DriveToCargoJoystickCommand) && !Robot.getInstance().isAutonomous()) {
 
             if((OI.driveMode == Drive.DriveMode.arcadeDrive) || (OI.driveMode == Drive.DriveMode.cheesyDrive || OI.driveMode == Drive.DriveMode.fieldCentricDrive)) {
                 return OI.getInstance().isArcadeNonZero();

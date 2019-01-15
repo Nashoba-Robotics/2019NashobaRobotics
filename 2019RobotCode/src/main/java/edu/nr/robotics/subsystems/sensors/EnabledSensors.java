@@ -12,7 +12,10 @@ public class EnabledSensors {
     //more sensors, way more sensors
 
     public static DigitalInput elevatorSensor = new DigitalInput(RobotMap.ELEVATOR_SENSOR_PORT);
-    public static DigitalInput cargoIntakeSensor = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT);
+
+    public static DigitalInput cargoIntakeSensorOne = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_1);
+    public static DigitalInput cargoIntakeSensorTwo = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_2);
+    public static DigitalInput cargoIntakeSensorThree = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_3);
 
 	public static Counter elevatorCounter = new Counter(elevatorSensor);
 
