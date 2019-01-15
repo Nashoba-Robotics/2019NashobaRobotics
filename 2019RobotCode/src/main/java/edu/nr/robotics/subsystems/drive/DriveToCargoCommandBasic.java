@@ -8,10 +8,11 @@ import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Angle;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.elevator.Elevator;
-import edu.nr.robotics.subsystems.intakeRollers.IntakeRollers;
-import edu.nr.robotics.subsystems.intakeRollers.IntakeRollersStopCommand;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersStopCommand;
 import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.sensors.SensorVoting;
 
 public class DriveToCargoCommandBasic extends NRCommand {
     private boolean hasStartedForward = false;
@@ -30,7 +31,7 @@ public class DriveToCargoCommandBasic extends NRCommand {
 		new EnableLimelightCommand(true).start();
 		gyro.reset();
 
-		if ((Elevator.getInstance().getPosition().sub(Elevator.INTAKE_HEIGHT)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
+		if ((Elevator.getInstance().getPosition().sub(Elevator.CARGO_PICKUP_HEIGHT)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
 			finished = true;
 		} else {
 			finished = false;
@@ -78,7 +79,7 @@ public class DriveToCargoCommandBasic extends NRCommand {
     }
     
     protected boolean isFinishedNR() {
-		return (!EnabledSensors.cargoIntakeSensor.get() && !EnabledSensors.cargoIntakeSensor.get()) || finished;
+		return (!(new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue())) || finished;
 	}
 
 }

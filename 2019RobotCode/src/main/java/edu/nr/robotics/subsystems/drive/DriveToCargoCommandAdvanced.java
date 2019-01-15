@@ -6,12 +6,14 @@ import edu.nr.lib.gyro.GyroCorrection;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.units.Angle;
 import edu.nr.robotics.subsystems.elevator.Elevator;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.sensors.SensorVoting;
 
 public class DriveToCargoCommandAdvanced extends NRCommand {
-    public Angle STOP_LIMELIGHT_TRACKING_ANGLE = new Angle(-15, Angle.Unit.DEGREE); //TODO; Find STOP_LIMELIGHT_TRACKING_ANGLE
+    public Angle STOP_LIMELIGHT_TRACKING_ANGLE = new Angle(-15, Angle.Unit.DEGREE); //TODO: Find STOP_LIMELIGHT_TRACKING_ANGLE
 
     private boolean stoppedTracking = false;
     private boolean hasStartedForward = false;
@@ -33,13 +35,13 @@ public class DriveToCargoCommandAdvanced extends NRCommand {
         gyro.reset();
         
 		//manipulator logic, waiting on other elevator subsystems
-		if ((Elevator.getInstance().getPosition().sub(Elevator.INTAKE_HEIGHT)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
+		if ((Elevator.getInstance().getPosition().sub(Elevator.CARGO_PICKUP_HEIGHT)).abs().greaterThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR)) {
 			finished = true;
 		} else {
 			finished = false;
 		}
 
-		if (IntakeRollers.getInstance().percentHighSetpoint == 0 && IntakeRollers.getInstance().percentLowSetpoint == 0) {
+		if (IntakeRollers.getInstance().Vel_Setpoint == 0) {
 			finished = true;
 		} else {
 			finished = false;
@@ -95,7 +97,7 @@ public class DriveToCargoCommandAdvanced extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-		return (!EnabledSensors.cargoIntakeSensor.get()) || finished;
+		return (!(new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue())) || finished;
 	}
 
 }

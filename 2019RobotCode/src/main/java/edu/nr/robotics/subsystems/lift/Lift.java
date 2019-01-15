@@ -22,10 +22,9 @@ public class Lift extends NRSubsystem {
 
     private CANSparkMax liftFront, liftBack;
 
-    public static final double ENC_TICK_PER_INCH_LIFT = 0;
+    public static final double INCH_PER_REVOLUTION_LIFT = 0;
 
-    public static final Speed MAX_SPEED_LIFT_FRONT = Speed.ZERO;
-    public static final Speed MAX_SPEED_LIFT_BACK = Speed.ZERO;
+    public static final Speed MAX_SPEED_LIFT = Speed.ZERO;
 
     public static final Acceleration MAX_ACCEL_LIFT_FRONT = Acceleration.ZERO;
     public static final Acceleration MAX_ACCEL_LIFT_BACK = Acceleration.ZERO;
@@ -149,9 +148,103 @@ public class Lift extends NRSubsystem {
 
     public Distance getFrontPosition() {
         if(liftFront != null){
-            return new Distance(liftFront.getEncoder().getPosition(), Distance.Unit.REVOLUTION);
+            return new Distance(liftFront.getEncoder().getPosition(), Distance.Unit.REVOLUTION_LIFT);
         } else {
             return Distance.ZERO;
         }
+    }
+
+    public Distance getBackPosition() {
+        if(liftBack != null){
+            return new Distance(liftBack.getEncoder().getPosition(), Distance.Unit.REVOLUTION_LIFT);
+        } else {
+            return Distance.ZERO;
+        }
+    }
+
+    public Speed getFrontVelocity() {
+        if(liftFront != null){
+            return new Speed(liftFront.getEncoder().getVelocity(), Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE);
+        } else {
+            return Speed.ZERO;
+        }
+    }
+
+    public Speed getBackVelocity() {
+        if(liftBack != null){
+            return new Speed(liftBack.getEncoder().getVelocity(), Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE);
+        } else {
+            return Speed.ZERO;
+        }
+    }
+
+    public double getFrontCurrent() {
+        if(liftFront != null) {
+            return liftFront.getOutputCurrent();
+        }
+        return 0;
+    }
+
+    public double getBackCurrent() {
+        if(liftBack != null) {
+            return liftBack.getOutputCurrent();
+        }
+        return 0;
+    }
+
+    public void setPosition() {
+
+    }
+
+    public void setMotorSpeedRaw(double front, double back) {
+        liftFront.set(front);
+        liftBack.set(back);
+    }
+
+    public void setMotorSpeedPercent(double front, double back) {
+        setMotorSpeed(MAX_SPEED_LIFT.mul(front), MAX_SPEED_LIFT.mul(back));
+
+    }
+
+    public void setMotorSpeed(Speed front, Speed back) {
+        if(liftFront != null && liftBack != null) {
+
+            frontVelSetpoint = front;
+            backVelSetpoint = back;
+
+            liftFront.getPIDController().setFF(((VOLTAGE_VELOCITY_SLOPE_LIFT_FRONT * frontVelSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LIFT_FRONT) * 1023.0 ChangeThis), VEL_SLOT);
+            liftBack.getPIDController().setFF(((VOLTAGE_VELOCITY_SLOPE_LIFT_BACK * backVelSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LIFT_BACK) * 1023.0 ChangeThis), VEL_SLOT);
+
+            if(EnabledSubsystems.LIFT_DUMB_ENABLED) {
+                    liftFront.set(frontVelSetpoint.div(MAX_SPEED_LIFT));
+                    liftBack.set(backVelSetpoint.div(MAX_SPEED_LIFT));
+            } else {
+                liftFront.getPIDController().setReference(frontVelSetpoint.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
+                liftBack.getPIDController().setReference(backVelSetpoint.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
+        }
+
+        }
+    }
+
+    public void setVoltageRamp(Time time) {
+        liftFront.setRampRate(time.get(Time.Unit.SECOND));
+        liftBack.setRampRate(time.get(Time.Unit.SECOND));
+    }
+
+    private void smartDashboardInit() {
+
+    }
+
+    public void smartDashboardInfo() {
+
+    }
+
+    public void periodic() {
+
+    }
+
+    public void disable() {
+        liftFront.disable();
+        liftBack.disable();
     }
 }

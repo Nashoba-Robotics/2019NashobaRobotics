@@ -125,6 +125,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = Distance.ZERO;
+    public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = Distance.ZERO;
 
     private Speed velSetpoint = Speed.ZERO;
     private Distance posSetpoint = Distance.ZERO;
@@ -452,7 +453,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 PROFILE_VEL_PERCENT_ELEVATOR = 0.8;
             }
             if (elevatorTalon.getSensorCollection().isRevLimitSwitchClosed()) {
-                elevatorTalon.getSensorCollection().setQuadraturePosition((int) HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV), DEFAULT_TIMEOUT);
+                elevatorTalon.getSensorCollection().setQuadraturePosition((int) CARGO_PICKUP_HEIGHT_ELEVATOR.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV), DEFAULT_TIMEOUT);
             }
         }
     }
