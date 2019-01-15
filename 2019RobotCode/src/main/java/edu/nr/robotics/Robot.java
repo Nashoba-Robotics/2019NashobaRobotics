@@ -8,16 +8,17 @@ import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
-//import edu.nr.robotics.subsystems.elevator.
+import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.commandbased.NRSubsystem;
-
 
 
 public class Robot extends TimedRobot {
@@ -64,7 +65,7 @@ public void robotInit(){
         if(EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new ElevatorDeltaPositionSmartDashboardCommand());
 			SmartDashboard.putData(new ElevatorMoveBasicSmartDashboardCommand());	
-			SmartDashboard.putData(new ElevatorProfileSmartDashboardCommand());
+			SmartDashboard.putData(new ElevatorProfileSmartDashboardCommandGroup());
         }
     }
 
