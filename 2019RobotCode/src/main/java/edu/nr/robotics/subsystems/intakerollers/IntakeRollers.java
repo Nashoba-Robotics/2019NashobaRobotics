@@ -11,7 +11,7 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class IntakeRollers extends NRSubsystem{
+public class IntakeRollers extends NRSubsystem {
 
     private static IntakeRollers singleton;
 
@@ -30,14 +30,18 @@ public class IntakeRollers extends NRSubsystem{
 
     public static final NeutralMode NEUTRAL_MODE_INTAKE_ROLLERS = NeutralMode.Brake;
 
+    public static final double CURRENT_PEAK_INTAKE_ROLLERS = 0; //TODO: find
+
     public static final int DEFAULT_TIMEOUT = 0;
     
-    // public static Time SCORE_TIME = new Time(0.5, Time.Unit.SECOND); // find
+    public static Time SCORE_TIME = Time.ZERO; // find
 
-    public double Vel_Setpoint = 0; //setpoint of subsystem motor velocity
+    //setpoint of subsystem motor velocity
+    public double Vel_Setpoint = 0; 
 
     private IntakeRollers() {
-        if(EnabledSubsystems.INAKE_ROLLERS_ENABLED){
+
+        if(EnabledSubsystems.INTAKE_ROLLERS_ENABLED){
 
             intakeRollers = CTRECreator.createMasterTalon(RobotMap.INTAKE_ROLLERS);
 
@@ -96,11 +100,26 @@ public class IntakeRollers extends NRSubsystem{
         }
     }
 
-    public void smartDashobardInit() {
-        if(EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putNumber("Intake Rollers Vel Percent: ", VEL);
+    public void smartDashboardInit() {
+        if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putNumber("Intake Rollers Vel Percent: ", Vel_Setpoint);
 
         }
+    }
+
+	@Override
+	public void smartDashboardInfo() {
+		if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_BASIC_ENABLED) {
+            SmartDashboard.putNumber("Intake Rollers Current: ", getCurrent());
+        }
+        if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
+            Vel_Setpoint = SmartDashboard.getNumber("Intake Rollers Vel Percent: ", Vel_Setpoint);
+        }
+	}
+
+	@Override
+	public void disable() {
+        setMotorPercent(0);
     }
 
 
