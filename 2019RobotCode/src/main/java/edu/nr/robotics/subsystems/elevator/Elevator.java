@@ -32,7 +32,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private VictorSPX elevatorVictorFollowOne;
     private VictorSPX elevatorVictorFollowTwo; //follow may be other type of talon
     
-    public static final double END_TICK_PER_INCH_CARRIAGE = 0;//find everything
+    public static final double ENC_TICK_PER_INCH_CARRIAGE = 0;//find everything
 
     public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;//find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
