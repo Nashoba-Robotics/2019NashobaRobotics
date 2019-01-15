@@ -15,7 +15,7 @@ import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.commandbased.NRSubsystem;
-
+import com.revrobtoics;
 
 
 public class Robot extends TimedRobot {
@@ -31,6 +31,7 @@ public synchronized static Robot getInstance(){
 public void robotInit(){
     singleton = this;
 
+    m_period;
     m_period = 0.01;
 
     smartDashboardInit();
