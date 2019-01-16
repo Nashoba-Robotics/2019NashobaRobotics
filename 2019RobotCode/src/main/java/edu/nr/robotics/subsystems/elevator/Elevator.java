@@ -8,6 +8,7 @@ import edu.nr.lib.motionprofiling.OneDimensionalMotionProfiler;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
 import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.motorcontrollers.CTRECreator;
@@ -32,6 +33,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private TalonSRX elevatorTalon;
     private VictorSPX elevatorVictorFollowOne;
     private VictorSPX elevatorVictorFollowTwo; //follow may be other type of talon
+    private PowerDistributionPanel pdp;
     
     public static final double ENC_TICK_PER_INCH_CARRIAGE = 0;//find everything
 
@@ -141,6 +143,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorTalon = CTRECreator.createMasterTalon(RobotMap.ELEVATOR_TALON);
             elevatorVictorFollowOne = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
             elevatorVictorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
+            pdp = new PowerDistributionPanel();
             
             elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
         
@@ -181,7 +184,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
             elevatorTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
-            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED){
+            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED) {
                 elevatorTalon.set(ControlMode.PercentOutput, 0);
             } else {
                 elevatorTalon.set(ControlMode.Velocity, 0);
@@ -193,7 +196,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     }
 
-    public static Elevator getInstance(){
+    public static Elevator getInstance() {
         if(singleton == null)
             init();
             return singleton;
@@ -201,7 +204,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     }
 
-    public synchronized static void init(){
+    public synchronized static void init() {
         if (singleton == null) {
             singleton = new Elevator();
             singleton.setJoystickCommand(new ElevatorJoystickCommand());
@@ -215,17 +218,29 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         return Distance.ZERO;    
     }
 
-    public Speed getVelocity(){
+    public Speed getVelocity() {
         if (elevatorTalon != null)
         return new Speed(elevatorTalon.getSelectedSensorVelocity(PID_TYPE), Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
             Time.Unit.HUNDRED_MILLISECOND);
         return Speed.ZERO;
     }
 
-    public double getMasterCurrent(){
+    public double getMasterCurrent() {
         if (elevatorTalon != null)
             return elevatorTalon.getOutputCurrent();
-            return 0;
+        return 0;
+    }
+
+    public double getFollowOneCurrent() {
+        if (elevatorVictorFollowOne != null)
+            return pdp.getCurrent(RobotMap.ELEVATOR_FOLLOW_ONE_CURRENT);
+        return 0;
+    }
+
+    public double getFollowTwoCurrent() {
+        if (elevatorVictorFollowTwo != null)
+            return pdp.getCurrent(RobotMap.ELEVATOR_FOLLOW_TWO_CURRENT);
+        return 0;
     }
 
     public void setPosition(Distance position) {
@@ -247,7 +262,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     }
 
 
-    public void setMotorPercentRaw(double percent){
+    public void setMotorPercentRaw(double percent) {
         if (elevatorTalon != null) {
             elevatorTalon.set(ControlMode.PercentOutput, percent);
 
@@ -296,15 +311,15 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         }
     }
 
-    public void setVoltageRamp(Time time){
-        if (elevatorTalon != null){
+    public void setVoltageRamp(Time time) {
+        if (elevatorTalon != null) {
             elevatorTalon.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
             elevatorTalon.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
 
 
         }
     }
-    public void enableMotionProfiler(Distance dist,double maxVelPercent, double maxAccelPercent){
+    public void enableMotionProfiler(Distance dist,double maxVelPercent, double maxAccelPercent) {
         Distance tempDist = dist.mul(1.227).add(new Distance(-4.533, Distance.Unit.INCH));
 
         if (dist.greaterThan(Distance.ZERO)) {
@@ -329,7 +344,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
         basicProfiler.enable();
     }
-        public void disableProfiler(){
+        public void disableProfiler() {
             basicProfiler.disable();
         }
         public void setPIDSourceType(PIDSourceType pidSource) {
@@ -340,18 +355,18 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         }
         
         public double pidGet() {
-                if(type == PIDSourceType.kRate){
+                if(type == PIDSourceType.kRate) {
                     return getInstance().getVelocity().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
 					    Time.Unit.HUNDRED_MILLISECOND);
                 } else{
                         return getInstance().getPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV);
                 }
         }
-        public void pidWrite(double output){
+        public void pidWrite(double output) {
             setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(output));
 
         }
-        public void smartDashboardInit(){
+        public void smartDashboardInit() {
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
                 SmartDashboard.putNumber("Elevator Profile Delta Inches: ", 0);
                 SmartDashboard.putNumber("Voltage Ramp Rate Elevator Seconds: ",
@@ -385,7 +400,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         }
 
         @Override
-        public void smartDashboardInfo(){
+        public void smartDashboardInfo() {
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_BASIC_ENABLED) {
                 SmartDashboard.putNumberArray("ElevatorCurrent: ", new double[] {getMasterCurrent()}); //Put in follower current
                 SmartDashboard.putNumberArray("Elevator Velocity vs. Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
@@ -440,12 +455,12 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             }
         }  
     //replace with Hall Effect Sensor
-   // public boolean isRevLimitSwitchClosed(){
+   // public boolean isRevLimitSwitchClosed() {
      //   return elevatorTalon.getSensorCollection().isRevLimitClosed();
     //}
 
     @Override
-    public void periodic(){
+    public void periodic() {
         if (EnabledSubsystems.ELEVATOR_ENABLED) {
             if (OI.getInstance().isKidModeOn()) {
                 PROFILE_VEL_PERCENT_ELEVATOR = 0.6;

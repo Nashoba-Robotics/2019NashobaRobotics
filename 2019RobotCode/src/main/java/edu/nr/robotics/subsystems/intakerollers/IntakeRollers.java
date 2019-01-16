@@ -3,19 +3,22 @@ package edu.nr.robotics.subsystems.intakerollers;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeRollers extends NRSubsystem {
 
     private static IntakeRollers singleton;
 
-    private TalonSRX intakeRollers;
+    private VictorSPX intakeRollers;
+    private PowerDistributionPanel pdp;
 
     public static Time  VOLTAGE_RAMP_RATE_INTAKE_ROLLERS = new Time(0.05, Time.Unit.SECOND);
 
@@ -43,20 +46,14 @@ public class IntakeRollers extends NRSubsystem {
 
         if(EnabledSubsystems.INTAKE_ROLLERS_ENABLED){
 
-            intakeRollers = CTRECreator.createMasterTalon(RobotMap.INTAKE_ROLLERS);
+            intakeRollers = CTRECreator.createMasterVictor(RobotMap.INTAKE_ROLLERS);
+            pdp = new PowerDistributionPanel();
 
             intakeRollers.setNeutralMode(NEUTRAL_MODE_INTAKE_ROLLERS);
             intakeRollers.setInverted(true);
             
             intakeRollers.enableVoltageCompensation(true);
-            intakeRollers.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
-            
-            intakeRollers.enableCurrentLimit(true);
-            intakeRollers.configPeakCurrentLimit(PEAK_CURRENT_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
-			intakeRollers.configPeakCurrentDuration(PEAK_CURRENT_DURATION_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
-            intakeRollers.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
-            
-            
+            intakeRollers.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_INTAKE_ROLLERS, DEFAULT_TIMEOUT);         
 
 			intakeRollers.configClosedloopRamp(VOLTAGE_RAMP_RATE_INTAKE_ROLLERS.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
             intakeRollers.configOpenloopRamp(VOLTAGE_RAMP_RATE_INTAKE_ROLLERS.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
@@ -81,7 +78,7 @@ public class IntakeRollers extends NRSubsystem {
 
     public double getCurrent() {
         if(intakeRollers != null) {
-            return intakeRollers.getOutputCurrent();
+            return pdp.getCurrent(RobotMap.INTAKE_ROLLERS_CURRENT);
         }
         return 0;
     }
