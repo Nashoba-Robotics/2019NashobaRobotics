@@ -84,6 +84,10 @@ public class CTRECreator {
     public static TalonSRX createMasterTalon(int id) {
         return createTalon(id, defaultConfiguration);
     }
+
+    public static VictorSPX createMasterVictor(int id) {
+        return createVictor(id, defaultConfiguration);
+    }
     
     /**
      * Creates a follower CANTalon with the default (out of the box) configuration

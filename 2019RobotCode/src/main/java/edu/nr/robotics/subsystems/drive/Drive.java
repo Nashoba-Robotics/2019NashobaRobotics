@@ -22,6 +22,7 @@ import edu.nr.lib.interfaces.DoublePIDSource;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.RobotMap;
@@ -40,6 +41,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		private TalonSRX  leftDrive, rightDrive, hDrive, pigeonTalon; 
 		private VictorSPX leftDriveFollow, rightDriveFollow, hDriveFollow; 
+		private PowerDistributionPanel pdp;
 		//these may change because of new talons
 
 
@@ -170,6 +172,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
 				rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
 				hDrive = CTRECreator.createMasterTalon(RobotMap.H_DRIVE);
+				pdp = new PowerDistributionPanel();
 
 				leftDriveFollow = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW, leftDrive);
 				rightDriveFollow = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW, rightDrive);
@@ -358,10 +361,22 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				return 0;
 		}
 
+		public double getRightFollowCurrent() {
+			if (rightDriveFollow != null)
+				return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_CURRENT);
+			return 0;
+		}
+
 		public double getLeftCurrent() {
 			if (leftDrive != null) {
 				return leftDrive.getOutputCurrent();
 			}
+			return 0;
+		}
+
+		public double getLeftFollowCurrent() {
+			if (leftDriveFollow != null) 
+				return pdp.getCurrent(RobotMap.LEFT_DRIVE_FOLLOW_CURRENT);
 			return 0;
 		}
 
