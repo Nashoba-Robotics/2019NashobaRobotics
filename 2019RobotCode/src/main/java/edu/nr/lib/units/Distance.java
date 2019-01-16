@@ -14,7 +14,7 @@ public class Distance {
 	
 	public enum Unit implements GenericUnit {
 		FOOT, INCH, METER, REVOLUTION_LIFT,
-		MAGNETIC_ENCODER_TICK_DRIVE, MAGNETIC_ENCODER_TICK_H, MAGNETIC_ENCODER_TICK_ELEV, MAGNETIC_ENCODER_TICK_INTAKE_ELEV,
+		MAGNETIC_ENCODER_TICK_DRIVE, ENCODER_REV_H, MAGNETIC_ENCODER_TICK_ELEV, MAGNETIC_ENCODER_TICK_INTAKE_ELEV,
 		MAGNETIC_ENCODER_TICK_CLIMBER;
 		
 		public static final Unit defaultUnit = INCH;
@@ -27,7 +27,7 @@ public class Distance {
 		/**
 		 * For the H drive
 		 */
-		private static final double ENCODER_TICK_DRIVE_H_PER_INCH = Drive.EFFECTIVE_ENC_TICK_PER_INCH_H_DRIVE;
+		private static final double ENCODER_REV_DRIVE_H_PER_INCH = Drive.EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE;
 		
 		/**
 		 * For the elevator
@@ -55,8 +55,8 @@ public class Distance {
 			if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
 				return val / ENCODER_TICK_DRIVE_PER_INCH;
 			}
-			if(this == Unit.MAGNETIC_ENCODER_TICK_H) {
-				return val / ENCODER_TICK_DRIVE_H_PER_INCH;
+			if(this == Unit.ENCODER_REV_H) {
+				return val / ENCODER_REV_DRIVE_H_PER_INCH;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return val / ENCODER_TICK_ELEV_PER_INCH;
@@ -80,8 +80,8 @@ public class Distance {
 			if(this == Unit.MAGNETIC_ENCODER_TICK_DRIVE) {
 				return ENCODER_TICK_DRIVE_PER_INCH * val;
 			}
-			if(this == Unit.MAGNETIC_ENCODER_TICK_H) {
-				return ENCODER_TICK_DRIVE_H_PER_INCH * val;
+			if(this == Unit.ENCODER_REV_H) {
+				return ENCODER_REV_DRIVE_H_PER_INCH * val;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return ENCODER_TICK_ELEV_PER_INCH * val;
