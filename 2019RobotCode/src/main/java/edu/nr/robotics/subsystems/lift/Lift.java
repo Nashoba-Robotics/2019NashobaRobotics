@@ -14,7 +14,6 @@ import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lift extends NRSubsystem {
@@ -98,6 +97,9 @@ public class Lift extends NRSubsystem {
 
     private Distance frontPosSetpoint = Distance.ZERO;
     private Distance backPosSetpoint = Distance.ZERO;
+
+    public static Distance frontSetPos = Distance.ZERO;
+    public static Distance backSetPos = Distance.ZERO;
 
     private Lift() {
         if (EnabledSubsystems.LIFT_ENABLED) {
@@ -297,8 +299,8 @@ public class Lift extends NRSubsystem {
         }
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
-            frontPosSetpoint = new Distance(SmartDashboard.getNumber("Lift Front Position Setpoint: ", 0), Distance.Unit.FOOT);
-            backPosSetpoint = new Distance(SmartDashboard.getNumber("Lift Back Position Setpoint: ", 0), Distance.Unit.FOOT);
+            frontSetPos = new Distance(SmartDashboard.getNumber("Lift Front Position Setpoint: ", 0), Distance.Unit.FOOT);
+            backSetPos = new Distance(SmartDashboard.getNumber("Lift Back Position Setpoint: ", 0), Distance.Unit.FOOT);
 			VOLTAGE_RAMP_RATE_LIFT = new Time(SmartDashboard.getNumber("Voltage Ramp Rate Lift Seconds: ",
 					VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND)), Time.Unit.SECOND);
             
@@ -329,7 +331,6 @@ public class Lift extends NRSubsystem {
     }
 
     public void disable() {
-        liftFront.disable();
-        liftBack.disable();
+        setMotorSpeedRaw(0, 0)
     }
 }

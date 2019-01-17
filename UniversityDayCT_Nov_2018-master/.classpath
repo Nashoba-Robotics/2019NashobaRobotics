@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="RobotDemo/src/main/java"/>
+	<classpathentry kind="src" path="TuningCodeExample/src/main/java"/>
+	<classpathentry kind="lib" path="RobotDemo/build/libs/RobotDemo.jar"/>
+	<classpathentry kind="lib" path="RobotDemo/build/libs/TuningCodeExample.jar"/>
+	<classpathentry kind="lib" path="RobotDemo/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="lib" path="RobotDemo/lib/Jama-1.0.3.jar"/>
+	<classpathentry kind="lib" path="TuningCodeExample/gradle/wrapper/gradle-wrapper.jar"/>
+	<classpathentry kind="output" path="RobotDemo/bin"/>
+</classpath>

@@ -13,8 +13,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.nr.lib.talons.CTRECreator;
+import edu.nr.lib.motorcontrollers.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,6 +30,8 @@ public class Robot extends TimedRobot {
 	TalonSRX carriageTalon;
 	TalonSRX intakeRoller1;
 	TalonSRX intakeRoller2;
+	CANSparkMax spark1;
+	CANSparkMax spark2;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -39,20 +43,30 @@ public class Robot extends TimedRobot {
 		carriageTalon = CTRECreator.createMasterTalon(0);
 		intakeRoller1 = CTRECreator.createMasterTalon(2);
 		intakeRoller2 = CTRECreator.createMasterTalon(4);
+
 		talon.configContinuousCurrentLimit(40, 0);
 		talon.configPeakCurrentLimit(50, 0);
 		talon.configPeakCurrentDuration(1000, 0);
+
 		carriageTalon.configContinuousCurrentLimit(40, 0);
 		carriageTalon.configPeakCurrentLimit(50, 0);
 		carriageTalon.configPeakCurrentDuration(1000, 0);
+
 		intakeRoller1.configContinuousCurrentLimit(40, 0);
 		intakeRoller1.configPeakCurrentLimit(50, 0);
 		intakeRoller1.configPeakCurrentDuration(1000, 0);
+
 		intakeRoller2.configContinuousCurrentLimit(40, 0);
 		intakeRoller2.configPeakCurrentLimit(50, 0);
 		intakeRoller2.configPeakCurrentDuration(1000, 0);
-		SmartDashboard.putNumber("Motor Percent: ", 0);
-		SmartDashboard.putNumber("Motor Percent 2: ", 0);
+
+		SmartDashboard.putNumber("Spark1 Percent: ", 0);
+		SmartDashboard.putNumber("Spark2 Percent: ", 0);
+
+		spark1 = SparkMax.createSpark(RobotMap.SPARK1_ID, true);
+		spark2 = SparkMax.createSpark(RobotMap.SPARK2_ID, true);
+		spark1.setIdleMode(IdleMode.kCoast);
+		spark2.setIdleMode(IdleMode.kCoast);
 	}
 
 	/**
@@ -66,6 +80,8 @@ public class Robot extends TimedRobot {
 		carriageTalon.set(ControlMode.PercentOutput, 0);
 		intakeRoller1.set(ControlMode.PercentOutput, 0);
 		intakeRoller2.set(ControlMode.PercentOutput, 0);
+		spark1.disable();
+		spark2.disable();
 
 	}
 
@@ -109,14 +125,25 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		talon.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
-		carriageTalon.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
+		//talon.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
+		//carriageTalon.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
 		//intakeRoller1.set(ControlMode.PercentOutput, -SmartDashboard.getNumber("Motor Percent 2: ", 0));
 		//intakeRoller2.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
 	
-		SmartDashboard.putNumber("Talon 1 Current: ", talon.getOutputCurrent());
-		SmartDashboard.putNumber("Talon 2 Current: ", carriageTalon.getOutputCurrent());
-		SmartDashboard.putNumber("Speed", talon.getSelectedSensorVelocity(0)/1365.33);
+		//SmartDashboard.putNumber("Talon 1 Current: ", talon.getOutputCurrent());
+		//SmartDashboard.putNumber("Talon 2 Current: ", carriageTalon.getOutputCurrent());
+		//SmartDashboard.putNumber("Speed", talon.getSelectedSensorVelocity(0)/1365.33);
+
+		spark1.set(SmartDashboard.getNumber("Spark1 Percent: ", 0));
+		spark2.set(SmartDashboard.getNumber("Spark2 Percent: ", 0));
+		
+		SmartDashboard.putNumber("Spark1 Velocity: ", spark1.getEncoder().getVelocity());
+		SmartDashboard.putNumber("Spark1 Position: ", spark1.getEncoder().getPosition());
+		SmartDashboard.putNumber("Spark1 Current: ", spark1.getOutputCurrent());
+
+		SmartDashboard.putNumber("Spark2 Velocity: ", spark2.getEncoder().getVelocity());
+		SmartDashboard.putNumber("Spark2 Position: ", spark2.getEncoder().getPosition());
+		SmartDashboard.putNumber("Spark2 Current: ", spark2.getOutputCurrent());
 	}
 
 	/**
