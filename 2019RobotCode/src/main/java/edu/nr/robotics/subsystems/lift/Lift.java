@@ -259,8 +259,8 @@ public class Lift extends NRSubsystem {
 
     private void smartDashboardInit() {
         if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.getNumber("Lift Front Position Setpoint: ", 0);
-            SmartDashboard.getNumber("Lift Back Position Setpoint: ", 0);
+            SmartDashboard.putNumber("Lift Front Pos Setpoint: ", 0);
+            SmartDashboard.putNumber("Lift Back Pos Setpoint: ", 0);
 			SmartDashboard.putNumber("Voltage Ramp Rate Lift Seconds: ",
 					VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND));
             
@@ -331,6 +331,6 @@ public class Lift extends NRSubsystem {
     }
 
     public void disable() {
-        setMotorSpeedRaw(0, 0)
+        setMotorSpeedRaw(0, 0);
     }
 }

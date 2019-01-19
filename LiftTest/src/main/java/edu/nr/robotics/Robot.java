@@ -1,11 +1,13 @@
 
 package edu.nr.robotics;
 
+import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.lift.LiftSetMotorSpeedRawSmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
+import edu.nr.robotics.subsystems.lift.LiftSetVelocitySmartDasboardCommand;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,6 +31,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
     SmartDashboard.putData(new LiftSetMotorSpeedRawSmartDashboardCommand());
+    SmartDashboard.putData(new LiftSetVelocitySmartDasboardCommand());
     
   }
 
@@ -84,4 +87,17 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
+  /**
+	 * This function is called once each time the robot enters Disabled mode.
+	 * You can use it to reset any subsystem information you want to clear when
+	 * the robot is disabled.
+	 */
+	@Override
+	public void disabledInit() {
+		for (NRSubsystem subsystem : NRSubsystem.subsystems) {
+			subsystem.disable();
+		}
+  }
+  
 }
