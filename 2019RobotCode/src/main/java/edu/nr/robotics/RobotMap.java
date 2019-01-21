@@ -4,11 +4,15 @@ public class RobotMap {
     public static final int RIGHT_DRIVE = -1;  //define these
     public static final int LEFT_DRIVE = -1;
     public static final int H_DRIVE = -1;
-    public static final int RIGHT_DRIVE_FOLLOW = -1;  //define these
-    public static final int LEFT_DRIVE_FOLLOW = -1;
+    public static final int RIGHT_DRIVE_FOLLOW_1 = -1;  //define these
+    public static final int RIGHT_DRIVE_FOLLOW_2 = -1;  
+    public static final int LEFT_DRIVE_FOLLOW_1 = -1;
+    public static final int LEFT_DRIVE_FOLLOW_2 = -1;
     public static final int H_DRIVE_FOLLOW = -1;
-    public static final int RIGHT_DRIVE_FOLLOW_CURRENT = -1;
-    public static final int LEFT_DRIVE_FOLLOW_CURRENT = -1;
+    public static final int RIGHT_DRIVE_FOLLOW_1_CURRENT = -1;
+    public static final int RIGHT_DRIVE_FOLLOW_2_CURRENT = -1;
+    public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = -1;
+    public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = -1;
 
     public static final int CARGO_INTAKE_SENSOR_PORT_1 = -1;
     public static final int CARGO_INTAKE_SENSOR_PORT_2 = -1;
