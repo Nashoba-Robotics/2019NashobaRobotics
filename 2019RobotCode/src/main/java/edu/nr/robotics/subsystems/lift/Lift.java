@@ -135,8 +135,10 @@ public class Lift extends NRSubsystem {
             liftFront.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
             liftBack.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
 
-            liftFront.getPIDController().setOutputRange(-1, 1);
-            liftBack.getPIDController().setOutputRange(-1, 1);
+            liftFront.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
+            liftBack.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
+            liftFront.getPIDController().setOutputRange(-1, 1, POS_SLOT);
+            liftBack.getPIDController().setOutputRange(-1, 1, POS_SLOT);
 
             smartDashboardInit();
 
