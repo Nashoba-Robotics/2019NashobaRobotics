@@ -37,13 +37,13 @@ public class Lift extends NRSubsystem {
 
     public static Time VOLTAGE_RAMP_RATE_LIFT = Time.ZERO;
 
-    public static double F_POS_LIFT_FRONT = 0.000175;
-    public static double P_POS_LIFT_FRONT = 0;
+    public static double F_POS_LIFT_FRONT = 0; //Leave F at 0
+    public static double P_POS_LIFT_FRONT = 0.1;
     public static double I_POS_LIFT_FRONT = 0;
     public static double D_POS_LIFT_FRONT = 0;
 
-    public static double F_POS_LIFT_BACK = 0.000165;
-    public static double P_POS_LIFT_BACK = 0;
+    public static double F_POS_LIFT_BACK = 0; //Leave F at 0
+    public static double P_POS_LIFT_BACK = 0.1;
     public static double I_POS_LIFT_BACK = 0;
     public static double D_POS_LIFT_BACK = 0;
 
