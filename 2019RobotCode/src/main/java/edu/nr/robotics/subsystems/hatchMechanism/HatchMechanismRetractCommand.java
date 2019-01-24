@@ -1,4 +1,4 @@
-package edu.nr.robotics.subsystems.hatchMechanism;
+package edu.nr.robotics.subsystems.hatchmechanism;
 
 import edu.nr.lib.commandbased.NRCommand;
 
