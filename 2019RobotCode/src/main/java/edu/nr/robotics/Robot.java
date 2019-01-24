@@ -3,6 +3,7 @@ package edu.nr.robotics;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
@@ -13,6 +14,10 @@ import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCom
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
+import edu.nr.robotics.auton.AutoChoosers;
+import edu.nr.robotics.auton.AutoChoosers.GamePiece;
+import edu.nr.robotics.auton.AutoChoosers.Platform;
+import edu.nr.robotics.auton.AutoChoosers.StartPos;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
@@ -45,8 +50,35 @@ public void robotInit(){
     LimelightNetworkTable.getInstance().lightLED(false);
 
 }
+
+    private Command autonomusCommand;
+    public AutoChoosers.StartPos selectedStartPos;
+    public AutoChoosers.GamePiece selectedGamePiece;
+    public AutoChoosers.GamePiece selectedGamePiece2;
+    public AutoChoosers.Destination selectedDestination;
+    public AutoChoosers.Platform selectedPlatform;
+    public AutoChoosers.Destination2 selectedDestination2;
+    public double autoWaitTime;
     
     public void autoChooserInit() {
+        AutoChoosers.autoStartPosChooser.addDefault("Start Pos Left", StartPos.left);
+        AutoChoosers.autoStartPosChooser.addObject("Start Pos Middle", StartPos.middle);
+		AutoChoosers.autoStartPosChooser.addObject("Start Pos Right", StartPos.right);
+
+        AutoChoosers.autoGamePiece1Chooser.addDefault("Game Piece", GamePiece.hatch);
+        AutoChoosers.autoGamePiece1Chooser.addObject("Game Piece", GamePiece.cargo);
+
+        AutoChoosers.autoGamePiece2Chooser.addDefault("Game Piece", GamePiece.hatch);
+        AutoChoosers.autoGamePiece2Chooser.addObject("Game Piece", GamePiece.cargo);
+
+        AutoChoosers.autoPlatformChooser.addDefault("Platform", Platform.no);
+        AutoChoosers.autoPlatformChooser.addObject("Platform", Platform.yes);
+
+        //AutoChoosers.autoDestinationChooser
+
+
+
+
 
     }
 
