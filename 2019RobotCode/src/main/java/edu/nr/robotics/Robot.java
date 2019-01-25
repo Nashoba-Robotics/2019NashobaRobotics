@@ -15,6 +15,8 @@ import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.auton.AutoChoosers;
+import edu.nr.robotics.auton.AutoChoosers.Destination;
+import edu.nr.robotics.auton.AutoChoosers.Destination2;
 import edu.nr.robotics.auton.AutoChoosers.GamePiece;
 import edu.nr.robotics.auton.AutoChoosers.Platform;
 import edu.nr.robotics.auton.AutoChoosers.StartPos;
@@ -74,10 +76,14 @@ public void robotInit(){
         AutoChoosers.autoPlatformChooser.addDefault("Platform", Platform.no);
         AutoChoosers.autoPlatformChooser.addObject("Platform", Platform.yes);
 
-        //AutoChoosers.autoDestinationChooser
+        AutoChoosers.autoDestination1Chooser.addDefault("Destination", Destination.rocketFront);
+        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.rocketBack);
+        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.cargoShipFrontLeft);
+        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.cargoShipFrontRight);
+        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.cargoShipSide);
 
-
-
+        AutoChoosers.autoDestination2Chooser.addDefault("Destination 2", Destination2.rocket);
+        AutoChoosers.autoDestination2Chooser.addObject("Destination 2", Destination2.cargoShip);
 
 
     }

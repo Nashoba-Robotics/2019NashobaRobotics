@@ -12,7 +12,6 @@ public class AutoChoosers {
     public static SendableChooser<Destination2> autoDestination2Chooser = new SendableChooser<>();
 
 
-
     public enum StartPos {
         left, middle, right;
     }
