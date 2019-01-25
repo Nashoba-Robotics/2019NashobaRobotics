@@ -34,6 +34,14 @@ public class RobotMap {
 
     public static final int PIGEON_TALON = -1;
 
+    public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = -1;
+    public static final int HATCH_MECHANISM_DEPLOY_FORWARD = -1;
+    public static final int HATCH_MECHANISM_DEPLOY_REVERSE = -1;
+
+    public static final int HATCH_MECHANISM_HATCH_PCM_PORT = -1;
+    public static final int HATCH_MECHANISM_HATCH_FORWARD = -1;
+    public static final int HATCH_MECHANISM_HATCH_REVERSE = -1;
+
     ///sensor ports too
 
 
