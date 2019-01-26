@@ -79,14 +79,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0;
 		public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0;
 
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_H_LEFT = 0;
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_H_RIGHT = 0;
+		public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
 
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0;
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0;
 
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H_LEFT = 0;
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H_RIGHT = 0;
+		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
 
 		public static Time DRIVE_RAMP_RATE = Time.ZERO;
 		public static Time H_DRIVE_RAMP_RATE = Time.ZERO;
@@ -99,13 +97,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double I_RIGHT = 0;
 		public static double D_RIGHT = 0;
 
-		public static double P_H_LEFT = 0;
-		public static double I_H_LEFT = 0;
-		public static double D_H_LEFT = 0;
-
-		public static double P_H_RIGHT = 0;
-		public static double I_H_RIGHT = 0;
-		public static double D_H_RIGHT = 0;
+		public static double FF_H = 0;
+		public static double P_H = 0;
+		public static double I_H = 0;
+		public static double D_H = 0;
 
 		public static double kVOneD = 1 / MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
 		public static double kAOneD = 0.0;
@@ -290,10 +285,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				rightDrive.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
 
-				hDrive.getPIDController().setFF(0, VEL_SLOT);
-				hDrive.getPIDController().setP(0, VEL_SLOT);
-				hDrive.getPIDController().setI(0, VEL_SLOT);
-				hDrive.getPIDController().setD(0, VEL_SLOT);
+				hDrive.getPIDController().setFF(FF_H, VEL_SLOT);
+				hDrive.getPIDController().setP(P_H, VEL_SLOT);
+				hDrive.getPIDController().setI(I_H, VEL_SLOT);
+				hDrive.getPIDController().setD(D_H, VEL_SLOT);
 
 				hDrive.setIdleMode(IdleMode.kBrake);
 
@@ -367,7 +362,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public Speed getHVelocity() {
 			if(hDrive != null)
-					return new Speed(hDrive.get(), Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND);
+					return new Speed(hDrive.get(), Unit.ENCODER_REV_H, Time.Unit.MINUTE);
 			return Speed.ZERO;	
 			}
 
@@ -441,8 +436,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				/ leftMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 				rightDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT * rightMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_RIGHT) * 1023.0) 
 				/ rightMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
-				hDrive.getPIDController().setFF(((VOLTAGE_PERCENT_VELOCITY_SLOPE_H_RIGHT * hMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_H_LEFT) * 1023.0)
-				 / hMotorSetpoint.abs().get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND) ,VEL_SLOT); //fix later  , 1023 will change to match new native encoder unit ratios
 
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 						leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.div(MAX_SPEED_DRIVE));
@@ -452,9 +445,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 					leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					if (Math.abs(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)) < 0.05){
-							hDrive.getPIDController().setReference(0, ControlType.kVelocity); //stop if velocity is really low
+							hDrive.set(0); //stop if velocity is really low
 				} else 
-						hDrive.getPIDController().setReference(hMotorSetpoint.get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND), ControlType.kVelocity);
+						hDrive.getPIDController().setReference(hMotorSetpoint.get(Distance.Unit.ENCODER_REV_H, Time.Unit.MINUTE), ControlType.kVelocity);
 
 			}
 
@@ -604,9 +597,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		SmartDashboard.putNumber("Right I Value: ", I_RIGHT);
 		SmartDashboard.putNumber("Right D Value: ", D_RIGHT);
 
-		SmartDashboard.putNumber("H P Value: ", P_H_RIGHT);
-		SmartDashboard.putNumber("H I Value: ", I_H_RIGHT);
-		SmartDashboard.putNumber("H D Value: ", D_H_RIGHT);
+		SmartDashboard.putNumber("H P Value: ", P_H);
+		SmartDashboard.putNumber("H I Value: ", I_H);
+		SmartDashboard.putNumber("H D Value: ", D_H);
 
 		SmartDashboard.putNumber("kVOneD Value: ", kVOneD);
 		SmartDashboard.putNumber("kAOneD Value: ", kAOneD);
@@ -674,23 +667,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			rightDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("Right I Value: ", I_RIGHT), DEFAULT_TIMEOUT);
 			rightDrive.config_kD(VEL_SLOT, SmartDashboard.getNumber("Right D Value: ", D_RIGHT), DEFAULT_TIMEOUT);
 
-			hDrive.getPIDController().setP(SmartDashboard.getNumber("H P Value: ", P_H_RIGHT), VEL_SLOT);
-			hDrive.getPIDController().setI(SmartDashboard.getNumber("H I Value: ", I_H_RIGHT), VEL_SLOT);
-			hDrive.getPIDController().setD(SmartDashboard.getNumber("H D Value: ", D_H_RIGHT), VEL_SLOT);
-
-			P_LEFT = SmartDashboard.getNumber("Left P Value: ", P_LEFT);
-			I_LEFT = SmartDashboard.getNumber("Left I Value: ", I_LEFT);
-			D_LEFT = SmartDashboard.getNumber("Left D Value: ", D_LEFT);
-
-			P_RIGHT = SmartDashboard.getNumber("Right P Value: ", P_RIGHT);
-			I_RIGHT = SmartDashboard.getNumber("Right I Value: ", I_RIGHT);
-			D_RIGHT = SmartDashboard.getNumber("Right D Value: ", D_RIGHT);
-
-			P_H_RIGHT = SmartDashboard.getNumber("H P Value: ", P_H_RIGHT);
-			I_H_RIGHT = SmartDashboard.getNumber("H I Value: ", I_H_RIGHT);
-			D_H_RIGHT = SmartDashboard.getNumber("H D Value: ", D_H_RIGHT);
-
-
+			hDrive.getPIDController().setP(SmartDashboard.getNumber("H P Value: ", P_H), VEL_SLOT);
+			hDrive.getPIDController().setI(SmartDashboard.getNumber("H I Value: ", I_H), VEL_SLOT);
+			hDrive.getPIDController().setD(SmartDashboard.getNumber("H D Value: ", D_H), VEL_SLOT);
 			kVOneD = SmartDashboard.getNumber("kVOneD Value: ", kVOneD);
 			kAOneD = SmartDashboard.getNumber("kAOneD Value: ", kAOneD);
 			kPOneD = SmartDashboard.getNumber("kPOneD Value: ", kPOneD);

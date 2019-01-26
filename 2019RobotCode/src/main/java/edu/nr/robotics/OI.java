@@ -27,10 +27,10 @@ public class OI implements SmartDashboardSource {
 
     private final Joystick elevatorStick;
 
-    private static final int STICK_LEFT = -1; //find these
-    private static final int STICK_RIGHT = -1; 
-    private static final int STICK_OPERATOR_LEFT = -1;
-    private static final int STICK_OPERATOR_RIGHT = -1;
+    private static final int STICK_LEFT = 0;
+    private static final int STICK_RIGHT = 1; 
+    private static final int STICK_OPERATOR_LEFT = 2;
+    private static final int STICK_OPERATOR_RIGHT = 3;
 
     public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
 

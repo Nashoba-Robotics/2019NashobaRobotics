@@ -8,7 +8,6 @@ public class RobotMap {
     public static final int RIGHT_DRIVE_FOLLOW_2 = -1;  
     public static final int LEFT_DRIVE_FOLLOW_1 = -1;
     public static final int LEFT_DRIVE_FOLLOW_2 = -1;
-    public static final int H_DRIVE_FOLLOW = -1;
     public static final int RIGHT_DRIVE_FOLLOW_1_CURRENT = -1;
     public static final int RIGHT_DRIVE_FOLLOW_2_CURRENT = -1;
     public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = -1;
