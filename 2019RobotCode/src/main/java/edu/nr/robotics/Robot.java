@@ -16,11 +16,20 @@ import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.auton.AutoChoosers;
+import edu.nr.robotics.auton.DriveOverBaselineAutoCommand;
 import edu.nr.robotics.auton.AutoChoosers.Destination;
 import edu.nr.robotics.auton.AutoChoosers.Destination2;
 import edu.nr.robotics.auton.AutoChoosers.GamePiece;
 import edu.nr.robotics.auton.AutoChoosers.Platform;
 import edu.nr.robotics.auton.AutoChoosers.StartPos;
+import edu.nr.robotics.auton.automap.startPosLeftCargoShipSideCommand;
+import edu.nr.robotics.auton.automap.startPosLeftRocketBackCommand;
+import edu.nr.robotics.auton.automap.startPosLeftRocketFrontCommand;
+import edu.nr.robotics.auton.automap.startPosMiddleCargoShipFrontLeftCommand;
+import edu.nr.robotics.auton.automap.startPosMiddleCargoShipFrontRightCommand;
+import edu.nr.robotics.auton.automap.startPosRightCargoShipSideCommand;
+import edu.nr.robotics.auton.automap.startPosRightRocketBackCommand;
+import edu.nr.robotics.auton.automap.startPosRightRocketFrontCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
@@ -38,6 +47,15 @@ public class Robot extends TimedRobot {
 private double prevTime = 0;
 
 private static Robot singleton;
+
+private Command autonomousCommand;
+public AutoChoosers.StartPos selectedStartPos;
+public AutoChoosers.GamePiece selectedGamePiece;
+public AutoChoosers.GamePiece selectedGamePiece2;
+public AutoChoosers.Destination selectedDestination;
+public AutoChoosers.Platform selectedPlatform;
+public AutoChoosers.Destination2 selectedDestination2;
+public double autoWaitTime;
 
 public synchronized static Robot getInstance(){
     return singleton;
@@ -60,15 +78,6 @@ public void robotInit(){
     System.out.println("end of robot init");
 
 }
-
-    private Command autonomusCommand;
-    public AutoChoosers.StartPos selectedStartPos;
-    public AutoChoosers.GamePiece selectedGamePiece;
-    public AutoChoosers.GamePiece selectedGamePiece2;
-    public AutoChoosers.Destination selectedDestination;
-    public AutoChoosers.Platform selectedPlatform;
-    public AutoChoosers.Destination2 selectedDestination2;
-    public double autoWaitTime;
     
     public void autoChooserInit() {
         AutoChoosers.autoStartPosChooser.addDefault("Start Pos Left", StartPos.left);
@@ -92,7 +101,6 @@ public void robotInit(){
 
         AutoChoosers.autoDestination2Chooser.addDefault("Destination 2", Destination2.rocket);
         AutoChoosers.autoDestination2Chooser.addObject("Destination 2", Destination2.cargoShip);
-
 
     }
 
@@ -149,8 +157,10 @@ public void robotInit(){
             selectedGamePiece2 = AutoChoosers.autoGamePiece2Chooser.getSelected();
             selectedPlatform = AutoChoosers.autoPlatformChooser.getSelected();
 
-            if(autonomusCommand != null)
-                autonomusCommand.start();
+            autonomousCommand = getAutoCommand();
+
+            if(autonomousCommand != null)
+                autonomousCommand.start();
 
         }
 
@@ -193,7 +203,28 @@ public void robotInit(){
 
         }
     
-    
+        public Command getAutoCommand() {
+
+            if(selectedStartPos == StartPos.left && selectedDestination == Destination.rocketBack) {
+                return new startPosLeftRocketBackCommand();
+            } else if(selectedStartPos == StartPos.left && selectedDestination == Destination.rocketFront) {
+                return new startPosLeftRocketFrontCommand();
+            } else if(selectedStartPos == StartPos.left && selectedDestination == Destination.cargoShipSide) {
+                return new startPosLeftCargoShipSideCommand();
+            } else if(selectedStartPos == StartPos.middle && selectedDestination == Destination.cargoShipFrontLeft) {
+                return new startPosMiddleCargoShipFrontLeftCommand();
+            } else if(selectedStartPos == StartPos.middle && selectedDestination == Destination.cargoShipFrontRight) {
+                return new startPosMiddleCargoShipFrontRightCommand();
+            } else  if(selectedStartPos == StartPos.right && selectedDestination == Destination.rocketBack) {
+                return new startPosRightRocketBackCommand();
+            } else if(selectedStartPos == StartPos.right && selectedDestination == Destination.rocketFront) {
+                return new startPosRightRocketFrontCommand();
+            } else if(selectedStartPos == StartPos.right && selectedDestination == Destination.cargoShipSide) {
+                return new startPosRightCargoShipSideCommand();
+            }
+            return new DriveOverBaselineAutoCommand();
+        }
+
 
     }
 
