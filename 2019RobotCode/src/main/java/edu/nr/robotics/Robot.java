@@ -22,6 +22,8 @@ import edu.nr.robotics.auton.AutoChoosers.Platform;
 import edu.nr.robotics.auton.AutoChoosers.StartPos;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
+import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
@@ -94,18 +96,26 @@ public void robotInit(){
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
 
-        if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
-                SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
-                SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand());
-			    SmartDashboard.putData(new DriveForwardSmartDashboardCommandH());
-			    SmartDashboard.putData(new TurnSmartDashboardCommand());
-                SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
+        if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
+            SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand());
+            SmartDashboard.putData(new DriveForwardSmartDashboardCommandH());
+            SmartDashboard.putData(new TurnSmartDashboardCommand());
+            SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
         }
 
-        if(EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
+        if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new ElevatorDeltaPositionSmartDashboardCommand());
 			SmartDashboard.putData(new ElevatorMoveBasicSmartDashboardCommand());	
 			SmartDashboard.putData(new ElevatorProfileSmartDashboardCommandGroup());
+        }
+
+        if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new IntakeRollersVelocitySmartDashboardCommand());
+        }
+
+        if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
         }
     }
 

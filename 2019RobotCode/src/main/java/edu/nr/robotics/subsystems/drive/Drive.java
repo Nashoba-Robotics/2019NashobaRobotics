@@ -57,7 +57,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 
 		//fix all of these
-		public static final double REAL_ENC_TICK_PER_INNCH_DRIVE = 0;
+		public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 0;
 		public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 0;
 
 		public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 0;
@@ -197,6 +197,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
 				rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
 				hDrive = SparkMax.createSpark(RobotMap.H_DRIVE, true);
+				pdp = new PowerDistributionPanel();
 
 				leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
 				leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);

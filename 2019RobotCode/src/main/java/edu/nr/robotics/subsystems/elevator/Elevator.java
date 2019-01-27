@@ -35,35 +35,35 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private VictorSPX elevatorVictorFollowTwo; //follow may be other type of talon
     private PowerDistributionPanel pdp;
     
-    public static final double ENC_TICK_PER_INCH_CARRIAGE = 0;//find everything
+    public static final double ENC_TICK_PER_INCH_CARRIAGE = 56535.0 / 107.0; //find everything, these are 2018 numbers for testing
 
-    public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;//find
+    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(10.98, Distance.Unit.FOOT, Time.Unit.SECOND);//find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
 
-    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = Acceleration.ZERO;//find
+    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration(30, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);//find
     public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = Acceleration.ZERO;
 
-    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0;
+    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.25;
 
-	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
+	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.25;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0; //find
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.260; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
 
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0;
+    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.0674;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
     
     public static Time VOLTAGE_RAMP_RATE_ELEVATOR = Time.ZERO;
 
-    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0;
-    public static final double DROP_PERCENT_ELEVATOR = 0;
-    public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0;
+    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.8;
+    public static final double DROP_PERCENT_ELEVATOR = -0.4;
+    public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0.9;
 
-    public static double F_POS_ELEVATOR_UP = 0;
+    public static double F_POS_ELEVATOR_UP = 0.4;
 
-    public static double P_POS_ELEVATOR_UP = 0;
+    public static double P_POS_ELEVATOR_UP = 0.05;
     public static double I_POS_ELEVATOR_UP = 0;
-    public static double D_POS_ELEVATOR_UP = 0;
+    public static double D_POS_ELEVATOR_UP = 0.5;
 
     public static double F_POS_ELEVATOR_DOWN = ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN * MAX_SPEED_ELEVATOR_DOWN.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
     + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN) * 1023.0)
@@ -157,8 +157,13 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorTalon.config_kD(MOTION_MAGIC_UP_SLOT, D_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
 
             elevatorTalon.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            elevatorVictorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            elevatorVictorFollowTwo.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            
             elevatorTalon.setInverted(false);
             elevatorTalon.setSensorPhase(true);
+            elevatorVictorFollowOne.setInverted(false);
+            elevatorVictorFollowTwo.setInverted(false);
 
             elevatorTalon.enableVoltageCompensation(true);
             elevatorTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_ELEVATOR, DEFAULT_TIMEOUT);
@@ -179,8 +184,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 				Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
                 DEFAULT_TIMEOUT);
                 
-            elevatorVictorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
-            elevatorVictorFollowTwo.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+
 
             elevatorTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
@@ -244,22 +248,36 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     }
 
     public void setPosition(Distance position) {
-        if (elevatorTalon != null) {
-
             posSetpoint = position;
-            velSetpoint = Speed.ZERO;
-
-            if (position.sub(getPosition()).greaterThan(Distance.ZERO) || position.sub(getPosition()).equals(Distance.ZERO)) {
-
-                elevatorTalon.selectProfileSlot(MOTION_MAGIC_UP_SLOT, DEFAULT_TIMEOUT);
-            
-                elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
-                    Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
-                        DEFAULT_TIMEOUT);
-            
-            }
+			velSetpoint = Speed.ZERO;
+			
+			if (position.sub(getPosition()).greaterThan(Distance.ZERO) || position.sub(getPosition()).equals(Distance.ZERO)) {
+				
+				elevatorTalon.selectProfileSlot(MOTION_MAGIC_UP_SLOT, DEFAULT_TIMEOUT);
+				
+				elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+								DEFAULT_TIMEOUT);
+                elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
+						DEFAULT_TIMEOUT);
+				
+                elevatorTalon.set(ControlMode.MotionMagic, position.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
+                
+			} else {
+				
+				elevatorTalon.selectProfileSlot(MOTION_MAGIC_DOWN_SLOT, DEFAULT_TIMEOUT);
+				
+				elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_DOWN.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+								DEFAULT_TIMEOUT);
+                elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_DOWN.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
+						DEFAULT_TIMEOUT);
+			
+			}
         }
-    }
+    
 
 
     public void setMotorPercentRaw(double percent) {
