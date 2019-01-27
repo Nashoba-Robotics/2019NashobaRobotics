@@ -142,6 +142,16 @@ public void robotInit(){
 
         public void autonomousInit() {
 
+            selectedStartPos = AutoChoosers.autoStartPosChooser.getSelected();
+            selectedDestination = AutoChoosers.autoDestination1Chooser.getSelected();
+            selectedDestination2 = AutoChoosers.autoDestination2Chooser.getSelected();
+            selectedGamePiece = AutoChoosers.autoGamePiece1Chooser.getSelected();
+            selectedGamePiece2 = AutoChoosers.autoGamePiece2Chooser.getSelected();
+            selectedPlatform = AutoChoosers.autoPlatformChooser.getSelected();
+
+            if(autonomusCommand != null)
+                autonomusCommand.start();
+
         }
 
         public void autonomousPeriodic() {

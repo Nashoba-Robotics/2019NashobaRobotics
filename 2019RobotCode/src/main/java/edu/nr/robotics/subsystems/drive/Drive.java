@@ -95,13 +95,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double I_RIGHT = 0;
 		public static double D_RIGHT = 0;
 
-		public static double P_H_LEFT = 0;
-		public static double I_H_LEFT = 0;
-		public static double D_H_LEFT = 0;
-
-		public static double P_H_RIGHT = 0;
-		public static double I_H_RIGHT = 0;
-		public static double D_H_RIGHT = 0;
+		public static double FF_H = 0;
+		public static double P_H = 0;
+		public static double I_H = 0;
+		public static double D_H = 0;
 
 		public static double kVOneD = 1 / MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
 		public static double kAOneD = 0.0;
@@ -603,9 +600,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		SmartDashboard.putNumber("Right I Value: ", I_RIGHT);
 		SmartDashboard.putNumber("Right D Value: ", D_RIGHT);
 
-		SmartDashboard.putNumber("H P Value: ", P_H_RIGHT);
-		SmartDashboard.putNumber("H I Value: ", I_H_RIGHT);
-		SmartDashboard.putNumber("H D Value: ", D_H_RIGHT);
+		SmartDashboard.putNumber("H P Value: ", P_H);
+		SmartDashboard.putNumber("H I Value: ", I_H);
+		SmartDashboard.putNumber("H D Value: ", D_H);
 
 		SmartDashboard.putNumber("kVOneD Value: ", kVOneD);
 		SmartDashboard.putNumber("kAOneD Value: ", kAOneD);
@@ -673,9 +670,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			rightDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("Right I Value: ", I_RIGHT), DEFAULT_TIMEOUT);
 			rightDrive.config_kD(VEL_SLOT, SmartDashboard.getNumber("Right D Value: ", D_RIGHT), DEFAULT_TIMEOUT);
 
-			hDrive.config_kP(VEL_SLOT, SmartDashboard.getNumber("H P Value: ", P_H_RIGHT), VEL_SLOT);
-			hDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("H I Value: ", I_H_RIGHT), VEL_SLOT);
-			hDrive.config_kD(VEL_SLOT, SmartDashboard.getNumber("H D Value: ", D_H_RIGHT), VEL_SLOT);
+			hDrive.config_kP(VEL_SLOT, SmartDashboard.getNumber("H P Value: ", P_H), VEL_SLOT);
+			hDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("H I Value: ", I_H), VEL_SLOT);
+			hDrive.config_kD(VEL_SLOT, SmartDashboard.getNumber("H D Value: ", D_H), VEL_SLOT);
 
 			kVOneD = SmartDashboard.getNumber("kVOneD Value: ", kVOneD);
 			kAOneD = SmartDashboard.getNumber("kAOneD Value: ", kAOneD);
