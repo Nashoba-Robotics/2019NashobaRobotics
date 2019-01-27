@@ -17,7 +17,7 @@ public class IntakeRollers extends NRSubsystem {
 
     private static IntakeRollers singleton;
 
-    private VictorSPX intakeRollers;
+    private TalonSRX intakeRollers;
     private PowerDistributionPanel pdp;
 
     public static Time  VOLTAGE_RAMP_RATE_INTAKE_ROLLERS = new Time(0.05, Time.Unit.SECOND);
@@ -46,7 +46,7 @@ public class IntakeRollers extends NRSubsystem {
 
         if(EnabledSubsystems.INTAKE_ROLLERS_ENABLED){
 
-            intakeRollers = CTRECreator.createMasterVictor(RobotMap.INTAKE_ROLLERS);
+            intakeRollers = CTRECreator.createMasterTalon(RobotMap.INTAKE_ROLLERS);
             pdp = new PowerDistributionPanel();
 
             intakeRollers.setNeutralMode(NEUTRAL_MODE_INTAKE_ROLLERS);
