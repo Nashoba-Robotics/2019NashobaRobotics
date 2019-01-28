@@ -31,10 +31,11 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private static Elevator singleton;
 
     private TalonSRX elevatorTalon;
-    private TalonSRX elevatorVictorFollowOne;
+    private VictorSPX elevatorVictorFollowOne;
+    private VictorSPX elevatorVictorFollowTwo; //follow may be other type of talon
     private PowerDistributionPanel pdp;
     
-    public static final double ENC_TICK_PER_INCH_CARRIAGE = 56535.0 / 107.0;//find everything
+    public static final double ENC_TICK_PER_INCH_CARRIAGE = 56535.0 / 107.0; //find everything, these are 2018 numbers for testing
 
     public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(10.98, Distance.Unit.FOOT, Time.Unit.SECOND);//find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
@@ -54,8 +55,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     
     public static Time VOLTAGE_RAMP_RATE_ELEVATOR = Time.ZERO;
 
-    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.9;
-    public static final double DROP_PERCENT_ELEVATOR = 0;
+    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.8;
+    public static final double DROP_PERCENT_ELEVATOR = -0.4;
     public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0.9;
 
     public static double F_POS_ELEVATOR_UP = 0.4;
@@ -73,9 +74,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 	public static double I_POS_ELEVATOR_DOWN = 0;
 	public static double D_POS_ELEVATOR_DOWN = 0;
 
-    public static double P_VEL_ELEVATOR_UP = 0.08;
+    public static double P_VEL_ELEVATOR_UP = 0;
 	public static double I_VEL_ELEVATOR_UP = 0;
-	public static double D_VEL_ELEVATOR_UP = 0.8;
+	public static double D_VEL_ELEVATOR_UP = 0;
 
 	public static double P_VEL_ELEVATOR_DOWN = 0; //  Find elevator velocity PID values for down
 	public static double I_VEL_ELEVATOR_DOWN = 0;
@@ -140,7 +141,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private Elevator() {
         if(EnabledSubsystems.ELEVATOR_ENABLED) {
             elevatorTalon = CTRECreator.createMasterTalon(RobotMap.ELEVATOR_TALON);
-            elevatorVictorFollowOne = CTRECreator.createFollowerTalon(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
+            elevatorVictorFollowOne = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
+            elevatorVictorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
             pdp = new PowerDistributionPanel();
             
             elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
@@ -156,11 +158,12 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
             elevatorTalon.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
             elevatorVictorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            elevatorVictorFollowTwo.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
             
-            elevatorTalon.setInverted(true);
-            elevatorVictorFollowOne.setInverted(true);
-
-            elevatorTalon.setSensorPhase(false);
+            elevatorTalon.setInverted(false);
+            elevatorTalon.setSensorPhase(true);
+            elevatorVictorFollowOne.setInverted(false);
+            elevatorVictorFollowTwo.setInverted(false);
 
             elevatorTalon.enableVoltageCompensation(true);
             elevatorTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_ELEVATOR, DEFAULT_TIMEOUT);
@@ -180,6 +183,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
 				Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
                 DEFAULT_TIMEOUT);
+                
+
 
             elevatorTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
 
@@ -236,37 +241,42 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         return 0;
     }
 
-    public void setPosition(Distance position) {
-        if (elevatorTalon != null) {
-    
-            posSetpoint = position;
-            velSetpoint = Speed.ZERO;
-            
-            if (position.sub(getPosition()).greaterThan(Distance.ZERO) || position.sub(getPosition()).equals(Distance.ZERO)) {
-                
-                elevatorTalon.selectProfileSlot(MOTION_MAGIC_UP_SLOT, DEFAULT_TIMEOUT);
-                
-                elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
-                                DEFAULT_TIMEOUT);
-                elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
-                        DEFAULT_TIMEOUT);
-                                    
-                elevatorTalon.set(ControlMode.MotionMagic, position.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
-            } else {
-                
-                elevatorTalon.selectProfileSlot(MOTION_MAGIC_DOWN_SLOT, DEFAULT_TIMEOUT);
-                
-                elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_DOWN.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
-                                DEFAULT_TIMEOUT);
-                                elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_DOWN.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
-                        DEFAULT_TIMEOUT);
-            }
-        }
+    public double getFollowTwoCurrent() {
+        if (elevatorVictorFollowTwo != null)
+            return pdp.getCurrent(RobotMap.ELEVATOR_FOLLOW_TWO_CURRENT);
+        return 0;
     }
+
+    public void setPosition(Distance position) {
+            posSetpoint = position;
+			velSetpoint = Speed.ZERO;
+			
+			if (position.sub(getPosition()).greaterThan(Distance.ZERO) || position.sub(getPosition()).equals(Distance.ZERO)) {
+				
+				elevatorTalon.selectProfileSlot(MOTION_MAGIC_UP_SLOT, DEFAULT_TIMEOUT);
+				
+				elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+								DEFAULT_TIMEOUT);
+                elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
+						DEFAULT_TIMEOUT);
+				
+                elevatorTalon.set(ControlMode.MotionMagic, position.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
+                
+			} else {
+				
+				elevatorTalon.selectProfileSlot(MOTION_MAGIC_DOWN_SLOT, DEFAULT_TIMEOUT);
+				
+				elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_DOWN.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+								DEFAULT_TIMEOUT);
+                elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_DOWN.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+						Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
+						DEFAULT_TIMEOUT);
+			
+			}
+        }
     
 
 

@@ -96,6 +96,8 @@ public class Lift extends NRSubsystem {
     public static Distance frontSetPos = Distance.ZERO;
     public static Distance backSetPos = Distance.ZERO;
 
+    public static boolean deployed = false;
+
     private Lift() {
         if (EnabledSubsystems.LIFT_ENABLED) {
             liftFront = SparkMax.createSpark(RobotMap.LIFT_FRONT, true);

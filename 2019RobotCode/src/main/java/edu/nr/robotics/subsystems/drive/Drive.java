@@ -49,43 +49,45 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
     
     private static Drive singleton;
 
-		private TalonSRX  leftDrive, rightDrive, pigeonTalon, leftDriveFollow, rightDriveFollow, hDrive, hDriveFollow;
+		private TalonSRX  leftDrive, rightDrive, pigeonTalon; 
+		private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+		private CANSparkMax hDrive;
 		private PowerDistributionPanel pdp;
 		//these may change because of new talons
 
 
 		//fix all of these
-		public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 428;
-		public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 1074;
+		public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 0;
+		public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 0;
 
-		public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 428;
-		public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = 1074;//change these
+		public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 0;
+		public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = 0;
 
 		public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 		public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 	
-		public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
+		public static final Distance WHEEL_BASE = Distance.ZERO;
 
-		public static final Speed MAX_SPEED_DRIVE = new Speed(12.824, Distance.Unit.FOOT, Time.Unit.SECOND);
-		public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.50, Distance.Unit.FOOT, Time.Unit.SECOND);
+		public static final Speed MAX_SPEED_DRIVE = Speed.ZERO;
+		public static final Speed MAX_SPEED_DRIVE_H = Speed.ZERO;
 
-		public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration (20, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
-		public static final Acceleration MAX_ACCEL_DRIVE_H = new Acceleration(14, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
+		public static final Acceleration MAX_ACCEL_DRIVE = Acceleration.ZERO;
+		public static final Acceleration MAX_ACCEL_DRIVE_H = Acceleration.ZERO;
 
 		public static final Jerk MAX_JERK_DRIVE = Jerk.ZERO;
 
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.069;
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.0782;
+		public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0;
+		public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0;
 
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0.171;
+		public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
 
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.0726;
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0691;
+		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0;
+		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0;
 
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0.0786;
+		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
 
-		public static Time DRIVE_RAMP_RATE = new Time(.05, Time.Unit.SECOND);
-		public static Time H_DRIVE_RAMP_RATE = new Time(.05, Time.Unit.SECOND);
+		public static Time DRIVE_RAMP_RATE = Time.ZERO;
+		public static Time H_DRIVE_RAMP_RATE = Time.ZERO;
 
 		public static double P_LEFT = 0;
 		public static double I_LEFT = 0;
@@ -194,24 +196,25 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			if(EnabledSubsystems.DRIVE_ENABLED) {
 				leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
 				rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
-				hDrive = CTRECreator.createMasterTalon(RobotMap.H_DRIVE);
+				hDrive = SparkMax.createSpark(RobotMap.H_DRIVE, true);
+				pdp = new PowerDistributionPanel();
 
-				leftDriveFollow = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
-				rightDriveFollow = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
-				hDriveFollow = CTRECreator.createFollowerTalon(RobotMap.H_DRIVE_FOLLOW, hDrive);
+				leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
+				leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
+				rightDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
+				rightDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
 
 				pigeonTalon = CTRECreator.createMasterTalon(RobotMap.PIGEON_TALON);
 
-				pdp = new PowerDistributionPanel();
 
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 					leftDrive.set(ControlMode.PercentOutput,0);
 					rightDrive.set(ControlMode.PercentOutput, 0); // .set sets sparkmax motor as a percent auomatically
-					hDrive.set(ControlMode.PercentOutput, 0);
+					hDrive.set(0);
 				} else {
 					leftDrive.set(ControlMode.Velocity, 0);
 					rightDrive.set(ControlMode.Velocity, 0);
-					hDrive.set(ControlMode.Velocity, 0); // velocity set
+					hDrive.getPIDController().setReference(0, ControlType.kVelocity, VEL_SLOT); // velocity set
 				}
 
 				leftDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
@@ -222,12 +225,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDrive.config_kD(VEL_SLOT, D_LEFT, DEFAULT_TIMEOUT);
 
 				leftDrive.setNeutralMode(NEUTRAL_MODE);
-				leftDriveFollow.setNeutralMode(NEUTRAL_MODE);
+				leftDriveFollow1.setNeutralMode(NEUTRAL_MODE);
+				leftDriveFollow2.setNeutralMode(NEUTRAL_MODE);
 				leftDrive.setInverted(false);
-				leftDriveFollow.setInverted(false);
-				
+				leftDriveFollow1.setInverted(false);
+				leftDriveFollow2.setInverted(false);
+
 				leftDrive.setSensorPhase(false);
-				leftDriveFollow.setSensorPhase(false);
+				leftDriveFollow1.setSensorPhase(false);
+				leftDriveFollow2.setSensorPhase(false);
 
 				leftDrive.enableVoltageCompensation(true);
 				leftDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
@@ -253,13 +259,16 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				rightDrive.config_kD(VEL_SLOT, D_RIGHT, DEFAULT_TIMEOUT);
 
 				rightDrive.setNeutralMode(NEUTRAL_MODE);
-				rightDriveFollow.setNeutralMode(NEUTRAL_MODE);
+				rightDriveFollow1.setNeutralMode(NEUTRAL_MODE);
+				rightDriveFollow2.setNeutralMode(NEUTRAL_MODE);
 				
 				rightDrive.setInverted(true);
-				rightDriveFollow.setInverted(true);
+				rightDriveFollow1.setInverted(true);
+				rightDriveFollow2.setInverted(true);
 
 				rightDrive.setSensorPhase(false);
-				rightDriveFollow.setSensorPhase(false);
+				rightDriveFollow1.setSensorPhase(false);
+				rightDriveFollow2.setSensorPhase(false);
 
 				rightDrive.enableVoltageCompensation(true);
 				rightDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
@@ -277,37 +286,23 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				rightDrive.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
 
-				rightDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+				hDrive.getPIDController().setFF(FF_H, VEL_SLOT);
+				hDrive.getPIDController().setP(P_H, VEL_SLOT);
+				hDrive.getPIDController().setI(I_H, VEL_SLOT);
+				hDrive.getPIDController().setD(D_H, VEL_SLOT);
 
-				rightDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
-				rightDrive.config_kP(VEL_SLOT, P_RIGHT, DEFAULT_TIMEOUT);
-				rightDrive.config_kI(VEL_SLOT, I_RIGHT, DEFAULT_TIMEOUT);
-				rightDrive.config_kD(VEL_SLOT, D_RIGHT, DEFAULT_TIMEOUT);
+				hDrive.setIdleMode(IdleMode.kBrake);
 
-				hDrive.setNeutralMode(NEUTRAL_MODE);
-				hDriveFollow.setNeutralMode(NEUTRAL_MODE);
-				
 				hDrive.setInverted(false);
-				hDriveFollow.setInverted(false);
-
-				hDrive.setSensorPhase(true);
-
-				hDrive.enableVoltageCompensation(true);
-				hDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
-
-				hDrive.enableCurrentLimit(true);
-				hDrive.configPeakCurrentLimit(PEAK_DRIVE_CURRENT, DEFAULT_TIMEOUT);
-				hDrive.configPeakCurrentDuration(PEAK_DRIVE_CURRENT_DURATION, DEFAULT_TIMEOUT);
-				hDrive.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT, DEFAULT_TIMEOUT);
-
-				hDrive.configVelocityMeasurementPeriod(VELOCITY_MEASUREMENT_PERIOD_DRIVE, DEFAULT_TIMEOUT);
-				hDrive.configVelocityMeasurementWindow(VELOCITY_MEASUREMENT_WINDOW_DRIVE, DEFAULT_TIMEOUT);
-
-				hDrive.configClosedloopRamp(DRIVE_RAMP_RATE.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-				hDrive.configOpenloopRamp(DRIVE_RAMP_RATE.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-
-				hDrive.selectProfileSlot(VEL_SLOT, DEFAULT_TIMEOUT);
 				
+				hDrive.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT);
+				hDrive.setSecondaryCurrentLimit(PEAK_DRIVE_CURRENT);
+				
+				hDrive.setRampRate(H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
+
+				hDrive.getPIDController().setOutputRange(-1, 1);
+				
+			
 				smartDashboardInit();
 
 				CheesyDriveCalculationConstants.createDriveTypeCalculations();
@@ -348,7 +343,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public Distance getHPosition() {
 			if(hDrive != null){
-				return new Distance(hDrive.getSelectedSensorPosition(PID_TYPE), Unit.ENCODER_REV_H);
+				return new Distance(hDrive.getEncoder().getPosition(), Unit.ENCODER_REV_H); // already integrated for h drive?
 			} else {
 				return Distance.ZERO;
 			}
@@ -368,7 +363,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public Speed getHVelocity() {
 			if(hDrive != null)
-					return new Speed(hDrive.getSelectedSensorPosition(), Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND);
+					return new Speed(hDrive.get(), Unit.ENCODER_REV_H, Time.Unit.MINUTE);
 			return Speed.ZERO;	
 			}
 
@@ -380,9 +375,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				return 0;
 		}
 
-		public double getRightFollowCurrent() {
-			if (rightDriveFollow != null)
+		public double getRightFollow1Current() {
+			if (rightDriveFollow1 != null)
 				return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_1_CURRENT);
+			return 0;
+		}
+
+		public double getRightFollow2Current() {
+			if (rightDriveFollow2 != null)
+				return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_2_CURRENT);
 			return 0;
 		}
 
@@ -393,22 +394,21 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			return 0;
 		}
 
-		public double getLeftFollowCurrent() {
-			if (leftDriveFollow != null) 
+		public double getLeftFollow1Current() {
+			if (leftDriveFollow1 != null) 
 				return pdp.getCurrent(RobotMap.LEFT_DRIVE_FOLLOW_1_CURRENT);
+			return 0;
+		}
+
+		public double getLeftFollow2Current() {
+			if (leftDriveFollow2 != null) 
+				return pdp.getCurrent(RobotMap.LEFT_DRIVE_FOLLOW_2_CURRENT);
 			return 0;
 		}
 
 		public double getHCurrent() {
 			if(hDrive != null) {
 				return hDrive.getOutputCurrent();
-			}
-			return 0;
-		}
-
-		public double getHFollowCurrent() {
-			if(hDriveFollow != null) {
-				return hDriveFollow.getOutputCurrent();
 			}
 			return 0;
 		}
@@ -437,20 +437,18 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				/ leftMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 				rightDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT * rightMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_RIGHT) * 1023.0) 
 				/ rightMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
-				hDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_H * hMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_H) * 1023.0)
-				 / hMotorSetpoint.abs().get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 						leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.div(MAX_SPEED_DRIVE));
 						rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint.div(MAX_SPEED_DRIVE));
-						hDrive.set(hDrive.getControlMode(), hMotorSetpoint.div(MAX_SPEED_DRIVE));
+						hDrive.set(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)); // set in speed as a percent
 				} else {
 					leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					if (Math.abs(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)) < 0.05){
-							hDrive.set(ControlMode.Velocity, 0);; //stop if velocity is really low
+							hDrive.set(0); //stop if velocity is really low
 				} else 
-						hDrive.set(ControlMode.Velocity, hMotorSetpoint.get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND));
+						hDrive.getPIDController().setReference(hMotorSetpoint.get(Distance.Unit.ENCODER_REV_H, Time.Unit.MINUTE), ControlType.kVelocity);
 
 			}
 
@@ -459,14 +457,14 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 
 		public void setVoltageRamp(Time time) {
-				leftDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-				rightDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-				leftDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-				rightDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			leftDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			rightDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			leftDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			rightDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
 		}
-
+//will it work?
 		public void setVoltageRampH(Time time) {
-				hDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			hDrive.setRampRate(time.get(Time.Unit.SECOND));
 		}
 
 		public void tankDrive(double left, double right, double strafe) {
@@ -590,55 +588,55 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 				SmartDashboard.putData(new ResetGyroCommand());
 		}
-	 if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+		if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
 
-		SmartDashboard.putNumber("Left P Value: ", P_LEFT);
-		SmartDashboard.putNumber("Left I Value: ", I_LEFT);
-		SmartDashboard.putNumber("Left D Value: ", D_LEFT);
+			SmartDashboard.putNumber("Left P Value: ", P_LEFT);
+			SmartDashboard.putNumber("Left I Value: ", I_LEFT);
+			SmartDashboard.putNumber("Left D Value: ", D_LEFT);
 
-		SmartDashboard.putNumber("Right P Value: ", P_RIGHT);
-		SmartDashboard.putNumber("Right I Value: ", I_RIGHT);
-		SmartDashboard.putNumber("Right D Value: ", D_RIGHT);
+			SmartDashboard.putNumber("Right P Value: ", P_RIGHT);
+			SmartDashboard.putNumber("Right I Value: ", I_RIGHT);
+			SmartDashboard.putNumber("Right D Value: ", D_RIGHT);
 
-		SmartDashboard.putNumber("H P Value: ", P_H);
-		SmartDashboard.putNumber("H I Value: ", I_H);
-		SmartDashboard.putNumber("H D Value: ", D_H);
+			SmartDashboard.putNumber("H P Value: ", P_H);
+			SmartDashboard.putNumber("H I Value: ", I_H);
+			SmartDashboard.putNumber("H D Value: ", D_H);
 
-		SmartDashboard.putNumber("kVOneD Value: ", kVOneD);
-		SmartDashboard.putNumber("kAOneD Value: ", kAOneD);
-		SmartDashboard.putNumber("kPOneD Value: ", kPOneD);
-		SmartDashboard.putNumber("kIOneD Value: ", kIOneD);
-		SmartDashboard.putNumber("kDOneD Value: ", kDOneD);
-		SmartDashboard.putNumber("kP_thetaOneD Value: ", kP_thetaOneD);
+			SmartDashboard.putNumber("kVOneD Value: ", kVOneD);
+			SmartDashboard.putNumber("kAOneD Value: ", kAOneD);
+			SmartDashboard.putNumber("kPOneD Value: ", kPOneD);
+			SmartDashboard.putNumber("kIOneD Value: ", kIOneD);
+			SmartDashboard.putNumber("kDOneD Value: ", kDOneD);
+			SmartDashboard.putNumber("kP_thetaOneD Value: ", kP_thetaOneD);
 
-		SmartDashboard.putNumber("kVOneDH Value: ", kVOneDH);
-		SmartDashboard.putNumber("kAOneDH Value: ", kAOneDH);
-		SmartDashboard.putNumber("kPOneDH Value: ", kPOneDH);
-		SmartDashboard.putNumber("kIOneDH Value: ", kIOneDH);
-		SmartDashboard.putNumber("kDOneDH Value: ", kDOneDH);
+			SmartDashboard.putNumber("kVOneDH Value: ", kVOneDH);
+			SmartDashboard.putNumber("kAOneDH Value: ", kAOneDH);
+			SmartDashboard.putNumber("kPOneDH Value: ", kPOneDH);
+			SmartDashboard.putNumber("kIOneDH Value: ", kIOneDH);
+			SmartDashboard.putNumber("kDOneDH Value: ", kDOneDH);
 
-		SmartDashboard.putNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
-		SmartDashboard.putNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
-		
-		SmartDashboard.putNumber("X Profile Feet: ", 0);
-		SmartDashboard.putNumber("Y Profile Feet: ", 0);
-		SmartDashboard.putNumber("Drive Percent: ", PROFILE_DRIVE_PERCENT);
-		SmartDashboard.putNumber("Drive Accel Percent: ", ACCEL_PERCENT);
-		SmartDashboard.putNumber("Angle To Turn: ", 0);
+			SmartDashboard.putNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
+			SmartDashboard.putNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
+			
+			SmartDashboard.putNumber("X Profile Feet: ", 0);
+			SmartDashboard.putNumber("Y Profile Feet: ", 0);
+			SmartDashboard.putNumber("Drive Percent: ", PROFILE_DRIVE_PERCENT);
+			SmartDashboard.putNumber("Drive Accel Percent: ", ACCEL_PERCENT);
+			SmartDashboard.putNumber("Angle To Turn: ", 0);
 
-		SmartDashboard.putNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE));
-		SmartDashboard.putString("Profile Name: ", profileName);
-	}
+			SmartDashboard.putNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE));
+			SmartDashboard.putString("Profile Name: ", profileName);
+		}
 	
 	}
 
 	public void smartDashboardInfo() {
 		if(leftDrive != null && rightDrive != null){
-			if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+			if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 
-				SmartDashboard.putNumberArray("Drive Left Current", new double[] {getLeftCurrent(), getLeftFollowCurrent()});
-				SmartDashboard.putNumberArray("Drive Right Current", new double [] {getRightCurrent(), getRightFollowCurrent()});
-				SmartDashboard.putNumberArray("Drive H Current", new double[] {getHCurrent(), getHFollowCurrent()});
+				SmartDashboard.putNumberArray("Drive Left Current", new double[] {getLeftCurrent(), getLeftFollow1Current(), getLeftFollow2Current()});
+				SmartDashboard.putNumberArray("Drive Right Current", new double [] {getRightCurrent(), getRightFollow1Current(), getRightFollow2Current()});
+				SmartDashboard.putNumber("Drive H Current", getHCurrent());
 
 				SmartDashboard.putNumber("Gyro Yaw", (-Pigeon.getPigeon(getInstance().getPigeonTalon()).getYaw().get(Angle.Unit.DEGREE))% 360);
 
@@ -660,7 +658,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 			SmartDashboard.putNumber("Drive Left Encoder Position", leftDrive.getSelectedSensorPosition(PID_TYPE));
 			SmartDashboard.putNumber("Drive Right Encoder Position", rightDrive.getSelectedSensorPosition(PID_TYPE));
-			SmartDashboard.putNumber("Drive H Encoder Position", hDrive.getSelectedSensorPosition(PID_TYPE));
+			SmartDashboard.putNumber("Drive H Encoder Position", hDrive.getEncoder().getPosition());
 		
 			leftDrive.config_kP(VEL_SLOT, SmartDashboard.getNumber("Left P Value: ", P_LEFT), DEFAULT_TIMEOUT);
 			leftDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("Left I Value: ", I_LEFT), DEFAULT_TIMEOUT);
@@ -670,10 +668,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			rightDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("Right I Value: ", I_RIGHT), DEFAULT_TIMEOUT);
 			rightDrive.config_kD(VEL_SLOT, SmartDashboard.getNumber("Right D Value: ", D_RIGHT), DEFAULT_TIMEOUT);
 
-			hDrive.config_kP(VEL_SLOT, SmartDashboard.getNumber("H P Value: ", P_H), VEL_SLOT);
-			hDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("H I Value: ", I_H), VEL_SLOT);
-			hDrive.config_kD(VEL_SLOT, SmartDashboard.getNumber("H D Value: ", D_H), VEL_SLOT);
-
+			hDrive.getPIDController().setP(SmartDashboard.getNumber("H P Value: ", P_H), VEL_SLOT);
+			hDrive.getPIDController().setI(SmartDashboard.getNumber("H I Value: ", I_H), VEL_SLOT);
+			hDrive.getPIDController().setD(SmartDashboard.getNumber("H D Value: ", D_H), VEL_SLOT);
 			kVOneD = SmartDashboard.getNumber("kVOneD Value: ", kVOneD);
 			kAOneD = SmartDashboard.getNumber("kAOneD Value: ", kAOneD);
 			kPOneD = SmartDashboard.getNumber("kPOneD Value: ", kPOneD);
