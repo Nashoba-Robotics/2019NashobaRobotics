@@ -151,8 +151,6 @@ public class AuxiliaryDrive extends NRSubsystem {
 
 			motorSetpoint = speed;
 
-			//System.out.println(hMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND));
-
 			auxDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE * motorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT) * 1023.0) 
 			/ motorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 

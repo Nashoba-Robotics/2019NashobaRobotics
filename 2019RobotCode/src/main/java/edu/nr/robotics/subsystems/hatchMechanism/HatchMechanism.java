@@ -20,8 +20,6 @@ public class HatchMechanism extends NRSubsystem {
 		private static Value DEPLOYED_VALUE = Value.kForward;
 		private static Value RETRACTED_VALUE = Value.kReverse;
 		
-
-		
 		private static State get(Value val) {
 			if(val == State.DEPLOYED_VALUE) {
 				return State.DEPLOYED;
@@ -46,7 +44,6 @@ public class HatchMechanism extends NRSubsystem {
             return State.DEPLOYED;
         }
     }
-
 
 	private HatchMechanism() {
 		if (EnabledSubsystems.HATCH_MECHANISM_ENABLED) {
