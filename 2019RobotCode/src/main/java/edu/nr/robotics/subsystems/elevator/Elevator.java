@@ -35,35 +35,35 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private VictorSPX elevatorVictorFollowTwo; //follow may be other type of talon
     private PowerDistributionPanel pdp;
     
-    public static final double ENC_TICK_PER_INCH_CARRIAGE = 56535.0 / 107.0; //find everything, these are 2018 numbers for testing
+    public static final double ENC_TICK_PER_INCH_CARRIAGE = 0; //find everything, these are 2018 numbers for testing
 
-    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(10.98, Distance.Unit.FOOT, Time.Unit.SECOND);//find
+    public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;//find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
 
-    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration(30, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);//find
+    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = Acceleration.ZERO;//find
     public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = Acceleration.ZERO;
 
-    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.25;
+    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.;
 
-	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.25;
+	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.260; //find
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
 
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.0674;
+    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
     
     public static Time VOLTAGE_RAMP_RATE_ELEVATOR = Time.ZERO;
 
-    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.8;
+    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.9;
     public static final double DROP_PERCENT_ELEVATOR = -0.4;
     public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0.9;
 
-    public static double F_POS_ELEVATOR_UP = 0.4;
+    public static double F_POS_ELEVATOR_UP = 0.;
 
-    public static double P_POS_ELEVATOR_UP = 0.05;
+    public static double P_POS_ELEVATOR_UP = 0.0;
     public static double I_POS_ELEVATOR_UP = 0;
-    public static double D_POS_ELEVATOR_UP = 0.5;
+    public static double D_POS_ELEVATOR_UP = 0.0;
 
     public static double F_POS_ELEVATOR_DOWN = ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN * MAX_SPEED_ELEVATOR_DOWN.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
     + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN) * 1023.0)
