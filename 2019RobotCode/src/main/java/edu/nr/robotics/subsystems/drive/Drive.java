@@ -227,6 +227,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDrive.setNeutralMode(NEUTRAL_MODE);
 				leftDriveFollow1.setNeutralMode(NEUTRAL_MODE);
 				leftDriveFollow2.setNeutralMode(NEUTRAL_MODE);
+				
 				leftDrive.setInverted(false);
 				leftDriveFollow1.setInverted(false);
 				leftDriveFollow2.setInverted(false);
@@ -416,11 +417,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public void setMotorSpeedInPercent(double left, double right, double strafe) {
 
 			if (OI.driveMode == DriveMode.fieldCentricDrive) {
-				setMotorSpeed(MAX_SPEED_DRIVE_H.mul(left), MAX_SPEED_DRIVE_H.mul(right), MAX_SPEED_DRIVE_H.mul(strafe));
-	
+				setMotorSpeed(MAX_SPEED_DRIVE_H.mul(left), MAX_SPEED_DRIVE_H.mul(right), MAX_SPEED_DRIVE_H.mul(strafe));	
 			} else {
-				setMotorSpeed(MAX_SPEED_DRIVE.mul(left), MAX_SPEED_DRIVE.mul(right), MAX_SPEED_DRIVE_H.mul(strafe));	
-	
+				setMotorSpeed(MAX_SPEED_DRIVE.mul(left), MAX_SPEED_DRIVE.mul(right), MAX_SPEED_DRIVE_H.mul(strafe));
 			}
 		}
 
@@ -430,8 +429,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftMotorSetpoint = left;
 				rightMotorSetpoint = right;
 				hMotorSetpoint = strafe;
-
-				//System.out.println(hMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND));
 
 				leftDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT * leftMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LEFT) * 1023.0) 
 				/ leftMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
@@ -462,7 +459,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
 				rightDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
 		}
-//will it work?
+		
+		//will it work?
 		public void setVoltageRampH(Time time) {
 				hDrive.setRampRate(time.get(Time.Unit.SECOND));
 		}
@@ -581,8 +579,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		diagonalProfiler.disable();
 		twoDProfiler.disable();
 	}
-
-
 
 	private void smartDashboardInit() {
 		if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
@@ -710,7 +706,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			MOVE_JOYSTICK_MULTIPLIER = 1;
 				if (!sniperModeEnabled) {
 					TURN_JOYSTICK_MULTIPLIER = 1;	
-				}		
+			}		
 
 		}
 
@@ -731,5 +727,4 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			EnabledSubsystems.DRIVE_DUMB_ENABLED = false;
 		}
 	}
-
 }
