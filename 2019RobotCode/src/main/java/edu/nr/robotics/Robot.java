@@ -21,14 +21,14 @@ import edu.nr.robotics.auton.AutoChoosers.Destination2;
 import edu.nr.robotics.auton.AutoChoosers.GamePiece;
 import edu.nr.robotics.auton.AutoChoosers.Platform;
 import edu.nr.robotics.auton.AutoChoosers.StartPos;
-import edu.nr.robotics.auton.automap.startPosLeftCargoShipSideCommand;
-import edu.nr.robotics.auton.automap.startPosLeftRocketBackCommand;
-import edu.nr.robotics.auton.automap.startPosLeftRocketFrontCommand;
-import edu.nr.robotics.auton.automap.startPosMiddleCargoShipFrontLeftCommand;
-import edu.nr.robotics.auton.automap.startPosMiddleCargoShipFrontRightCommand;
-import edu.nr.robotics.auton.automap.startPosRightCargoShipSideCommand;
-import edu.nr.robotics.auton.automap.startPosRightRocketBackCommand;
-import edu.nr.robotics.auton.automap.startPosRightRocketFrontCommand;
+import edu.nr.robotics.auton.automap.StartPosLeftCargoShipSideCommand;
+import edu.nr.robotics.auton.automap.StartPosLeftRocketBackCommand;
+import edu.nr.robotics.auton.automap.StartPosLeftRocketFrontCommand;
+import edu.nr.robotics.auton.automap.StartPosMiddleCargoShipFrontLeftCommand;
+import edu.nr.robotics.auton.automap.StartPosMiddleCargoShipFrontRightCommand;
+import edu.nr.robotics.auton.automap.StartPosRightCargoShipSideCommand;
+import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
+import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
@@ -199,21 +199,21 @@ public void robotInit(){
         public Command getAutoCommand() {
 
             if(selectedStartPos == StartPos.left && selectedDestination == Destination.rocketBack) {
-                return new startPosLeftRocketBackCommand();
+                return new StartPosLeftRocketBackCommand();
             } else if(selectedStartPos == StartPos.left && selectedDestination == Destination.rocketFront) {
-                return new startPosLeftRocketFrontCommand();
+                return new StartPosLeftRocketFrontCommand();
             } else if(selectedStartPos == StartPos.left && selectedDestination == Destination.cargoShipSide) {
-                return new startPosLeftCargoShipSideCommand();
+                return new StartPosLeftCargoShipSideCommand();
             } else if(selectedStartPos == StartPos.middle && selectedDestination == Destination.cargoShipFrontLeft) {
-                return new startPosMiddleCargoShipFrontLeftCommand();
+                return new StartPosMiddleCargoShipFrontLeftCommand();
             } else if(selectedStartPos == StartPos.middle && selectedDestination == Destination.cargoShipFrontRight) {
-                return new startPosMiddleCargoShipFrontRightCommand();
+                return new StartPosMiddleCargoShipFrontRightCommand();
             } else  if(selectedStartPos == StartPos.right && selectedDestination == Destination.rocketBack) {
-                return new startPosRightRocketBackCommand();
+                return new StartPosRightRocketBackCommand();
             } else if(selectedStartPos == StartPos.right && selectedDestination == Destination.rocketFront) {
-                return new startPosRightRocketFrontCommand();
+                return new StartPosRightRocketFrontCommand();
             } else if(selectedStartPos == StartPos.right && selectedDestination == Destination.cargoShipSide) {
-                return new startPosRightCargoShipSideCommand();
+                return new StartPosRightCargoShipSideCommand();
             }
             return new DriveOverBaselineAutoCommand();
         }
