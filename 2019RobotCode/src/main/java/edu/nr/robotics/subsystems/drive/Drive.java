@@ -454,15 +454,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 
 		public void setVoltageRamp(Time time) {
-				leftDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-				rightDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-				leftDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
-				rightDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			leftDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			rightDrive.configClosedloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			leftDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
+			rightDrive.configOpenloopRamp(time.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
 		}
 		
 		//will it work?
 		public void setVoltageRampH(Time time) {
-				hDrive.setRampRate(time.get(Time.Unit.SECOND));
+			hDrive.setRampRate(time.get(Time.Unit.SECOND));
 		}
 
 		public void tankDrive(double left, double right, double strafe) {
@@ -584,51 +584,51 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 				SmartDashboard.putData(new ResetGyroCommand());
 		}
-	 if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+		if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
 
-		SmartDashboard.putNumber("Left P Value: ", P_LEFT);
-		SmartDashboard.putNumber("Left I Value: ", I_LEFT);
-		SmartDashboard.putNumber("Left D Value: ", D_LEFT);
+			SmartDashboard.putNumber("Left P Value: ", P_LEFT);
+			SmartDashboard.putNumber("Left I Value: ", I_LEFT);
+			SmartDashboard.putNumber("Left D Value: ", D_LEFT);
 
-		SmartDashboard.putNumber("Right P Value: ", P_RIGHT);
-		SmartDashboard.putNumber("Right I Value: ", I_RIGHT);
-		SmartDashboard.putNumber("Right D Value: ", D_RIGHT);
+			SmartDashboard.putNumber("Right P Value: ", P_RIGHT);
+			SmartDashboard.putNumber("Right I Value: ", I_RIGHT);
+			SmartDashboard.putNumber("Right D Value: ", D_RIGHT);
 
-		SmartDashboard.putNumber("H P Value: ", P_H);
-		SmartDashboard.putNumber("H I Value: ", I_H);
-		SmartDashboard.putNumber("H D Value: ", D_H);
+			SmartDashboard.putNumber("H P Value: ", P_H);
+			SmartDashboard.putNumber("H I Value: ", I_H);
+			SmartDashboard.putNumber("H D Value: ", D_H);
 
-		SmartDashboard.putNumber("kVOneD Value: ", kVOneD);
-		SmartDashboard.putNumber("kAOneD Value: ", kAOneD);
-		SmartDashboard.putNumber("kPOneD Value: ", kPOneD);
-		SmartDashboard.putNumber("kIOneD Value: ", kIOneD);
-		SmartDashboard.putNumber("kDOneD Value: ", kDOneD);
-		SmartDashboard.putNumber("kP_thetaOneD Value: ", kP_thetaOneD);
+			SmartDashboard.putNumber("kVOneD Value: ", kVOneD);
+			SmartDashboard.putNumber("kAOneD Value: ", kAOneD);
+			SmartDashboard.putNumber("kPOneD Value: ", kPOneD);
+			SmartDashboard.putNumber("kIOneD Value: ", kIOneD);
+			SmartDashboard.putNumber("kDOneD Value: ", kDOneD);
+			SmartDashboard.putNumber("kP_thetaOneD Value: ", kP_thetaOneD);
 
-		SmartDashboard.putNumber("kVOneDH Value: ", kVOneDH);
-		SmartDashboard.putNumber("kAOneDH Value: ", kAOneDH);
-		SmartDashboard.putNumber("kPOneDH Value: ", kPOneDH);
-		SmartDashboard.putNumber("kIOneDH Value: ", kIOneDH);
-		SmartDashboard.putNumber("kDOneDH Value: ", kDOneDH);
+			SmartDashboard.putNumber("kVOneDH Value: ", kVOneDH);
+			SmartDashboard.putNumber("kAOneDH Value: ", kAOneDH);
+			SmartDashboard.putNumber("kPOneDH Value: ", kPOneDH);
+			SmartDashboard.putNumber("kIOneDH Value: ", kIOneDH);
+			SmartDashboard.putNumber("kDOneDH Value: ", kDOneDH);
 
-		SmartDashboard.putNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
-		SmartDashboard.putNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
-		
-		SmartDashboard.putNumber("X Profile Feet: ", 0);
-		SmartDashboard.putNumber("Y Profile Feet: ", 0);
-		SmartDashboard.putNumber("Drive Percent: ", PROFILE_DRIVE_PERCENT);
-		SmartDashboard.putNumber("Drive Accel Percent: ", ACCEL_PERCENT);
-		SmartDashboard.putNumber("Angle To Turn: ", 0);
+			SmartDashboard.putNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
+			SmartDashboard.putNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
+			
+			SmartDashboard.putNumber("X Profile Feet: ", 0);
+			SmartDashboard.putNumber("Y Profile Feet: ", 0);
+			SmartDashboard.putNumber("Drive Percent: ", PROFILE_DRIVE_PERCENT);
+			SmartDashboard.putNumber("Drive Accel Percent: ", ACCEL_PERCENT);
+			SmartDashboard.putNumber("Angle To Turn: ", 0);
 
-		SmartDashboard.putNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE));
-		SmartDashboard.putString("Profile Name: ", profileName);
-	}
+			SmartDashboard.putNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE));
+			SmartDashboard.putString("Profile Name: ", profileName);
+		}
 	
 	}
 
 	public void smartDashboardInfo() {
 		if(leftDrive != null && rightDrive != null){
-			if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+			if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 
 				SmartDashboard.putNumberArray("Drive Left Current", new double[] {getLeftCurrent(), getLeftFollow1Current(), getLeftFollow2Current()});
 				SmartDashboard.putNumberArray("Drive Right Current", new double [] {getRightCurrent(), getRightFollow1Current(), getRightFollow2Current()});

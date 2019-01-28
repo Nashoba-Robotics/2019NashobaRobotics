@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
+import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
@@ -31,8 +32,10 @@ import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
+import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
@@ -66,9 +69,13 @@ public void robotInit(){
     smartDashboardInit();
     autoChooserInit();
     OI.init();
-    CameraInit();
+    Drive.getInstance();
+    Elevator.getInstance();
+    IntakeRollers.getInstance();
+    //CameraInit();
 
     LimelightNetworkTable.getInstance().lightLED(false);
+    System.out.println("end of robot init");
 
 }
     
@@ -106,8 +113,8 @@ public void robotInit(){
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
             SmartDashboard.putData(new EnableMotionProfileSmartDashboardCommand());
-            SmartDashboard.putData(new DriveForwardSmartDashboardCommandH());
-            SmartDashboard.putData(new TurnSmartDashboardCommand());
+			SmartDashboard.putData(new DriveForwardSmartDashboardCommandH());
+			SmartDashboard.putData(new TurnSmartDashboardCommand());
             SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
         }
 

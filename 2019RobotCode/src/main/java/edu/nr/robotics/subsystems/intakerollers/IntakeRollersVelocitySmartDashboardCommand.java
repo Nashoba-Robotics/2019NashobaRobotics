@@ -13,6 +13,7 @@ public class IntakeRollersVelocitySmartDashboardCommand extends NRCommand {
 	@Override
 	protected void onStart() {
 		IntakeRollers.getInstance().setMotorPercent(IntakeRollers.getInstance().Vel_Setpoint);
+		System.out.println("percent: " + IntakeRollers.getInstance().Vel_Setpoint);
 	}
 
 	@Override
@@ -22,6 +23,6 @@ public class IntakeRollersVelocitySmartDashboardCommand extends NRCommand {
 	
 	@Override
 	protected boolean isFinishedNR() {
-		return (new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue());
+		return false;//(new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue());
 	}
 }
