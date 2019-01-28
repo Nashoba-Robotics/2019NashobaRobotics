@@ -7,8 +7,13 @@
 
 package edu.nr.robotics.auton.autoroutes;
 
-/**
- * Add your docs here.
- */
-public class StartPosMiddleToCargoShipFrontRightProfilingCommand {
+import edu.wpi.first.wpilibj.command.CommandGroup;
+
+
+public class StartPosMiddleToCargoShipFrontRightProfilingCommand extends CommandGroup{
+
+    public StartPosMiddleToCargoShipFrontRightProfilingCommand() {
+        
+    }
+
 }

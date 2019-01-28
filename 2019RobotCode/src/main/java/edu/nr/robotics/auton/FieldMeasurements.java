@@ -6,7 +6,6 @@ public class FieldMeasurements {
 
     public static final Distance WALL_TO_BASELINE = Distance.ZERO;
 
-    public static final Distance  = Distance.ZERO;
 
 
 }
