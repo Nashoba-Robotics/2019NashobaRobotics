@@ -51,7 +51,6 @@ public class StartPosLeftRocketBackCommand extends CommandGroup {
         });
 
         addSequential(new ConditionalCommand(new LeftCargoToCargoShipProfilingCommand()){
-
             
             protected boolean condition() {
                 return Robot.getInstance().selectedGamePiece2 == GamePiece.cargo && Robot.getInstance().selectedDestination2 == Destination2.cargoShip;

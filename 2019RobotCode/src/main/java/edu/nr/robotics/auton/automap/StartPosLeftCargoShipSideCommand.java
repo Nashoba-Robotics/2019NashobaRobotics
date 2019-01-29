@@ -51,13 +51,13 @@ public class StartPosLeftCargoShipSideCommand extends CommandGroup {
         });
 
         addSequential(new ConditionalCommand(new CargoLeftToCargoShipSlot2ProfilingCommand()){
-
             
             protected boolean condition() {
                 return Robot.getInstance().selectedDestination2 == Destination2.cargoShip && Robot.getInstance().selectedGamePiece2 == GamePiece.cargo;
             }
 
         });
+
 
     }
 
