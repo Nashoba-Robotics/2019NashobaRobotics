@@ -6,18 +6,16 @@ import edu.nr.lib.units.Distance;
 
 public class LiftSetPositionSmartDashboardCommand extends NRCommand {
 
-    Distance frontSetPoint;
-    Distance backSetPoint;
+    Distance setPoint;
 
     public LiftSetPositionSmartDashboardCommand() {
         super(Lift.getInstance());
     }
 
     protected void onStart() {
-        this.frontSetPoint = Lift.frontSetPos;
-        this.backSetPoint = Lift.backSetPos;
+        this.setPoint = Lift.setPos;
 
-        Lift.getInstance().setPosition(frontSetPoint, backSetPoint);
+        Lift.getInstance().setPosition(setPoint);
     }
 
     protected boolean isFinishedNR() {

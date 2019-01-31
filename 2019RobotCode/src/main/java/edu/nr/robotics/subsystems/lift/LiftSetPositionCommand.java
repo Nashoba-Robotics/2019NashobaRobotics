@@ -8,22 +8,20 @@ import edu.nr.lib.units.Distance;
  */
 public class LiftSetPositionCommand extends NRCommand {
 
-    Distance frontSetPoint;
-    Distance backSetPoint;
+    Distance posSetPoint;
 
-    public LiftSetPositionCommand(Distance frontSetPoint, Distance backSetPoint) {
+    public LiftSetPositionCommand(Distance posSetPoint, Distance backSetPoint) {
         super(Lift.getInstance());
-        this.frontSetPoint = frontSetPoint;
-        this.backSetPoint = backSetPoint;
+        this.posSetPoint = posSetPoint;
 
     }
 
     protected void onStart() {
-        Lift.getInstance().setPosition(frontSetPoint, backSetPoint);
+        Lift.getInstance().setPosition(posSetPoint);
     }
 
     protected void onEnd() {
-        if(!frontSetPoint.equals(Distance.ZERO) && !backSetPoint.equals(Distance.ZERO)) {
+        if(!posSetPoint.equals(Distance.ZERO)) {
             Lift.getInstance().deployed = true;
         } else {
             Lift.getInstance().deployed = false;
