@@ -11,7 +11,7 @@ public class DriveOverBaselineAutoCommand extends CommandGroup {
 	
 	public DriveOverBaselineAutoCommand() {
 
-		addSequential(new DriveForwardBasicCommand(FieldMeasurements.WALL_TO_BASELINE));
+		addSequential(new DriveForwardBasicCommand(FieldMeasurements.ALLIANCE_WALL_TO_BASELINE));
 
 	}
 }

@@ -6,7 +6,7 @@ import edu.nr.robotics.auton.autoroutes.RightCargoToCargoShipProfilingCommand;
 import edu.nr.robotics.auton.autoroutes.RightHatchToCargoShipProfilingCommand;
 import edu.nr.robotics.auton.autoroutes.RightHatchToRocketFrontProfilingCommand;
 import edu.nr.robotics.auton.autoroutes.RightRocketBackToCargoProfilingCommand;
-import edu.nr.robotics.auton.autoroutes.RightRocketBacktoHatchProfilingCommand;
+import edu.nr.robotics.auton.autoroutes.RightRocketBackToHatchProfilingCommand;
 import edu.nr.robotics.auton.autoroutes.StartPosRightToRocketBackProfilingCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.ConditionalCommand;
@@ -16,7 +16,7 @@ public class StartPosRightRocketBackCommand extends CommandGroup{
     public StartPosRightRocketBackCommand() {
         addSequential(new StartPosRightToRocketBackProfilingCommand());
 
-        addSequential(new ConditionalCommand(new RightRocketBacktoHatchProfilingCommand()){
+        addSequential(new ConditionalCommand(new RightRocketBackToHatchProfilingCommand()){
 
             protected boolean condition() {
                 return Robot.getInstance().selectedGamePiece2 == GamePiece.hatch;
