@@ -14,7 +14,6 @@ public class LiftSetPositionSmartDashboardCommand extends NRCommand {
 
     protected void onStart() {
         this.setPoint = Lift.setPos;
-
         Lift.getInstance().setPosition(setPoint);
     }
 

@@ -49,6 +49,9 @@ public class Lift extends NRSubsystem {
 
     public static double PROFILE_VEL_PERCENT_LIFT = 0;
 
+    public static final Distance PROFILE_END_THRESHOLD_LIFT = new Distance(1, Distance.Unit.INCH);
+    public static final Speed PROFILE_STOP_SPEED_THRESHOLD = new Speed(0.1, Distance.Unit.INCH, Time.Unit.SECOND);
+
     public static final int VELOCITY_MEASUREMENT_PERIOD_LIFT = 10; // find
     public static final int VELOCITY_MEASUREMENT_WINDOW_LIFT = 32; //find this
 

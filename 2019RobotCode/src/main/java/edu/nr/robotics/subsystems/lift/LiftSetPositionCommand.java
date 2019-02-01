@@ -10,7 +10,7 @@ public class LiftSetPositionCommand extends NRCommand {
 
     Distance posSetPoint;
 
-    public LiftSetPositionCommand(Distance posSetPoint, Distance backSetPoint) {
+    public LiftSetPositionCommand(Distance posSetPoint) {
         super(Lift.getInstance());
         this.posSetPoint = posSetPoint;
 
@@ -18,14 +18,6 @@ public class LiftSetPositionCommand extends NRCommand {
 
     protected void onStart() {
         Lift.getInstance().setPosition(posSetPoint);
-    }
-
-    protected void onEnd() {
-        if(!posSetPoint.equals(Distance.ZERO)) {
-            Lift.getInstance().deployed = true;
-        } else {
-            Lift.getInstance().deployed = false;
-        }
     }
 
     protected boolean isFinishedNR() {
