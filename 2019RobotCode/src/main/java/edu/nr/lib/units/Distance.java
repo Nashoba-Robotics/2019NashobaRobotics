@@ -14,7 +14,7 @@ public class Distance {
 	private Unit type;
 	
 	public enum Unit implements GenericUnit {
-		FOOT, INCH, METER, REVOLUTION_LIFT, MAGNETIC_ENCODER_TICK_DRIVE, ENCODER_REV_H, MAGNETIC_ENCODER_TICK_ELEV, 
+		FOOT, INCH, METER, ENCODER_REV_LIFT, MAGNETIC_ENCODER_TICK_DRIVE, ENCODER_REV_H, MAGNETIC_ENCODER_TICK_ELEV, 
 		MAGNETIC_ENCODER_TICK_AUX_DRIVE, MAGNETIC_ENCODER_TICK_CLIMBER;
 		
 		public static final Unit defaultUnit = INCH;
@@ -66,7 +66,7 @@ public class Distance {
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return val / ENCODER_TICK_ELEV_PER_INCH;
 			}
-			if(this == Unit.REVOLUTION_LIFT) {
+			if(this == Unit.ENCODER_REV_LIFT) {
 				return val * INCH_PER_REVOLUTION_LIFT;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_AUX_DRIVE) {
@@ -94,7 +94,7 @@ public class Distance {
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return ENCODER_TICK_ELEV_PER_INCH * val;
 			}
-			if(this == Unit.REVOLUTION_LIFT) {
+			if(this == Unit.ENCODER_REV_LIFT) {
 				return val / INCH_PER_REVOLUTION_LIFT;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_AUX_DRIVE) {

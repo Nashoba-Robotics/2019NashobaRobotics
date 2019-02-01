@@ -129,7 +129,7 @@ public class Lift extends NRSubsystem {
 
     public Distance getPosition() {
         if(lift != null){
-            return new Distance(lift.getEncoder().getPosition(), Distance.Unit.REVOLUTION_LIFT);
+            return new Distance(lift.getEncoder().getPosition(), Distance.Unit.ENCODER_REV_LIFT);
         } else {
             return Distance.ZERO;
         }
@@ -137,7 +137,7 @@ public class Lift extends NRSubsystem {
 
     public Speed getVelocity() {
         if(lift != null){
-            return new Speed(lift.getEncoder().getVelocity(), Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE);
+            return new Speed(lift.getEncoder().getVelocity(), Distance.Unit.ENCODER_REV_LIFT, Time.Unit.MINUTE);
         } else {
             return Speed.ZERO;
         }
@@ -155,7 +155,7 @@ public class Lift extends NRSubsystem {
             posSetpoint = pos;
             velSetpoint = Speed.ZERO;
 
-            lift.getPIDController().setReference(pos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);
+            lift.getPIDController().setReference(pos.get(Distance.Unit.ENCODER_REV_LIFT), ControlType.kPosition, POS_SLOT);
         }
 
     }
@@ -177,7 +177,7 @@ public class Lift extends NRSubsystem {
             if(EnabledSubsystems.LIFT_DUMB_ENABLED) {
                     lift.set(velSetpoint.div(MAX_SPEED_LIFT));
             } else {
-                lift.getPIDController().setReference(velSetpoint.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
+                lift.getPIDController().setReference(velSetpoint.get(Distance.Unit.ENCODER_REV_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
             }
 
         }
