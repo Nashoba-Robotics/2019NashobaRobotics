@@ -44,6 +44,10 @@ public class RobotMap {
     public static final int HATCH_MECHANISM_HATCH_FORWARD = -1;
     public static final int HATCH_MECHANISM_HATCH_REVERSE = -1;
 
+    public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = -1;
+    public static final int ELEVATOR_GEAR_SWITCHER_FORWARD_CHANNEL = -1;
+    public static final int ELEVATOR_GEAR_SWITCHER_REVERSE_CHANNEL = -1;
+
     ///sensor ports too
 
 
