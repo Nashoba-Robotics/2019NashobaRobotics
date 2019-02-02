@@ -17,6 +17,12 @@ public class DeployLiftCommand extends NRCommand {
         this.liftSetPoint = liftSetPoint;
     }
 
+    public DeployLiftCommand() {
+        super(new NRSubsystem[] {Elevator.getInstance(), Lift.getInstance()});
+        this.elevSetPoint = Elevator.getInstance().profilePos;
+        this.liftSetPoint = Lift.getInstance().setPos;
+    }
+
     protected void onStart() {
         Elevator.getInstance().setPosition(elevSetPoint);
     }
