@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class HatchLeftToRocketFrontProfilingCommand extends CommandGroup {
 
     public HatchLeftToRocketFrontProfilingCommand() {
-        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.accelPercent, "HatchLeftToRocketFront"));
+        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.accelPercent, "HatchLeftToRocketFront"));
     }
 
 }

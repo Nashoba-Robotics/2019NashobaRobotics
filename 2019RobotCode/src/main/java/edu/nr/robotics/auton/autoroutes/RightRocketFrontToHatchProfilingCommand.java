@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class RightRocketFrontToHatchProfilingCommand extends CommandGroup{
 
     public RightRocketFrontToHatchProfilingCommand() {
-        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "RightRocketFrontToHatch"));
+        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "RightRocketFrontToHatch"));
     }
 
 }

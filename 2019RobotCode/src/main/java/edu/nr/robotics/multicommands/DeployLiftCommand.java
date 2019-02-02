@@ -24,6 +24,7 @@ public class DeployLiftCommand extends NRCommand {
     }
 
     protected void onStart() {
+        Elevator.getInstance().switchToClimbGear();
         Elevator.getInstance().setPosition(elevSetPoint);
     }
 

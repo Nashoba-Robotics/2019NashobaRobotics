@@ -11,6 +11,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class CargoShipLeftSideToCargoProfilingCommand extends CommandGroup{
 
     public CargoShipLeftSideToCargoProfilingCommand() {
-        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "CargoShipLeftSideToCargo"));
+        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "CargoShipLeftSideToCargo"));
     }
 }

@@ -21,7 +21,7 @@ public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
 	}
 
 	public void onStart() {
-		Drive.getInstance().enableMotionProfiler(Drive.xProfile, Drive.yProfile, Drive.drivePercent, Drive.accelPercent);
+		Drive.getInstance().enableMotionProfiler(Drive.endX, Drive.endY, Drive.drivePercent, Drive.accelPercent);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
 		initialHPosition = Drive.getInstance().getHPosition();

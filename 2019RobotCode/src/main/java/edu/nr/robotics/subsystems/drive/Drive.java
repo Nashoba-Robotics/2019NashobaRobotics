@@ -178,9 +178,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		private PIDSourceType type = PIDSourceType.kRate;
 
-		public static Distance xProfile;
-		public static Distance yProfile;
+		public static Distance endX;
+		public static Distance endY;
 		public static Angle endAngle = new Angle(0, Angle.Unit.DEGREE); // set next two to SD...
+		public static Distance xPoint1 = new Distance(1, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE);
+		public static Distance yPoint1 = Distance.ZERO;
+		public static Angle anglePoint1 = Angle.ZERO;
 		public static String profileName = "ProfileName";
 		public static double drivePercent;
 		public static double accelPercent;
@@ -521,7 +524,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			setMotorSpeedInPercent(outputLeft, outputRight, 0);
 		}
 
-		public void enableTwoDMotionProfiler(Distance distX, Distance distY, Angle endAngle, double maxVelPercent,
+		public void enableTwoDMotionProfiler(Distance endX, Distance endY, Angle endAngle, Distance x1Point, Distance y1Point, Angle angle1Point, double maxVelPercent,
 			double maxAccelPercent, String profileName) {
 			File profileFile = new File("home/lvuser/" + profileName + ".csv");
 			
@@ -540,11 +543,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			System.out.println(profileFile.getName());
 			
 			if (!profileFile.exists()) {
-				System.out.println("distX: " + distX.get(Distance.Unit.FOOT) + "	distY: "
-						+ distY.get(Distance.Unit.FOOT) + "	end Angle: " + endAngle.get(Angle.Unit.DEGREE));
-				points = new Waypoint[] { new Waypoint(0, 0, 0), new Waypoint(1, 0, 0),
-						new Waypoint(distX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE),
-								distY.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), endAngle.get(Angle.Unit.RADIAN)) };
+				System.out.println("endX: " + endX.get(Distance.Unit.FOOT) + "	endY: "
+						+ endY.get(Distance.Unit.FOOT) + "	end Angle: " + endAngle.get(Angle.Unit.DEGREE));
+				points = new Waypoint[] { new Waypoint(0, 0, 0), new Waypoint(x1Point.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), y1Point.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), angle1Point.get(Angle.Unit.RADIAN)),
+						new Waypoint(endX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE),
+								endY.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), endAngle.get(Angle.Unit.RADIAN)) };
 			}
 				twoDProfiler.setTrajectory(points);
 			
@@ -616,14 +619,16 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
 			SmartDashboard.putNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
 			
-			SmartDashboard.putNumber("X Profile Feet: ", 0);
-			SmartDashboard.putNumber("Y Profile Feet: ", 0);
+			SmartDashboard.putNumber("X End Point: ", 0);
+			SmartDashboard.putNumber("Y End Point: ", 0);
+			SmartDashboard.putNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE));
+			SmartDashboard.putNumber("Point 1 X: ", xPoint1.get(Distance.Unit.FOOT));
+			SmartDashboard.putNumber("Point 1 Y: ", yPoint1.get(Distance.Unit.FOOT));
+			SmartDashboard.putNumber("Point 1 Angle: ", anglePoint1.get(Angle.Unit.DEGREE));
+			SmartDashboard.putString("Profile Name: ", profileName);
 			SmartDashboard.putNumber("Drive Percent: ", PROFILE_DRIVE_PERCENT);
 			SmartDashboard.putNumber("Drive Accel Percent: ", ACCEL_PERCENT);
 			SmartDashboard.putNumber("Angle To Turn: ", 0);
-
-			SmartDashboard.putNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE));
-			SmartDashboard.putString("Profile Name: ", profileName);
 		}
 	
 	}
@@ -685,13 +690,16 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			DRIVE_RAMP_RATE = new Time(SmartDashboard.getNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND)), Time.Unit.SECOND);
 			H_DRIVE_RAMP_RATE = new Time(SmartDashboard.getNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND)), Time.Unit.SECOND);
 
-			xProfile = new Distance(SmartDashboard.getNumber("X Profile Feet: ", 0), Distance.Unit.FOOT);
-			yProfile = new Distance(SmartDashboard.getNumber("Y Profile Feet: ", 0), Distance.Unit.FOOT);
+			endX = new Distance(SmartDashboard.getNumber("X End Point: ", 0), Distance.Unit.FOOT);
+			endY = new Distance(SmartDashboard.getNumber("Y End Point: ", 0), Distance.Unit.FOOT);
+			endAngle = new Angle(SmartDashboard.getNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
+			xPoint1 = new Distance(SmartDashboard.getNumber("Point 1 X: ", xPoint1.get(Distance.Unit.FOOT)), Distance.Unit.FOOT);
+			yPoint1 = new Distance(SmartDashboard.getNumber("Point 1 Y: ", yPoint1.get(Distance.Unit.FOOT)), Distance.Unit.FOOT);
+			anglePoint1 = new Angle(SmartDashboard.getNumber("Point 1 Angle: ", anglePoint1.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
 			drivePercent = SmartDashboard.getNumber("Drive Percent: ", 0);
 			accelPercent = SmartDashboard.getNumber("Drive Accel Percent: ", 0);
 			angleToTurn = new Angle(SmartDashboard.getNumber("Angle To Turn: ", 0), Angle.Unit.DEGREE);
 
-			endAngle = new Angle(SmartDashboard.getNumber("Profile End Angle: ", endAngle.get(Angle.Unit.DEGREE)), Angle.Unit.DEGREE);
 			profileName = SmartDashboard.getString("Profile Name: ", profileName);
 		}	
 

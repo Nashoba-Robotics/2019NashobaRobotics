@@ -29,7 +29,7 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 	@Override
 	public void onStart() {
-		Drive.getInstance().enableTwoDMotionProfiler(Drive.xProfile, Drive.yProfile, Drive.endAngle, Drive.drivePercent,
+		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.drivePercent,
 				Drive.accelPercent, Drive.profileName);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
@@ -89,24 +89,6 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 			}
 		}
-		/*
-		 * SmartDashboard.putString("Motion Profiler X Left", new
-		 * Distance(Drive.getInstance().pidGetLeft(),
-		 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH) + ":" +
-		 * new Distance( TwoDimensionalMotionProfilerPathfinder.positionGoalLeft +
-		 * TwoDimensionalMotionProfilerPathfinder.initialPositionLeft,
-		 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH) + ":" +
-		 * new Distance(TwoDimensionalMotionProfilerPathfinder.errorLeft,
-		 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH));
-		 * SmartDashboard.putString("Motion Profiler X Right", new
-		 * Distance(Drive.getInstance().pidGetRight(),
-		 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH) + ":" +
-		 * new Distance( TwoDimensionalMotionProfilerPathfinder.positionGoalRight +
-		 * TwoDimensionalMotionProfilerPathfinder.initialPositionRight,
-		 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH) + ":" +
-		 * new Distance(TwoDimensionalMotionProfilerPathfinder.errorRight,
-		 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH));
-		 */
 
 	}
 
@@ -124,18 +106,18 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 		finished = Math
 				.abs(Math.abs(Drive.getInstance().getLeftPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 						- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))) > (NRMath
-								.hypot(Drive.xProfile, Drive.yProfile).sub(Drive.END_THRESHOLD))
+								.hypot(Drive.endX, Drive.endY).sub(Drive.END_THRESHOLD))
 										.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 				|| Math.abs(
 						Math.abs(Drive.getInstance().getRightPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 								- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))) > (NRMath
-										.hypot(Drive.xProfile, Drive.yProfile).sub(Drive.END_THRESHOLD)
+										.hypot(Drive.endX, Drive.endY).sub(Drive.END_THRESHOLD)
 										.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))
 
 						&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 						&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 
-		return false;// finished;
+		return finished;
 	}
 
 }

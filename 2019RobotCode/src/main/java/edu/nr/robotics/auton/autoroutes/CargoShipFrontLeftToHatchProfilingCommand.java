@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class CargoShipFrontLeftToHatchProfilingCommand extends CommandGroup {
 
     public CargoShipFrontLeftToHatchProfilingCommand() {
-        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.accelPercent, "CargoShipFrontLeftToHatch"));
+        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.accelPercent, "CargoShipFrontLeftToHatch"));
     }
 
 }

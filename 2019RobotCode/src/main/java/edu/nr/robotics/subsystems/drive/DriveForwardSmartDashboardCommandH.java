@@ -25,7 +25,7 @@ public class DriveForwardSmartDashboardCommandH extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return (Drive.getInstance().getHPosition().sub(initialPosition)).abs().greaterThan(Drive.yProfile.abs());
+        return (Drive.getInstance().getHPosition().sub(initialPosition)).abs().greaterThan(Drive.endY.abs());
     }
 
 }
