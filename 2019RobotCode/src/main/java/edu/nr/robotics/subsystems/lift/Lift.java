@@ -20,42 +20,28 @@ public class Lift extends NRSubsystem {
 
     private static Lift singleton;
 
-    private CANSparkMax liftFront, liftBack;
+    private CANSparkMax lift;
 
     public static final double INCH_PER_REVOLUTION_LIFT = 0;
 
     public static final Speed MAX_SPEED_LIFT = Speed.ZERO;
 
-    public static final Acceleration MAX_ACCEL_LIFT_FRONT = Acceleration.ZERO;
-    public static final Acceleration MAX_ACCEL_LIFT_BACK = Acceleration.ZERO;
+    public static final Acceleration MAX_ACCEL_LIFT = Acceleration.ZERO;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_LIFT_FRONT = 0;
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_LIFT_BACK = 0;
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_LIFT = 0;
     
-    public static final double VOLTAGE_VELOCITY_SLOPE_LIFT_FRONT = 0;
-    public static final double VOLTAGE_VELOCITY_SLOPE_LIFT_BACK = 0;
-
+    public static final double VOLTAGE_VELOCITY_SLOPE_LIFT = 0;
     public static Time VOLTAGE_RAMP_RATE_LIFT = Time.ZERO;
 
-    public static double F_POS_LIFT_FRONT = 0; //Leave F at 0
-    public static double P_POS_LIFT_FRONT = 0;
-    public static double I_POS_LIFT_FRONT = 0;
-    public static double D_POS_LIFT_FRONT = 0;
+    public static double F_POS_LIFT = 0; //Leave F at 0
+    public static double P_POS_LIFT = 0;
+    public static double I_POS_LIFT = 0;
+    public static double D_POS_LIFT = 0;
 
-    public static double F_POS_LIFT_BACK = 0; //Leave F at 0
-    public static double P_POS_LIFT_BACK = 0;
-    public static double I_POS_LIFT_BACK = 0;
-    public static double D_POS_LIFT_BACK = 0;
-
-    public static double F_VEL_LIFT_FRONT = 0;
-    public static double P_VEL_LIFT_FRONT = 0;
-    public static double I_VEL_LIFT_FRONT = 0;
-    public static double D_VEL_LIFT_FRONT = 0;
-
-    public static double F_VEL_LIFT_BACK = 0;
-    public static double P_VEL_LIFT_BACK = 0;
-    public static double I_VEL_LIFT_BACK = 0;
-    public static double D_VEL_LIFT_BACK = 0;
+    public static double F_VEL_LIFT = 0;
+    public static double P_VEL_LIFT = 0;
+    public static double I_VEL_LIFT = 0;
+    public static double D_VEL_LIFT = 0;
 
     public static final int PEAK_CURRENT_LIFT = 60;
     //public static final int PEAK_CURRENT_DURATION_LIFT = 250;
@@ -63,10 +49,11 @@ public class Lift extends NRSubsystem {
 
     public static double PROFILE_VEL_PERCENT_LIFT = 0;
 
+    public static final Distance PROFILE_END_THRESHOLD_LIFT = new Distance(1, Distance.Unit.INCH);
+    public static final Speed PROFILE_STOP_SPEED_THRESHOLD = new Speed(0.1, Distance.Unit.INCH, Time.Unit.SECOND);
+
     public static final int VELOCITY_MEASUREMENT_PERIOD_LIFT = 10; // find
     public static final int VELOCITY_MEASUREMENT_WINDOW_LIFT = 32; //find this
-    
-    public static final int VOLTAGE_COMPENSATION_LEVEL_LIFT = 12;
 
     public static final IdleMode IDLE_MODE_LIFT = IdleMode.kBrake;
 
@@ -87,60 +74,38 @@ public class Lift extends NRSubsystem {
     public static final Distance BOTTOM_HEIGHT = Distance.ZERO;
 
     //tracking drive motor setpoints
-    private Speed frontVelSetpoint = Speed.ZERO;
-    private Speed backVelSetpoint = Speed.ZERO;
+    private Speed velSetpoint = Speed.ZERO;
+    private Distance posSetpoint = Distance.ZERO;
 
-    private Distance frontPosSetpoint = Distance.ZERO;
-    private Distance backPosSetpoint = Distance.ZERO;
-
-    public static Distance frontSetPos = Distance.ZERO;
-    public static Distance backSetPos = Distance.ZERO;
+    public static Distance setPos = Distance.ZERO;
 
     public static boolean deployed = false;
 
     private Lift() {
         if (EnabledSubsystems.LIFT_ENABLED) {
-            liftFront = SparkMax.createSpark(RobotMap.LIFT_FRONT, true);
-            liftBack = SparkMax.createSpark(RobotMap.LIFT_BACK, true);
+            lift = SparkMax.createSpark(RobotMap.LIFT, true);
 
-            liftFront.getPIDController().setFF(F_VEL_LIFT_FRONT, VEL_SLOT);
-            liftFront.getPIDController().setP(P_VEL_LIFT_FRONT, VEL_SLOT);
-            liftFront.getPIDController().setI(I_VEL_LIFT_FRONT, VEL_SLOT);
-            liftFront.getPIDController().setD(D_VEL_LIFT_FRONT, VEL_SLOT);
+            lift.getPIDController().setFF(F_VEL_LIFT, VEL_SLOT);
+            lift.getPIDController().setP(P_VEL_LIFT, VEL_SLOT);
+            lift.getPIDController().setI(I_VEL_LIFT, VEL_SLOT);
+            lift.getPIDController().setD(D_VEL_LIFT, VEL_SLOT);
 
-            liftBack.getPIDController().setFF(F_VEL_LIFT_BACK, VEL_SLOT);
-            liftBack.getPIDController().setP(P_VEL_LIFT_BACK, VEL_SLOT);
-            liftBack.getPIDController().setI(I_VEL_LIFT_BACK, VEL_SLOT);
-            liftBack.getPIDController().setD(D_VEL_LIFT_BACK, VEL_SLOT);
+            lift.getPIDController().setFF(F_POS_LIFT, POS_SLOT);
+            lift.getPIDController().setP(P_POS_LIFT, POS_SLOT);
+            lift.getPIDController().setI(I_POS_LIFT, POS_SLOT);
+            lift.getPIDController().setD(D_POS_LIFT, POS_SLOT);
 
-            liftFront.getPIDController().setFF(F_POS_LIFT_FRONT, POS_SLOT);
-            liftFront.getPIDController().setP(P_POS_LIFT_FRONT, POS_SLOT);
-            liftFront.getPIDController().setI(I_POS_LIFT_FRONT, POS_SLOT);
-            liftFront.getPIDController().setD(D_POS_LIFT_FRONT, POS_SLOT);
+            lift.setIdleMode(IDLE_MODE_LIFT);
 
-            liftBack.getPIDController().setFF(F_POS_LIFT_BACK, POS_SLOT);
-            liftBack.getPIDController().setP(P_POS_LIFT_BACK, POS_SLOT);
-            liftBack.getPIDController().setI(I_POS_LIFT_BACK, POS_SLOT);
-            liftBack.getPIDController().setD(D_POS_LIFT_BACK, POS_SLOT);
+            lift.setInverted(false);
 
-            liftFront.setIdleMode(IDLE_MODE_LIFT);
-            liftBack.setIdleMode(IDLE_MODE_LIFT);
+            lift.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_LIFT);
+            lift.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
 
-            liftFront.setInverted(false);
-            liftBack.setInverted(false);
+            lift.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
 
-            liftFront.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_LIFT);
-            liftFront.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
-            liftBack.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_LIFT);
-            liftBack.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
-
-            liftFront.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
-            liftBack.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
-
-            liftFront.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
-            liftBack.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
-            liftFront.getPIDController().setOutputRange(-1, 1, POS_SLOT);
-            liftBack.getPIDController().setOutputRange(-1, 1, POS_SLOT);
+            lift.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
+            lift.getPIDController().setOutputRange(-1, 1, POS_SLOT);
 
             smartDashboardInit();
 
@@ -162,124 +127,80 @@ public class Lift extends NRSubsystem {
         }
     }
 
-    public Distance getFrontPosition() {
-        if(liftFront != null){
-            return new Distance(liftFront.getEncoder().getPosition(), Distance.Unit.REVOLUTION_LIFT);
+    public Distance getPosition() {
+        if(lift != null){
+            return new Distance(lift.getEncoder().getPosition(), Distance.Unit.ENCODER_REV_LIFT);
         } else {
             return Distance.ZERO;
         }
     }
 
-    public Distance getBackPosition() {
-        if(liftBack != null){
-            return new Distance(liftBack.getEncoder().getPosition(), Distance.Unit.REVOLUTION_LIFT);
-        } else {
-            return Distance.ZERO;
-        }
-    }
-
-    public Speed getFrontVelocity() {
-        if(liftFront != null){
-            return new Speed(liftFront.getEncoder().getVelocity(), Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE);
+    public Speed getVelocity() {
+        if(lift != null){
+            return new Speed(lift.getEncoder().getVelocity(), Distance.Unit.ENCODER_REV_LIFT, Time.Unit.MINUTE);
         } else {
             return Speed.ZERO;
         }
     }
 
-    public Speed getBackVelocity() {
-        if(liftBack != null){
-            return new Speed(liftBack.getEncoder().getVelocity(), Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE);
-        } else {
-            return Speed.ZERO;
-        }
-    }
-
-    public double getFrontCurrent() {
-        if(liftFront != null) {
-            return liftFront.getOutputCurrent();
+    public double getCurrent() {
+        if(lift != null) {
+            return lift.getOutputCurrent();
         }
         return 0;
     }
 
-    public double getBackCurrent() {
-        if(liftBack != null) {
-            return liftBack.getOutputCurrent();
-        }
-        return 0;
-    }
+    public void setPosition(Distance pos) {
+        if (lift != null) {
+            posSetpoint = pos;
+            velSetpoint = Speed.ZERO;
 
-    public void setPosition(Distance frontPos, Distance backPos) {
-        if (liftFront != null && liftBack != null) {
-            frontPosSetpoint = frontPos;
-            backPosSetpoint = backPos;
-            frontVelSetpoint = Speed.ZERO;
-            backVelSetpoint = Speed.ZERO;
-
-            liftFront.getPIDController().setReference(frontPos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);
-            liftBack.getPIDController().setReference(backPos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);
+            lift.getPIDController().setReference(pos.get(Distance.Unit.ENCODER_REV_LIFT), ControlType.kPosition, POS_SLOT);
         }
 
     }
 
-    public void setMotorSpeedRaw(double front, double back) {
-        liftFront.set(front);
-        liftBack.set(back);
+    public void setMotorSpeedRaw(double percent) {
+        lift.set(percent);
     }
 
-    public void setMotorSpeedPercent(double front, double back) {
-        setMotorSpeed(MAX_SPEED_LIFT.mul(front), MAX_SPEED_LIFT.mul(back));
+    public void setMotorSpeedPercent(double percent) {
+        setMotorSpeed(MAX_SPEED_LIFT.mul(percent));
 
     }
 
-    public void setMotorSpeed(Speed front, Speed back) {
-        if(liftFront != null && liftBack != null) {
+    public void setMotorSpeed(Speed speed) {
+        if(lift != null) {
 
-            frontVelSetpoint = front;
-            backVelSetpoint = back;
-
-            //liftFront.getPIDController().setFF(((VOLTAGE_VELOCITY_SLOPE_LIFT_FRONT * frontVelSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LIFT_FRONT) * 1), VEL_SLOT); //THESE WILL NOT WORK AT ALL. BUT IF THEY DO, NATHANIEL IS RESPONSIBLE. IF THEY DON'T, ETHAN IS RESPONSIBLE.
-            //liftBack.getPIDController().setFF(((VOLTAGE_VELOCITY_SLOPE_LIFT_BACK * backVelSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LIFT_BACK) * 1), VEL_SLOT);
+            velSetpoint = speed;
 
             if(EnabledSubsystems.LIFT_DUMB_ENABLED) {
-                    liftFront.set(frontVelSetpoint.div(MAX_SPEED_LIFT));
-                    liftBack.set(backVelSetpoint.div(MAX_SPEED_LIFT));
+                    lift.set(velSetpoint.div(MAX_SPEED_LIFT));
             } else {
-                liftFront.getPIDController().setReference(frontVelSetpoint.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
-                liftBack.getPIDController().setReference(backVelSetpoint.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
-        }
+                lift.getPIDController().setReference(velSetpoint.get(Distance.Unit.ENCODER_REV_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
+            }
 
         }
     }
 
     public void setVoltageRamp(Time time) {
-        liftFront.setRampRate(time.get(Time.Unit.SECOND));
-        liftBack.setRampRate(time.get(Time.Unit.SECOND));
+        lift.setRampRate(time.get(Time.Unit.SECOND));
     }
 
     private void smartDashboardInit() {
         if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putNumber("Lift Front Pos Setpoint: ", 0);
-            SmartDashboard.putNumber("Lift Back Pos Setpoint: ", 0);
+            SmartDashboard.putNumber("Lift Pos Setpoint: ", 0);
 			SmartDashboard.putNumber("Voltage Ramp Rate Lift Seconds: ",
 					VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND));
             
-            SmartDashboard.putNumber("F Pos Lift Back: ", F_POS_LIFT_BACK);
-			SmartDashboard.putNumber("P Pos Lift Back: ", P_POS_LIFT_BACK);
-			SmartDashboard.putNumber("I Pos Lift Back: ", I_POS_LIFT_BACK);
-            SmartDashboard.putNumber("D Pos Lift Back: ", D_POS_LIFT_BACK);
-            SmartDashboard.putNumber("F Vel Lift Back: ", F_VEL_LIFT_BACK);
-			SmartDashboard.putNumber("P Vel Lift Back: ", P_VEL_LIFT_BACK);
-			SmartDashboard.putNumber("I Vel Lift Back: ", I_VEL_LIFT_BACK);
-			SmartDashboard.putNumber("D Vel Lift Back: ", D_VEL_LIFT_BACK);
-            
-            SmartDashboard.putNumber("F Pos Lift Front: ", F_POS_LIFT_FRONT);
-			SmartDashboard.putNumber("P Pos Lift Front: ", P_POS_LIFT_FRONT);
-			SmartDashboard.putNumber("I Pos Lift Front: ", I_POS_LIFT_FRONT);
-            SmartDashboard.putNumber("D Pos Lift Front: ", D_POS_LIFT_FRONT);
-            SmartDashboard.putNumber("F Vel Lift Front: ", F_VEL_LIFT_FRONT);
-			SmartDashboard.putNumber("P Vel Lift Front: ", P_VEL_LIFT_FRONT);
-			SmartDashboard.putNumber("I Vel Lift Front: ", I_VEL_LIFT_FRONT);
-			SmartDashboard.putNumber("D Vel Lift Front: ", D_VEL_LIFT_FRONT);
+            SmartDashboard.putNumber("F Pos Lift: ", F_POS_LIFT);
+			SmartDashboard.putNumber("P Pos Lift: ", P_POS_LIFT);
+			SmartDashboard.putNumber("I Pos Lift: ", I_POS_LIFT);
+            SmartDashboard.putNumber("D Pos Lift: ", D_POS_LIFT);
+            SmartDashboard.putNumber("F Vel Lift: ", F_VEL_LIFT);
+			SmartDashboard.putNumber("P Vel Lift: ", P_VEL_LIFT);
+			SmartDashboard.putNumber("I Vel Lift: ", I_VEL_LIFT);
+			SmartDashboard.putNumber("D Vel Lift: ", D_VEL_LIFT);
 			
 			SmartDashboard.putNumber("Profile Vel Percent Lift: ", PROFILE_VEL_PERCENT_LIFT);
 		}
@@ -288,57 +209,35 @@ public class Lift extends NRSubsystem {
 
     public void smartDashboardInfo() {
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_BASIC_ENABLED) {
-            SmartDashboard.putNumber("Lift Front Current: ", getFrontCurrent());
-            SmartDashboard.putNumber("Lift Back Current: ", getBackCurrent());
+            SmartDashboard.putNumber("Lift Current: ", getCurrent());
 
-            SmartDashboard.putNumberArray("Lift Front Velocity vs Set Velocity: ", new double[] {getFrontVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), frontVelSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
-            SmartDashboard.putNumberArray("Lift Back Velocity vs Set Velocity: ", new double[] {getBackVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), backVelSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
+            SmartDashboard.putNumberArray("Lift Velocity vs Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
         
-            SmartDashboard.putNumberArray("Lift Front Position vs Set Position: ", new double[] {getFrontPosition().get(Distance.Unit.FOOT), frontPosSetpoint.get(Distance.Unit.FOOT)});
-            SmartDashboard.putNumberArray("Lift Back Position vs Set Position: ", new double[] {getBackPosition().get(Distance.Unit.FOOT), backPosSetpoint.get(Distance.Unit.FOOT)});
-        
+            SmartDashboard.putNumberArray("Lift Position vs Set Position: ", new double[] {getPosition().get(Distance.Unit.FOOT), posSetpoint.get(Distance.Unit.FOOT)});
         }
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
-            frontSetPos = new Distance(SmartDashboard.getNumber("Lift Front Position Setpoint: ", 0), Distance.Unit.FOOT);
-            backSetPos = new Distance(SmartDashboard.getNumber("Lift Back Position Setpoint: ", 0), Distance.Unit.FOOT);
+            setPos = new Distance(SmartDashboard.getNumber("Lift Pos Setpoint: ", 0), Distance.Unit.FOOT);
 			VOLTAGE_RAMP_RATE_LIFT = new Time(SmartDashboard.getNumber("Voltage Ramp Rate Lift Seconds: ",
 					VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND)), Time.Unit.SECOND);
             
-            F_POS_LIFT_BACK = SmartDashboard.getNumber("F Pos Lift Back: ", F_POS_LIFT_BACK);
-            liftBack.getPIDController().setFF(F_POS_LIFT_BACK, POS_SLOT);
-            P_POS_LIFT_BACK = SmartDashboard.getNumber("P Pos Lift Back: ", P_POS_LIFT_BACK);
-            liftBack.getPIDController().setP(P_POS_LIFT_BACK, POS_SLOT);
-            I_POS_LIFT_BACK = SmartDashboard.getNumber("I Pos Lift Back: ", I_POS_LIFT_BACK);
-            liftBack.getPIDController().setI(I_POS_LIFT_BACK, POS_SLOT);
-            D_POS_LIFT_BACK = SmartDashboard.getNumber("D Pos Lift Back: ", D_POS_LIFT_BACK);
-            liftBack.getPIDController().setD(D_POS_LIFT_BACK, POS_SLOT);
-            F_VEL_LIFT_BACK = SmartDashboard.getNumber("F Vel Lift Back: ", F_VEL_LIFT_BACK);
-            liftBack.getPIDController().setFF(F_VEL_LIFT_BACK, VEL_SLOT);
-            P_VEL_LIFT_BACK = SmartDashboard.getNumber("P Vel Lift Back: ", P_VEL_LIFT_BACK);
-            liftBack.getPIDController().setP(P_VEL_LIFT_BACK, VEL_SLOT);
-            P_VEL_LIFT_BACK = SmartDashboard.getNumber("I Vel Lift Back: ", I_VEL_LIFT_BACK);
-            liftBack.getPIDController().setI(I_VEL_LIFT_BACK, VEL_SLOT);
-            P_VEL_LIFT_BACK = SmartDashboard.getNumber("D Vel Lift Back: ", D_VEL_LIFT_BACK);
-            liftBack.getPIDController().setD(D_VEL_LIFT_BACK, VEL_SLOT);
-            
-            F_POS_LIFT_FRONT = SmartDashboard.getNumber("F Pos Lift Front: ", F_POS_LIFT_FRONT);
-            liftFront.getPIDController().setFF(F_POS_LIFT_FRONT, POS_SLOT);
-            P_POS_LIFT_FRONT = SmartDashboard.getNumber("P Pos Lift Front: ", P_POS_LIFT_FRONT);
-            liftFront.getPIDController().setP(P_POS_LIFT_FRONT, POS_SLOT);
-            I_POS_LIFT_FRONT = SmartDashboard.getNumber("I Pos Lift Front: ", I_POS_LIFT_FRONT);
-            liftFront.getPIDController().setI(I_POS_LIFT_FRONT, POS_SLOT);
-            D_POS_LIFT_FRONT = SmartDashboard.getNumber("D Pos Lift Front: ", D_POS_LIFT_FRONT);
-            liftFront.getPIDController().setD(D_POS_LIFT_FRONT, POS_SLOT);
-            F_VEL_LIFT_FRONT = SmartDashboard.getNumber("F Vel Lift Front: ", F_VEL_LIFT_FRONT);
-            liftFront.getPIDController().setFF(F_VEL_LIFT_FRONT, VEL_SLOT);
-            P_VEL_LIFT_FRONT = SmartDashboard.getNumber("P Vel Lift Front: ", P_VEL_LIFT_FRONT);
-            liftFront.getPIDController().setP(P_VEL_LIFT_FRONT, VEL_SLOT);
-            I_VEL_LIFT_FRONT = SmartDashboard.getNumber("I Vel Lift Front: ", I_VEL_LIFT_FRONT);
-            liftFront.getPIDController().setI(I_VEL_LIFT_FRONT, VEL_SLOT);
-            D_VEL_LIFT_FRONT = SmartDashboard.getNumber("D Vel Lift Front: ", D_VEL_LIFT_FRONT);
-            liftFront.getPIDController().setD(D_VEL_LIFT_FRONT, VEL_SLOT);
-			
+            F_POS_LIFT = SmartDashboard.getNumber("F Pos Lift: ", F_POS_LIFT);
+            lift.getPIDController().setFF(F_POS_LIFT, POS_SLOT);
+            P_POS_LIFT = SmartDashboard.getNumber("P Pos Lift: ", P_POS_LIFT);
+            lift.getPIDController().setP(P_POS_LIFT, POS_SLOT);
+            I_POS_LIFT = SmartDashboard.getNumber("I Pos Lift: ", I_POS_LIFT);
+            lift.getPIDController().setI(I_POS_LIFT, POS_SLOT);
+            D_POS_LIFT = SmartDashboard.getNumber("D Pos Lift: ", D_POS_LIFT);
+            lift.getPIDController().setD(D_POS_LIFT, POS_SLOT);
+            F_VEL_LIFT = SmartDashboard.getNumber("F Vel Lift: ", F_VEL_LIFT);
+            lift.getPIDController().setFF(F_VEL_LIFT, VEL_SLOT);
+            P_VEL_LIFT = SmartDashboard.getNumber("P Vel Lift: ", P_VEL_LIFT);
+            lift.getPIDController().setP(P_VEL_LIFT, VEL_SLOT);
+            P_VEL_LIFT = SmartDashboard.getNumber("I Vel Lift: ", I_VEL_LIFT);
+            lift.getPIDController().setI(I_VEL_LIFT, VEL_SLOT);
+            P_VEL_LIFT = SmartDashboard.getNumber("D Vel Lift: ", D_VEL_LIFT);
+            lift.getPIDController().setD(D_VEL_LIFT, VEL_SLOT);
+           
 			PROFILE_VEL_PERCENT_LIFT = SmartDashboard.getNumber("Profile Vel Percent Lift: ", PROFILE_VEL_PERCENT_LIFT);
 
         }
@@ -350,6 +249,6 @@ public class Lift extends NRSubsystem {
     }
 
     public void disable() {
-        setMotorSpeedRaw(0, 0);
+        setMotorSpeedRaw(0);
     }
 }

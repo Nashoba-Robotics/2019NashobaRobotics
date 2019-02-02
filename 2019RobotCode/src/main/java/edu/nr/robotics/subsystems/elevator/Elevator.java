@@ -101,7 +101,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 	public static double D_POS_CLIMB_UP = 0;
 
 
-    public static final Distance PROFILE_END_POS_THRESHOLD_ELEVATOR = new Distance(3, Distance.Unit.INCH);
+    public static final Distance PROFILE_END_POS_THRESHOLD_ELEVATOR = new Distance(2, Distance.Unit.INCH);
     public static final Speed PROFILE_STOP_SPEED_THRESHOLD = new Speed(0.1, Distance.Unit.INCH, Time.Unit.SECOND);
     
     

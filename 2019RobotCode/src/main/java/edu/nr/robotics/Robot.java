@@ -30,6 +30,7 @@ import edu.nr.robotics.auton.automap.StartPosMiddleCargoShipFrontRightCommand;
 import edu.nr.robotics.auton.automap.StartPosRightCargoShipSideCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
+import edu.nr.robotics.multicommands.DeployLiftCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
@@ -130,6 +131,10 @@ public void robotInit(){
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
+        }
+
+        if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED && EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new DeployLiftCommand());
         }
     }
 
