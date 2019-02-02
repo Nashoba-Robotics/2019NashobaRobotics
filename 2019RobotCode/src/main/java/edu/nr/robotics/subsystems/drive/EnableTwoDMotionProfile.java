@@ -18,9 +18,12 @@ public class EnableTwoDMotionProfile extends NRCommand {
 		Distance tempLeftPosition = Distance.ZERO;
 		Distance tempRightPosition = Distance.ZERO;
 		
-		Distance xProfile;
-		Distance yProfile;
+		Distance endX;
+		Distance endY;
 		Angle endAngle;
+		Distance xPoint1;
+		Distance yPoint1;
+		Angle anglePoint1;
 		double drivePercent;
 		double accelPercent;
 		String profileName;
@@ -31,11 +34,14 @@ public class EnableTwoDMotionProfile extends NRCommand {
 
 		private final Distance END_THRESHOLD = Drive.END_THRESHOLD;
 
-		public EnableTwoDMotionProfile(Distance xProfile, Distance yProfile, Angle endAngle, double drivePercent, double accelPercent, String profileName) {
+		public EnableTwoDMotionProfile(Distance endX, Distance endY, Angle endAngle, Distance xPoint1, Distance yPoint1, Angle anglePoint1, double drivePercent, double accelPercent, String profileName) {
 			super(Drive.getInstance());
-			this.xProfile = xProfile;
-			this.yProfile = yProfile;
+			this.endX = endX;
+			this.endY = endY;
 			this.endAngle = endAngle;
+			this.xPoint1 = xPoint1;
+			this.yPoint1 = yPoint1;
+			this.anglePoint1 = anglePoint1;
 			this.drivePercent = drivePercent;
 			this.accelPercent = accelPercent;
 			this.profileName = profileName;
@@ -43,7 +49,7 @@ public class EnableTwoDMotionProfile extends NRCommand {
 
 		@Override
 		public void onStart() {
-			Drive.getInstance().enableTwoDMotionProfiler(xProfile, yProfile, endAngle, drivePercent,
+			Drive.getInstance().enableTwoDMotionProfiler(endX, endY, endAngle, xPoint1, yPoint1, anglePoint1, drivePercent,
 					accelPercent, profileName);
 			initialLeftPosition = Drive.getInstance().getLeftPosition();
 			initialRightPosition = Drive.getInstance().getRightPosition();
@@ -103,24 +109,6 @@ public class EnableTwoDMotionProfile extends NRCommand {
 
 				}
 			}
-			/*
-			 * SmartDashboard.putString("Motion Profiler X Left", new
-			 * Distance(Drive.getInstance().pidGetLeft(),
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH) + ":" +
-			 * new Distance( TwoDimensionalMotionProfilerPathfinder.positionGoalLeft +
-			 * TwoDimensionalMotionProfilerPathfinder.initialPositionLeft,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH) + ":" +
-			 * new Distance(TwoDimensionalMotionProfilerPathfinder.errorLeft,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH));
-			 * SmartDashboard.putString("Motion Profiler X Right", new
-			 * Distance(Drive.getInstance().pidGetRight(),
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH) + ":" +
-			 * new Distance( TwoDimensionalMotionProfilerPathfinder.positionGoalRight +
-			 * TwoDimensionalMotionProfilerPathfinder.initialPositionRight,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH) + ":" +
-			 * new Distance(TwoDimensionalMotionProfilerPathfinder.errorRight,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH));
-			 */
 
 		}
 
@@ -138,18 +126,18 @@ public class EnableTwoDMotionProfile extends NRCommand {
 			finished = Math
 					.abs(Math.abs(Drive.getInstance().getLeftPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 							- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))) > (NRMath
-									.hypot(Drive.xProfile, Drive.yProfile).sub(Drive.END_THRESHOLD))
+									.hypot(Drive.endX, Drive.endY).sub(Drive.END_THRESHOLD))
 											.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 					|| Math.abs(
 							Math.abs(Drive.getInstance().getRightPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 									- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))) > (NRMath
-											.hypot(Drive.xProfile, Drive.yProfile).sub(Drive.END_THRESHOLD)
+											.hypot(Drive.endX, Drive.endY).sub(Drive.END_THRESHOLD)
 											.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))
 
 							&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 							&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 
-			return false;// finished;
+			return finished;
 			
 		}
 
