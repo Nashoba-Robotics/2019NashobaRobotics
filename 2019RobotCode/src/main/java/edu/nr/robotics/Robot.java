@@ -46,7 +46,7 @@ public synchronized static Robot getInstance(){
 public void robotInit(){
     singleton = this;
 
-    m_period = 0.01;  //period that code runs at
+    m_period = 0.02;  //period that code runs at
 
     smartDashboardInit();
     autoChooserInit();
@@ -57,7 +57,6 @@ public void robotInit(){
     //CameraInit();
 
     LimelightNetworkTable.getInstance().lightLED(false);
-    System.out.println("end of robot init");
 
 }
 

@@ -64,7 +64,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 		public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 	
-		public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
+		public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.3);
 
 		public static final Speed MAX_SPEED_DRIVE = new Speed(12.824, Distance.Unit.FOOT, Time.Unit.SECOND);
 		public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.50, Distance.Unit.FOOT, Time.Unit.SECOND);
@@ -72,7 +72,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration (20, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
 		public static final Acceleration MAX_ACCEL_DRIVE_H = new Acceleration(14, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
 
-		public static final Jerk MAX_JERK_DRIVE = Jerk.ZERO;
+		public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND,
+		Time.Unit.SECOND);
 
 		public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.069;
 		public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.0782;
@@ -84,16 +85,16 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0.0786;
 
-		public static Time DRIVE_RAMP_RATE = new Time(.05, Time.Unit.SECOND);
-		public static Time H_DRIVE_RAMP_RATE = new Time(.05, Time.Unit.SECOND);
+		public static Time DRIVE_RAMP_RATE = new Time(0.05, Time.Unit.SECOND);
+		public static Time H_DRIVE_RAMP_RATE = new Time(0.05, Time.Unit.SECOND);
 
-		public static double P_LEFT = 0;
+		public static double P_LEFT = 0.2;
 		public static double I_LEFT = 0;
-		public static double D_LEFT = 0;
+		public static double D_LEFT = 2.0;
 
-		public static double P_RIGHT = 0;
+		public static double P_RIGHT = 0.2;
 		public static double I_RIGHT = 0;
-		public static double D_RIGHT = 0;
+		public static double D_RIGHT = 2.0;
 
 		public static double FF_H = 0;
 		public static double P_H = 0;
@@ -115,27 +116,27 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		
 		public static double kVTwoD = 1
 		/ MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
-		public static double kATwoD = 0;
-		public static double kPTwoD = 0;
+		public static double kATwoD = 0.0002;
+		public static double kPTwoD = 0.00002;
 		public static double kITwoD = 0;
 		public static double kDTwoD = 0;
-		public static double kP_thetaTwoD = 0;
+		public static double kP_thetaTwoD = 0.02;
 
-		public static final double PROFILE_DRIVE_PERCENT = 0;
-		public static final double ACCEL_PERCENT = 0;
+		public static final double PROFILE_DRIVE_PERCENT = 0.8;
+		public static final double ACCEL_PERCENT = 0.8;
 
-		public static double TURN_JOYSTICK_MULTIPLIER = 0;
-		public static double MOVE_JOYSTICK_MULTIPLIER = 0;
+		public static double TURN_JOYSTICK_MULTIPLIER = 1;
+		public static double MOVE_JOYSTICK_MULTIPLIER = 1;
 
-		public static final double MAX_PROFILE_TURN_PERCENT = 0;
-		public static final double MIN_PROFILE_TURN_PERCENT = 0;
+		public static final double MAX_PROFILE_TURN_PERCENT = 1.0;
+		public static final double MIN_PROFILE_TURN_PERCENT = 0.02;
 
 		public static final double DRIVE_TO_HATCH_PERCENT = 0;
 		public static final double DRIVE_TO_CARGO_PERCENT = 0;
 
 		public static final double SENSOR_STRAFE_PERCENT = 0;
 
-		public static final Distance END_THRESHOLD = Distance.ZERO;
+		public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH);
 		public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
 		public static final Speed PROFILE_END_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(0.10);
 
@@ -583,8 +584,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	public void disableProfiler() {
-		diagonalProfiler.disable();
-		twoDProfiler.disable();
+		if (diagonalProfiler != null)
+			diagonalProfiler.disable();
+		if (twoDProfiler != null)
+			twoDProfiler.disable();
 	}
 
 
