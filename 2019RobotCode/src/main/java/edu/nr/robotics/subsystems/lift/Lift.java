@@ -223,18 +223,25 @@ public class Lift extends NRSubsystem {
             
             F_POS_LIFT = SmartDashboard.getNumber("F Pos Lift: ", F_POS_LIFT);
             lift.getPIDController().setFF(F_POS_LIFT, POS_SLOT);
+           
             P_POS_LIFT = SmartDashboard.getNumber("P Pos Lift: ", P_POS_LIFT);
             lift.getPIDController().setP(P_POS_LIFT, POS_SLOT);
+           
             I_POS_LIFT = SmartDashboard.getNumber("I Pos Lift: ", I_POS_LIFT);
             lift.getPIDController().setI(I_POS_LIFT, POS_SLOT);
+           
             D_POS_LIFT = SmartDashboard.getNumber("D Pos Lift: ", D_POS_LIFT);
             lift.getPIDController().setD(D_POS_LIFT, POS_SLOT);
+           
             F_VEL_LIFT = SmartDashboard.getNumber("F Vel Lift: ", F_VEL_LIFT);
             lift.getPIDController().setFF(F_VEL_LIFT, VEL_SLOT);
+           
             P_VEL_LIFT = SmartDashboard.getNumber("P Vel Lift: ", P_VEL_LIFT);
             lift.getPIDController().setP(P_VEL_LIFT, VEL_SLOT);
+           
             P_VEL_LIFT = SmartDashboard.getNumber("I Vel Lift: ", I_VEL_LIFT);
             lift.getPIDController().setI(I_VEL_LIFT, VEL_SLOT);
+           
             P_VEL_LIFT = SmartDashboard.getNumber("D Vel Lift: ", D_VEL_LIFT);
             lift.getPIDController().setD(D_VEL_LIFT, VEL_SLOT);
            

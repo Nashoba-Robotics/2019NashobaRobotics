@@ -28,7 +28,7 @@ public class DeployLiftCommand extends NRCommand {
         Elevator.getInstance().setPosition(elevSetPoint);
     }
 
-    protected void onExecute(){
+    protected void onExecute() {
         Lift.getInstance().setMotorSpeed(Elevator.getInstance().getVelocity());
     }
 
@@ -42,7 +42,7 @@ public class DeployLiftCommand extends NRCommand {
         Lift.getInstance().setPosition(liftSetPoint);
     }
 
-    protected boolean isFinishNR() {
+    protected boolean isFinishedNR() {
         return Elevator.getInstance().getPosition().sub(elevSetPoint).abs().lessThan(Elevator.getInstance().PROFILE_END_POS_THRESHOLD_ELEVATOR)
          && Lift.getInstance().getPosition().sub(liftSetPoint).abs().lessThan(Lift.getInstance().PROFILE_END_THRESHOLD_LIFT)
          && Elevator.getInstance().getVelocity().lessThan(Elevator.getInstance().PROFILE_STOP_SPEED_THRESHOLD)

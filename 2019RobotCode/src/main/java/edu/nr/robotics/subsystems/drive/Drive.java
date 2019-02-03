@@ -581,8 +581,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	public void disableProfiler() {
-		diagonalProfiler.disable();
-		twoDProfiler.disable();
+		if (diagonalProfiler !=null)
+			diagonalProfiler.disable();
+		if (twoDProfiler != null)
+			twoDProfiler.disable();
 	}
 
 	private void smartDashboardInit() {
