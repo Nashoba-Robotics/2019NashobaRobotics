@@ -133,9 +133,6 @@ public void robotInit(){
             SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
         }
 
-        if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED && EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putData(new DeployLiftCommand());
-        }
     }
 
         @Override
