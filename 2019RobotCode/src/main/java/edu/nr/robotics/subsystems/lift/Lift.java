@@ -43,6 +43,8 @@ public class Lift extends NRSubsystem {
     public static double I_VEL_LIFT = 0;
     public static double D_VEL_LIFT = 0;
 
+    public static double P_Angle = 0;
+
     public static final int PEAK_CURRENT_LIFT = 60;
     //public static final int PEAK_CURRENT_DURATION_LIFT = 250;
     public static final int CONTINUOUS_CURRENT_LIMIT_LIFT = 40;
