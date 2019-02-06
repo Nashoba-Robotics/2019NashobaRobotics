@@ -64,7 +64,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 		public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 	
-		public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.3);
+		public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.36);
 
 		public static final Speed MAX_SPEED_DRIVE = new Speed(12.824, Distance.Unit.FOOT, Time.Unit.SECOND);
 		public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.50, Distance.Unit.FOOT, Time.Unit.SECOND);
@@ -117,10 +117,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double kVTwoD = 1
 		/ MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
 		public static double kATwoD = 0.0002;
-		public static double kPTwoD = 0.00002;
+		public static double kPTwoD = 0.000053;
 		public static double kITwoD = 0;
-		public static double kDTwoD = 0;
-		public static double kP_thetaTwoD = 0.02;
+		public static double kDTwoD = 0.0000;
+		public static double kP_thetaTwoD = 0.0;
 
 		public static final double PROFILE_DRIVE_PERCENT = 0.8;
 		public static final double ACCEL_PERCENT = 0.8;
@@ -182,8 +182,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static Distance yPoint1 = Distance.ZERO;
 		public static Angle anglePoint1 = Angle.ZERO;
 		public static String profileName = "ProfileName";
-		public static double drivePercent;
-		public static double accelPercent;
+		public static double drivePercent = 0.4;
+		public static double accelPercent = 0.8;
 		public static Angle angleToTurn;
 
 		private OneDimensionalMotionProfilerTwoMotor diagonalProfiler;
