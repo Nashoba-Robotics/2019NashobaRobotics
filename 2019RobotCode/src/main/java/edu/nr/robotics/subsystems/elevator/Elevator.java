@@ -1,33 +1,30 @@
 package edu.nr.robotics.subsystems.elevator;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PIDOutput;
-import edu.wpi.first.wpilibj.PIDSource; 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import edu.nr.lib.units.Distance;
-import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.motionprofiling.OneDimensionalMotionProfiler;
-import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
-import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
-import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.nr.lib.units.Speed;
-import edu.nr.lib.units.Acceleration;
-import edu.nr.lib.motorcontrollers.CTRECreator;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import edu.nr.lib.units.Time;
-import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.nr.robotics.OI;
-
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+
+import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
+import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
+import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.units.Acceleration;
+import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Speed;
+import edu.nr.lib.units.Time;
+import edu.nr.robotics.OI;
+import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
@@ -35,17 +32,17 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     private TalonSRX elevatorTalon;
     private VictorSPX elevatorVictorFollowOne;
-    private VictorSPX elevatorVictorFollowTwo; //follow may be other type of talon
+    private VictorSPX elevatorVictorFollowTwo; // follow may be other type of talon
     private PowerDistributionPanel pdp;
-    
+
     private DoubleSolenoid gearShifter;
 
-    public static final double ENC_TICK_PER_INCH_CARRIAGE = 0; //find everything, these are 2018 numbers for testing
+    public static final double ENC_TICK_PER_INCH_CARRIAGE = 0; // find everything, these are 2018 numbers for testing
 
-    public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;//find
+    public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;// find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
 
-    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = Acceleration.ZERO;//find
+    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = Acceleration.ZERO;// find
     public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = Acceleration.ZERO;
 
     public static final Speed MAX_CLIMB_SPEED_UP = Speed.ZERO;

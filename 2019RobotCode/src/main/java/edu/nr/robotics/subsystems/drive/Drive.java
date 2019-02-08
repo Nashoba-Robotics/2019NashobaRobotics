@@ -1,90 +1,83 @@
 package edu.nr.robotics.subsystems.drive;
-import edu.nr.lib.units.Time;
-import edu.nr.lib.units.Distance.Unit;
-import edu.nr.lib.units.Speed;
-import edu.nr.lib.units.Acceleration;
-import edu.nr.lib.units.Distance;
-import edu.nr.lib.units.Angle;
-import edu.nr.lib.units.Jerk;
-import edu.nr.lib.NRMath;
-import edu.nr.lib.gyro.Pigeon;
-import edu.nr.lib.commandbased.JoystickCommand;
-import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.gyro.ResetGyroCommand;
-import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import edu.nr.lib.interfaces.DoublePIDOutput;
-import edu.nr.lib.interfaces.DoublePIDSource;
 
 import java.io.File;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.ControlType;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.nr.lib.NRMath;
+import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.driving.DriveTypeCalculations;
+import edu.nr.lib.gyro.Pigeon;
+import edu.nr.lib.gyro.ResetGyroCommand;
+import edu.nr.lib.interfaces.DoublePIDOutput;
+import edu.nr.lib.interfaces.DoublePIDSource;
+import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
+import edu.nr.lib.motionprofiling.RampedDiagonalHTrajectory;
+import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
+import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.motorcontrollers.SparkMax;
+import edu.nr.lib.network.LimelightNetworkTable;
+import edu.nr.lib.units.Acceleration;
+import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Distance.Unit;
+import edu.nr.lib.units.Jerk;
+import edu.nr.lib.units.Speed;
+import edu.nr.lib.units.Time;
+import edu.nr.robotics.OI;
+import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Waypoint;
-import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.OI;
-import edu.nr.robotics.subsystems.drive.DriveJoystickCommand;
-import edu.nr.lib.driving.DriveTypeCalculations;
-import edu.nr.lib.motorcontrollers.CTRECreator;
-import edu.nr.lib.motorcontrollers.SparkMax;
-import edu.nr.lib.network.LimelightNetworkTable;
-import edu.nr.robotics.subsystems.drive.CheesyDriveCalculationConstants;
-import edu.nr.lib.motionprofiling.RampedDiagonalHTrajectory;
-import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 
 
 public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSource {
-    
-    private static Drive singleton;
 
-		private TalonSRX  leftDrive, rightDrive, pigeonTalon; 
-		private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
-		private CANSparkMax hDrive;
-		private PowerDistributionPanel pdp;
-		//these may change because of new talons
+	private static Drive singleton;
 
+	private TalonSRX leftDrive, rightDrive, pigeonTalon;
+	private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+	private CANSparkMax hDrive;
+	private PowerDistributionPanel pdp;
+	// these may change because of new talons
 
-		//fix all of these
-		public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 0;
-		public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 0;
+	// fix all of these
+	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 0;
+	public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 0;
 
-		public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 0;
-		public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = 0;
+	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 0;
+	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = 0;
 
-		public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
-		public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
-	
-		public static final Distance WHEEL_BASE = Distance.ZERO;
+	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
+	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
-		public static final Speed MAX_SPEED_DRIVE = Speed.ZERO;
-		public static final Speed MAX_SPEED_DRIVE_H = Speed.ZERO;
+	public static final Distance WHEEL_BASE = Distance.ZERO;
 
-		public static final Acceleration MAX_ACCEL_DRIVE = Acceleration.ZERO;
-		public static final Acceleration MAX_ACCEL_DRIVE_H = Acceleration.ZERO;
+	public static final Speed MAX_SPEED_DRIVE = Speed.ZERO;
+	public static final Speed MAX_SPEED_DRIVE_H = Speed.ZERO;
 
-		public static final Jerk MAX_JERK_DRIVE = Jerk.ZERO;
+	public static final Acceleration MAX_ACCEL_DRIVE = Acceleration.ZERO;
+	public static final Acceleration MAX_ACCEL_DRIVE_H = Acceleration.ZERO;
 
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0;
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0;
+	public static final Jerk MAX_JERK_DRIVE = Jerk.ZERO;
 
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0;
 
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0;
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
+
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0;
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0;
 
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
 
