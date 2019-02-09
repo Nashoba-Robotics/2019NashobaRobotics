@@ -16,8 +16,9 @@ package edu.nr.robotics;
 public class RobotMap {
 	// For example to map the left and right motors, you could define the
 	// following variables to use with your drivetrain subsystem.
-	//public static final int leftMotor = 1;
-	//public static final int rightMotor = 2;
+	public static final int leftMotor = 7;
+	public static final int rightMotor = 2;
+	public static final int thirdMotor = -2;
 
 	public static final int SPARK1_ID = 1;
 	public static final int SPARK2_ID = 2;
