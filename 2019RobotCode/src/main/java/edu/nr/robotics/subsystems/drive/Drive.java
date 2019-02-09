@@ -732,4 +732,14 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			EnabledSubsystems.DRIVE_DUMB_ENABLED = false;
 		}
 	}
+
+	public void invertDrive() {
+		leftDrive.setInverted(!leftDrive.getInverted());
+		leftDriveFollow1.setInverted(!leftDriveFollow1.getInverted());
+		leftDriveFollow2.setInverted(!leftDriveFollow2.getInverted());
+		rightDrive.setInverted(!rightDrive.getInverted());
+		rightDriveFollow1.setInverted(!rightDriveFollow1.getInverted());
+		rightDriveFollow2.setInverted(!rightDriveFollow2.getInverted());
+		hDrive.setInverted(!hDrive.getInverted());
+	}
 }
