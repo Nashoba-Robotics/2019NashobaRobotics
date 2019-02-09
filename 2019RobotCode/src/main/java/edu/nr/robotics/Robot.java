@@ -22,6 +22,7 @@ import edu.nr.robotics.auton.AutoChoosers.Destination2;
 import edu.nr.robotics.auton.AutoChoosers.GamePiece;
 import edu.nr.robotics.auton.AutoChoosers.Platform;
 import edu.nr.robotics.auton.AutoChoosers.StartPos;
+import edu.nr.robotics.multicommands.DeployLiftCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
@@ -39,6 +40,15 @@ public class Robot extends TimedRobot {
 private double prevTime = 0;
 
 private static Robot singleton;
+
+private Command autonomousCommand;
+public AutoChoosers.StartPos selectedStartPos;
+public AutoChoosers.GamePiece selectedGamePiece;
+public AutoChoosers.GamePiece selectedGamePiece2;
+public AutoChoosers.Destination selectedDestination;
+public AutoChoosers.Platform selectedPlatform;
+public AutoChoosers.Destination2 selectedDestination2;
+public double autoWaitTime;
 
 public synchronized static Robot getInstance(){
     return singleton;
@@ -60,15 +70,6 @@ public void robotInit(){
     LimelightNetworkTable.getInstance().lightLED(false);
 
 }
-
-    private Command autonomusCommand;
-    public AutoChoosers.StartPos selectedStartPos;
-    public AutoChoosers.GamePiece selectedGamePiece;
-    public AutoChoosers.GamePiece selectedGamePiece2;
-    public AutoChoosers.Destination selectedDestination;
-    public AutoChoosers.Platform selectedPlatform;
-    public AutoChoosers.Destination2 selectedDestination2;
-    public double autoWaitTime;
     
     public void autoChooserInit() {
         AutoChoosers.autoStartPosChooser.addDefault("Start Pos Left", StartPos.left);
@@ -92,7 +93,6 @@ public void robotInit(){
 
         AutoChoosers.autoDestination2Chooser.addDefault("Destination 2", Destination2.rocket);
         AutoChoosers.autoDestination2Chooser.addObject("Destination 2", Destination2.cargoShip);
-
 
     }
 
@@ -124,6 +124,7 @@ public void robotInit(){
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
         }
+
     }
 
         @Override
@@ -150,8 +151,8 @@ public void robotInit(){
             selectedGamePiece2 = AutoChoosers.autoGamePiece2Chooser.getSelected();
             selectedPlatform = AutoChoosers.autoPlatformChooser.getSelected();
 
-            if(autonomusCommand != null)
-                autonomusCommand.start();
+            if(autonomousCommand != null)
+                autonomousCommand.start();
 
         }
 
@@ -193,8 +194,7 @@ public void robotInit(){
             SmartDashboardSource.runAll();
 
         }
-    
-    
+
 
     }
 

@@ -6,20 +6,18 @@ import edu.nr.lib.units.Distance;
 /**
  * Sets the lift to a specified height
  */
-public class LiftSetPositionCommand extends NRCommand{
+public class LiftSetPositionCommand extends NRCommand {
 
-    Distance frontSetPoint;
-    Distance backSetPoint;
+    Distance posSetPoint;
 
-    public LiftSetPositionCommand(Distance frontSetPoint, Distance backSetPoint) {
+    public LiftSetPositionCommand(Distance posSetPoint) {
         super(Lift.getInstance());
-        this.frontSetPoint = frontSetPoint;
-        this.backSetPoint = backSetPoint;
+        this.posSetPoint = posSetPoint;
 
     }
 
     protected void onStart() {
-        Lift.getInstance().setPosition(frontSetPoint, backSetPoint);
+        Lift.getInstance().setPosition(posSetPoint);
     }
 
     protected boolean isFinishedNR() {

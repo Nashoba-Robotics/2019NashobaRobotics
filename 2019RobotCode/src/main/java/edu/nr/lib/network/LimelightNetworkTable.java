@@ -26,6 +26,7 @@ public class LimelightNetworkTable extends TimerTask {
 	private Angle horizOffsetAngle = Angle.ZERO;
 	private Angle vertOffsetAngle = Angle.ZERO;
 	private Time pipelineLatency = Time.ZERO;
+	private double boxHeight = 0;
 	
 	private boolean enabled = false;
 	
@@ -63,9 +64,10 @@ public class LimelightNetworkTable extends TimerTask {
 	@Override
 	public void run() {
 		if (enabled) {
-			horizOffsetAngle = new Angle(limelightTable.getEntry("ty").getDouble(0), Angle.Unit.DEGREE);
-			vertOffsetAngle = new Angle(-limelightTable.getEntry("tx").getDouble(0), Angle.Unit.DEGREE);
+			horizOffsetAngle = new Angle(limelightTable.getEntry("tx").getDouble(0), Angle.Unit.DEGREE);
+			vertOffsetAngle = new Angle(limelightTable.getEntry("ty").getDouble(0), Angle.Unit.DEGREE);
 			pipelineLatency = new Time(limelightTable.getEntry("tl").getDouble(0), Time.Unit.MILLISECOND);
+			boxHeight = limelightTable.getEntry("tvert").getDouble(0);
 		}
 	}
 	
@@ -97,6 +99,14 @@ public class LimelightNetworkTable extends TimerTask {
 	 */
 	public Angle getVertOffsetAngle() {
 		return vertOffsetAngle;
+	}
+	
+	/**
+	 * 
+	 * @return Height of box that limelight draws around target
+	 */
+	public double getBoxHeight() {
+		return boxHeight;
 	}
 	
 	/**

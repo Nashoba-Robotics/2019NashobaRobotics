@@ -13,9 +13,8 @@ public class Distance {
 	private Unit type;
 	
 	public enum Unit implements GenericUnit {
-		FOOT, INCH, METER, REVOLUTION_LIFT,
-		MAGNETIC_ENCODER_TICK_DRIVE, ENCODER_REV_H, MAGNETIC_ENCODER_TICK_ELEV, MAGNETIC_ENCODER_TICK_INTAKE_ELEV,
-		MAGNETIC_ENCODER_TICK_CLIMBER;
+		FOOT, INCH, METER, ENCODER_REV_LIFT, MAGNETIC_ENCODER_TICK_DRIVE, ENCODER_REV_H, MAGNETIC_ENCODER_TICK_ELEV, 
+		MAGNETIC_ENCODER_TICK_AUX_DRIVE, MAGNETIC_ENCODER_TICK_CLIMBER;
 		
 		public static final Unit defaultUnit = INCH;
 		
@@ -38,7 +37,7 @@ public class Distance {
 		 * For the lift
 		 */
 		private static final double INCH_PER_REVOLUTION_LIFT = Lift.INCH_PER_REVOLUTION_LIFT;
-		
+
 		private static final double FOOT_PER_INCH = 1.0/Units.INCHES_PER_FOOT;
 		private static final double METER_PER_INCH = 1.0/Units.INCHES_PER_METER;
 		
@@ -56,12 +55,12 @@ public class Distance {
 				return val / ENCODER_TICK_DRIVE_PER_INCH;
 			}
 			if(this == Unit.ENCODER_REV_H) {
-				return val / ENCODER_REV_DRIVE_H_PER_INCH;
+				return val * ENCODER_REV_DRIVE_H_PER_INCH;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return val / ENCODER_TICK_ELEV_PER_INCH;
 			}
-			if(this == Unit.REVOLUTION_LIFT) {
+			if(this == Unit.ENCODER_REV_LIFT) {
 				return val * INCH_PER_REVOLUTION_LIFT;
 			}
 			return 0;
@@ -81,12 +80,12 @@ public class Distance {
 				return ENCODER_TICK_DRIVE_PER_INCH * val;
 			}
 			if(this == Unit.ENCODER_REV_H) {
-				return ENCODER_REV_DRIVE_H_PER_INCH * val;
+				return val / ENCODER_REV_DRIVE_H_PER_INCH;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return ENCODER_TICK_ELEV_PER_INCH * val;
 			}
-			if(this == Unit.REVOLUTION_LIFT) {
+			if(this == Unit.ENCODER_REV_LIFT) {
 				return val / INCH_PER_REVOLUTION_LIFT;
 			}
 			return 0;

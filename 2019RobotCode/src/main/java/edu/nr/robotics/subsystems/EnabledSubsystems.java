@@ -16,8 +16,6 @@ public class EnabledSubsystems {
     public static final boolean LIFT_DUMB_ENABLED                             = false;
     public static final boolean LIFT_SMARTDASHBOARD_BASIC_ENABLED             = false;
     public static final boolean LIFT_SMARTDASHBOARD_DEBUG_ENABLED             = false;
-   
-    public static boolean LIMELIGHT_ENABLED                                   = false;
     
     public static final boolean INTAKE_ROLLERS_ENABLED                        = false;
     public static final boolean INTAKE_ROLLERS_SMARTDASHBOARD_BASIC_ENABLED   = false;
@@ -26,4 +24,11 @@ public class EnabledSubsystems {
     public static final boolean HATCH_MECHANISM_ENABLED                       = false;
     public static final boolean HATCH_MECHANISM_SMARTDASHBOARD_BASIC_ENABLED  = false;
     public static final boolean HATCH_MECHANISM_SMARTDASHBOARD_DEBUG_ENABLED  = false;
+
+    public static final boolean AUX_DRIVE_ENABLED                             = false;
+    public static final boolean AUX_DRIVE_DUMB_ENABLED                        = false;
+    public static final boolean AUX_DRIVE_SMARTDASHBOARD_BASIC_ENABLED        = false;
+    public static final boolean AUX_DRIVE_SMARTDASHBOARD_DEBUG_ENABLED        = false;
+
+    public static boolean LIMELIGHT_ENABLED                                   = false;
 }
