@@ -11,6 +11,7 @@ import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
@@ -107,6 +108,7 @@ public void robotInit(){
 			SmartDashboard.putData(new DriveForwardSmartDashboardCommandH());
 			SmartDashboard.putData(new TurnSmartDashboardCommand());
             SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
+            SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand());
         }
 
         if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {

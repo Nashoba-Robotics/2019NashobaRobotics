@@ -1,87 +1,79 @@
 package edu.nr.robotics.subsystems.drive;
-import edu.nr.lib.units.Time;
-import edu.nr.lib.units.Distance.Unit;
-import edu.nr.lib.units.Speed;
-import edu.nr.lib.units.Acceleration;
-import edu.nr.lib.units.Distance;
-import edu.nr.lib.units.Angle;
-import edu.nr.lib.units.Jerk;
-import edu.nr.lib.NRMath;
-import edu.nr.lib.gyro.Pigeon;
-import edu.nr.lib.commandbased.JoystickCommand;
-import edu.nr.lib.commandbased.NRSubsystem;
-import edu.nr.lib.gyro.ResetGyroCommand;
-import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
-import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-import edu.nr.lib.interfaces.DoublePIDOutput;
-import edu.nr.lib.interfaces.DoublePIDSource;
 
 import java.io.File;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.nr.lib.NRMath;
+import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.driving.DriveTypeCalculations;
+import edu.nr.lib.gyro.Pigeon;
+import edu.nr.lib.gyro.ResetGyroCommand;
+import edu.nr.lib.interfaces.DoublePIDOutput;
+import edu.nr.lib.interfaces.DoublePIDSource;
+import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
+import edu.nr.lib.motionprofiling.RampedDiagonalHTrajectory;
+import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
+import edu.nr.lib.motorcontrollers.CTRECreator;
+import edu.nr.lib.network.LimelightNetworkTable;
+import edu.nr.lib.units.Acceleration;
+import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Distance.Unit;
+import edu.nr.lib.units.Jerk;
+import edu.nr.lib.units.Speed;
+import edu.nr.lib.units.Time;
+import edu.nr.robotics.OI;
+import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import jaci.pathfinder.Waypoint;
-import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.RobotMap;
-import edu.nr.robotics.OI;
-import edu.nr.robotics.subsystems.drive.DriveJoystickCommand;
-import edu.nr.lib.driving.DriveTypeCalculations;
-import edu.nr.lib.motorcontrollers.CTRECreator;
-import edu.nr.lib.motorcontrollers.SparkMax;
-import edu.nr.lib.network.LimelightNetworkTable;
-import edu.nr.robotics.subsystems.drive.CheesyDriveCalculationConstants;
-import edu.nr.lib.motionprofiling.RampedDiagonalHTrajectory;
-import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 
 
 public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSource {
-    
-    private static Drive singleton;
+
+	private static Drive singleton;
 
 		private TalonSRX  leftDrive, rightDrive, pigeonTalon, leftDriveFollow, rightDriveFollow, hDrive, hDriveFollow;
-		private PowerDistributionPanel pdp;
-		//these may change because of new talons
+	private PowerDistributionPanel pdp;
+	// these may change because of new talons
 
+	// fix all of these
+	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 428;
+	public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 1074;
 
-		//fix all of these
-		public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 428;
-		public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 1074;
+	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 428;
+	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = 1074;// change these
 
-		public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 428;
-		public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = 1074;//change these
+	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
+	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
-		public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
-		public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
-	
-		public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.36);
+	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.36);
 
-		public static final Speed MAX_SPEED_DRIVE = new Speed(12.824, Distance.Unit.FOOT, Time.Unit.SECOND);
-		public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.50, Distance.Unit.FOOT, Time.Unit.SECOND);
+	public static final Speed MAX_SPEED_DRIVE = new Speed(12.824, Distance.Unit.FOOT, Time.Unit.SECOND);
+	public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.50, Distance.Unit.FOOT, Time.Unit.SECOND);
 
-		public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration (20, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
-		public static final Acceleration MAX_ACCEL_DRIVE_H = new Acceleration(14, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
+	public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(20, Distance.Unit.FOOT, Time.Unit.SECOND,
+			Time.Unit.SECOND);
+	public static final Acceleration MAX_ACCEL_DRIVE_H = new Acceleration(14, Distance.Unit.FOOT, Time.Unit.SECOND,
+			Time.Unit.SECOND);
 
-		public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND,
-		Time.Unit.SECOND);
+	public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND,
+			Time.Unit.SECOND);
 
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.069;
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.0782;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.069;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.0782;
 
-		public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0.171;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0.171;
 
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.0726;
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0691;
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.0726;
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0691;
 
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0.0786;
 
@@ -122,7 +114,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double kDTwoD = 0.0000;
 		public static double kP_thetaTwoD = 0.0;
 
-		public static final double PROFILE_DRIVE_PERCENT = 0.8;
+		public static final double PROFILE_DRIVE_PERCENT = 0.4;
 		public static final double ACCEL_PERCENT = 0.8;
 
 		public static double TURN_JOYSTICK_MULTIPLIER = 1;
@@ -705,8 +697,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				yPoint1 = new Distance(SmartDashboard.getNumber("Point 1 Y: ", yPoint1.get(Distance.Unit.FOOT)), Distance.Unit.FOOT);
 				anglePoint1 = new Angle(SmartDashboard.getNumber("Point 1 Angle: ", anglePoint1.get(Angle.Unit.DEGREE)),  Angle.Unit.DEGREE);
 				profileName = SmartDashboard.getString("Profile Name: ", profileName);
-				drivePercent = SmartDashboard.getNumber("Drive Percent: ", 0);
-				accelPercent = SmartDashboard.getNumber("Drive Accel Percent: ", 0);
+				drivePercent = SmartDashboard.getNumber("Drive Percent: ", PROFILE_DRIVE_PERCENT);
+				accelPercent = SmartDashboard.getNumber("Drive Accel Percent: ", ACCEL_PERCENT);
 				angleToTurn = new Angle(SmartDashboard.getNumber("Angle To Turn: ", 0), Angle.Unit.DEGREE);
 			}	
 
@@ -743,6 +735,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		if(leftDrive != null && rightDrive != null && hDrive != null) {
 			EnabledSubsystems.DRIVE_DUMB_ENABLED = false;
 		}
+	}
+
+	public void invertDrive() {
+		leftDrive.setInverted(!leftDrive.getInverted());
+		leftDriveFollow.setInverted(!leftDriveFollow.getInverted());
+		rightDrive.setInverted(!rightDrive.getInverted());
+		rightDriveFollow.setInverted(!rightDriveFollow.getInverted());
+		hDrive.setInverted(!rightDriveFollow.getInverted());
+		hDriveFollow.setInverted(!rightDriveFollow.getInverted());
 	}
 
 }
