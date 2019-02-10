@@ -14,6 +14,7 @@ import edu.nr.robotics.subsystems.drive.DriveForwardCommand;
 import edu.nr.robotics.subsystems.drive.EnableOneDMotionProfile;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfile;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -27,7 +28,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends TimedRobot {
 	
 	private static Robot singleton;
 	
@@ -47,6 +48,8 @@ public class Robot extends IterativeRobot {
 		
 		singleton = this;
 		OI.init();
+
+		m_period = 0.01;
 		
 		AutoChooserInit();
 		SmartDashboardInit();

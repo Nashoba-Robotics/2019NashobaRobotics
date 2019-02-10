@@ -29,6 +29,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     Lift.getInstance();
 
+    m_period = 0.02;
+
     SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
     SmartDashboard.putData(new LiftSetMotorSpeedRawSmartDashboardCommand());
     SmartDashboard.putData(new LiftSetVelocitySmartDasboardCommand());

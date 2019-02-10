@@ -152,7 +152,7 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		dt = edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - prevTime;
 		prevTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
-		System.out.println(dt);
+		//System.out.println(dt);
 	}
 
 	@Override

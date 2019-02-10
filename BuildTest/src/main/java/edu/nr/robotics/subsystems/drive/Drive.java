@@ -42,7 +42,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
-	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);//.mul(1.36);
+	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.36);
 	/**
 	 * The maximum speed of the drive base
 	 */
@@ -116,7 +116,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	/**
 	 * Percent driving during profiling
 	 */
-	public static final double PROFILE_DRIVE_PERCENT = 0.8;
+	public static final double PROFILE_DRIVE_PERCENT = 0.6;
 
 	/**
 	 * Percent accelerating during profiling
@@ -628,14 +628,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 	
 	public void periodic() {
-		SmartDashboard.putString("Drive Left Current", getLeftCurrent() + " : " + getLeftFollowCurrent());
-		SmartDashboard.putString("Drive Right Current", getRightCurrent() + " : " + getRightFollowCurrent());
+		SmartDashboard.putNumberArray("Drive Left Current: ", new double[] {getLeftCurrent(), getLeftFollowCurrent()});
+		SmartDashboard.putNumberArray("Drive Right Current: ", new double[] {getRightCurrent(), getRightFollowCurrent()});
 
-		SmartDashboard.putString("Drive Left Velocity: ", getLeftVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND)
-				+ " : " + leftMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND));
-		SmartDashboard.putString("Drive Right Velocity: ", getRightVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND)
-				+ " : " + rightMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND));
-
+		SmartDashboard.putNumberArray("Drive Left Velocity: ", new double[] {getLeftVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), leftMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
+		SmartDashboard.putNumberArray("Drive Right Velocity: ", new double[] {getRightVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), rightMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
+		
 		SmartDashboard.putNumber("Drive Left Percent", leftMotorSetpoint.div(MAX_SPEED_DRIVE));
 		SmartDashboard.putNumber("Drive Right Percent", rightMotorSetpoint.div(MAX_SPEED_DRIVE));
 

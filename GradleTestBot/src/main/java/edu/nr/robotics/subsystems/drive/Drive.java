@@ -27,6 +27,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -413,6 +414,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	public void periodic() {
+		System.out.println("Force Sensor 1: " + EnabledSensors.forceSensor1.get());
+		System.out.println("Force Sensor 2: " + EnabledSensors.forceSensor2.get());
 	}
 
 	public void disable() {
