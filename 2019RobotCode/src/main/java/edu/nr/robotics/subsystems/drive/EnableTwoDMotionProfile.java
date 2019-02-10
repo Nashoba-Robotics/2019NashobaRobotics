@@ -103,24 +103,6 @@ public class EnableTwoDMotionProfile extends NRCommand {
 
 				}
 			}
-			/*
-			 * SmartDashboard.putString("Motion Profiler X Left", new
-			 * Distance(Drive.getInstance().pidGetLeft(),
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH) + ":" +
-			 * new Distance( TwoDimensionalMotionProfilerPathfinder.positionGoalLeft +
-			 * TwoDimensionalMotionProfilerPathfinder.initialPositionLeft,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH) + ":" +
-			 * new Distance(TwoDimensionalMotionProfilerPathfinder.errorLeft,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH));
-			 * SmartDashboard.putString("Motion Profiler X Right", new
-			 * Distance(Drive.getInstance().pidGetRight(),
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH) + ":" +
-			 * new Distance( TwoDimensionalMotionProfilerPathfinder.positionGoalRight +
-			 * TwoDimensionalMotionProfilerPathfinder.initialPositionRight,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH) + ":" +
-			 * new Distance(TwoDimensionalMotionProfilerPathfinder.errorRight,
-			 * Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) .get(Distance.Unit.INCH));
-			 */
 
 		}
 
@@ -149,7 +131,7 @@ public class EnableTwoDMotionProfile extends NRCommand {
 							&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 							&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 
-			return false;// finished;
+			return finished;// false;
 			
 		}
 

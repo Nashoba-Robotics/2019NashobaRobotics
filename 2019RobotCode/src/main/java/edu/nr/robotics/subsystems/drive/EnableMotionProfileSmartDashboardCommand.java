@@ -32,33 +32,27 @@ public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
 		if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
 
 			Drive.getInstance().setPIDSourceType(PIDSourceType.kRate);
-			SmartDashboard.putString("Motion Profiler V Left",
-					Drive.getInstance().pidGetLeft() + ":" + OneDimensionalMotionProfilerTwoMotor.velocityGoal);
-			SmartDashboard.putString("Motion Profiler V Right",
-					Drive.getInstance().pidGetRight() + ":" + OneDimensionalMotionProfilerTwoMotor.velocityGoal);
+			SmartDashboard.putNumberArray("Motion Profiler V Left", new double [] {Drive.getInstance().pidGetLeft() , OneDimensionalMotionProfilerTwoMotor.velocityGoal });
+			SmartDashboard.putNumberArray("Motion Profiler V Right", new double [] {Drive.getInstance().pidGetRight() , OneDimensionalMotionProfilerTwoMotor.velocityGoal});
+			
 			Drive.getInstance().setPIDSourceType(PIDSourceType.kDisplacement);
 
-			SmartDashboard.putString("Motion Profiler X Left",
-					new Distance(Drive.getInstance().pidGetLeft(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
-							.get(Distance.Unit.INCH)
-							+ ":"
-
-							+ new Distance(
+			SmartDashboard.putNumberArray("Motion Profiler X Left", new double [] {
+					new Distance(Drive.getInstance().pidGetLeft(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH)
+					, new Distance(
 									OneDimensionalMotionProfilerTwoMotor.positionGoal + OneDimensionalMotionProfilerTwoMotor.initialPositionLeft,
-									Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH)
-							+ ":" + new Distance(OneDimensionalMotionProfilerTwoMotor.errorLeft, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
-									.get(Distance.Unit.INCH));
+									Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH) , 
+					new Distance(OneDimensionalMotionProfilerTwoMotor.errorLeft, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
+									.get(Distance.Unit.INCH)});
 
-			SmartDashboard.putString("Motion Profiler X Right",
+			SmartDashboard.putNumberArray("Motion Profiler X Right", new double [] {
 					new Distance(Drive.getInstance().pidGetRight(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
-							.get(Distance.Unit.INCH)
-                            + ":"
-                            
-							+ new Distance(
-									OneDimensionalMotionProfilerTwoMotor.positionGoal + OneDimensionalMotionProfilerTwoMotor.initialPositionRight,
-									Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH)
-							+ ":" + new Distance(OneDimensionalMotionProfilerTwoMotor.errorRight, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
-									.get(Distance.Unit.INCH));
+							.get(Distance.Unit.INCH),
+					new Distance(
+								OneDimensionalMotionProfilerTwoMotor.positionGoal + OneDimensionalMotionProfilerTwoMotor.initialPositionRight,
+								Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH),
+					new Distance(OneDimensionalMotionProfilerTwoMotor.errorRight, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
+								.get(Distance.Unit.INCH)});
 		}
 	}
 
