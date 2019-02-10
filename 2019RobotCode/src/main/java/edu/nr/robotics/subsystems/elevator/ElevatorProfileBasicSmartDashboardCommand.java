@@ -36,7 +36,7 @@ public class ElevatorProfileBasicSmartDashboardCommand extends NRCommand {
 	public void onExecute() {
 		if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {	
 			Drive.getInstance().setPIDSourceType(PIDSourceType.kRate);
-			SmartDashboard.putString("Elevator Motion Profiler V", Elevator.getInstance().pidGet() + ":" + Elevator.getInstance().basicProfiler.velocityGoal);
+			SmartDashboard.putNumberArray("Elevator Motion Profiler V", new double []{Elevator.getInstance().pidGet(), Elevator.getInstance().basicProfiler.velocityGoal});
 			Drive.getInstance().setPIDSourceType(PIDSourceType.kDisplacement);
 			//SmartDashboard.putString("Elevator Motion Profiler X", new Distance(Elevator.getInstance().pidGet(), Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV).get(Distance.Unit.INCH) + ":" + new Distance(OneDimensionalMotionProfilerBasic.positionGoal + OneDimensionalMotionProfilerBasic.initialPosition, Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV).get(Distance.Unit.INCH) + ":" + new Distance(OneDimensionalMotionProfilerBasic.error, Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV).get(Distance.Unit.INCH));
 	
