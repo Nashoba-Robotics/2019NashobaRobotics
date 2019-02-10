@@ -204,7 +204,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				pigeonTalon = CTRECreator.createMasterTalon(RobotMap.PIGEON_TALON);
 
-
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 					leftDrive.set(ControlMode.PercentOutput,0);
 					rightDrive.set(ControlMode.PercentOutput, 0); // .set sets sparkmax motor as a percent auomatically
