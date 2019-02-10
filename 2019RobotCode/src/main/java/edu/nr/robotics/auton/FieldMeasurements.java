@@ -13,6 +13,5 @@ public class FieldMeasurements {
     public static final Distance LEFT_CARGO_TO_CARGO_SHIP_HORIZ = Distance.ZERO;
     public static final Distance LEFT_CARGO_TO_CARGO_SHIP_VERT = Distance.ZERO;
 
-    //public static final Distance 
 
 }

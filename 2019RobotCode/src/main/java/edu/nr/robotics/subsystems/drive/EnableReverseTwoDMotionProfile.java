@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class EnableTwoDMotionProfile extends NRCommand {
+public class EnableReverseTwoDMotionProfile extends NRCommand {
 
 		Distance initialLeftPosition;
 		Distance initialRightPosition;
@@ -32,9 +32,8 @@ public class EnableTwoDMotionProfile extends NRCommand {
 		private double profileStartTimeMs = 0;
 		private int index = 0;
 
-		private final Distance END_THRESHOLD = Drive.END_THRESHOLD;
-
-		public EnableTwoDMotionProfile(Distance endX, Distance endY, Angle endAngle, Distance xPoint1, Distance yPoint1, Angle anglePoint1Angle, double drivePercent, double accelPercent, String profileName) {
+		public EnableReverseTwoDMotionProfile(Distance endX, Distance endY, Angle endAngle, Distance xPoint1,
+			Distance yPoint1, Angle anglePoint1Angle, double drivePercent, double accelPercent, String profileName) {
 			super(Drive.getInstance());
 			this.endX = endX;
 			this.endY = endY;
@@ -49,6 +48,7 @@ public class EnableTwoDMotionProfile extends NRCommand {
 
 		@Override
 		public void onStart() {
+			Drive.getInstance().invertDrive();
 			Drive.getInstance().enableTwoDMotionProfiler(endX, endY, endAngle, xPoint1, yPoint1, anglePoint1, drivePercent,
 					accelPercent, profileName);
 			initialLeftPosition = Drive.getInstance().getLeftPosition();
@@ -116,6 +116,7 @@ public class EnableTwoDMotionProfile extends NRCommand {
 		public void onEnd() {
 			Drive.getInstance().disableProfiler();
 			Drive.getInstance().setMotorSpeedInPercent(0, 0, 0);
+			Drive.getInstance().invertDrive();
 		}
 
 		@Override
@@ -135,7 +136,6 @@ public class EnableTwoDMotionProfile extends NRCommand {
 			
 				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
-
 
 			return finished;
 			

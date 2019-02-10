@@ -8,7 +8,6 @@ import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
-import edu.nr.robotics.subsystems.drive.Drive;
 
 public class Pigeon extends Gyro implements Periodic {
 
@@ -60,12 +59,21 @@ public class Pigeon extends Gyro implements Periodic {
 		return Angle.ZERO;
 	}
 	
-	@Override
 	public Angle getYaw() {
 		pigeon.getYawPitchRoll(yawPitchRoll);
 		return new Angle(yawPitchRoll[0], Angle.Unit.DEGREE);
 	}
 	
+	public Angle getPitch() {
+		pigeon.getYawPitchRoll(yawPitchRoll);
+		return new Angle(yawPitchRoll[1], Angle.Unit.DEGREE);
+	}
+
+	public Angle getRoll() {
+		pigeon.getYawPitchRoll(yawPitchRoll);
+		return new Angle(yawPitchRoll[2], Angle.Unit.DEGREE);
+	}
+
 	@Override
 	public void periodic() {
 	}

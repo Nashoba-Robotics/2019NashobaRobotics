@@ -27,8 +27,8 @@ public class DriveForwardBasicSmartDashboardCommand extends NRCommand {
 
     public void onExecute() {
         double turnValue = gyro.getTurnValue(Drive.kP_thetaOneD, false);
-        Drive.getInstance().setMotorSpeedInPercent(Drive.drivePercent * Drive.xProfile.signum() - turnValue,
-        Drive.drivePercent * Drive.xProfile.signum() + turnValue, 0); 
+        Drive.getInstance().setMotorSpeedInPercent(Drive.drivePercent * Drive.endX.signum() - turnValue,
+        Drive.drivePercent * Drive.endX.signum() + turnValue, 0); 
     
     }
 
@@ -37,7 +37,7 @@ public class DriveForwardBasicSmartDashboardCommand extends NRCommand {
     }
 
     public boolean isFinishedNR() {
-        return (Drive.getInstance().getLeftPosition().sub(initialPosition)).abs().greaterThan(Drive.xProfile.abs());
+        return (Drive.getInstance().getLeftPosition().sub(initialPosition)).abs().greaterThan(Drive.endX.abs());
     }
 
 

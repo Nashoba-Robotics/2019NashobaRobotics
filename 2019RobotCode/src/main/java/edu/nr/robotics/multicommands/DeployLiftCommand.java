@@ -2,7 +2,12 @@ package edu.nr.robotics.multicommands;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.gyro.Pigeon;
+import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Speed;
+import edu.nr.lib.units.Time;
+import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.lift.Lift;
 
@@ -17,18 +22,13 @@ public class DeployLiftCommand extends NRCommand {
         this.liftSetPoint = liftSetPoint;
     }
 
-    public DeployLiftCommand() {
-        super(new NRSubsystem[] {Elevator.getInstance(), Lift.getInstance()});
-        this.elevSetPoint = Elevator.getInstance().profilePos;
-        this.liftSetPoint = Lift.getInstance().setPos;
-    }
-
     protected void onStart() {
+        Elevator.getInstance().switchToClimbGear();
         Elevator.getInstance().setPosition(elevSetPoint);
     }
 
-    protected void onExecute(){
-        Lift.getInstance().setMotorSpeed(Elevator.getInstance().getVelocity());
+    protected void onExecute() {
+        Lift.getInstance().setMotorSpeed(Elevator.getInstance().getVelocity().add(new Speed(Lift.getInstance().P_Angle * Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getPitch().get(Angle.Unit.DEGREE), Distance.Unit.FOOT, Time.Unit.SECOND)));
     }
 
     protected void onEnd() {
@@ -41,7 +41,7 @@ public class DeployLiftCommand extends NRCommand {
         Lift.getInstance().setPosition(liftSetPoint);
     }
 
-    protected boolean isFinishNR() {
+    protected boolean isFinishedNR() {
         return Elevator.getInstance().getPosition().sub(elevSetPoint).abs().lessThan(Elevator.getInstance().PROFILE_END_POS_THRESHOLD_ELEVATOR)
          && Lift.getInstance().getPosition().sub(liftSetPoint).abs().lessThan(Lift.getInstance().PROFILE_END_THRESHOLD_LIFT)
          && Elevator.getInstance().getVelocity().lessThan(Elevator.getInstance().PROFILE_STOP_SPEED_THRESHOLD)
