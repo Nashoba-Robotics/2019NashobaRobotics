@@ -1,6 +1,5 @@
 package edu.nr.robotics.subsystems.drive;
 
-import edu.nr.lib.NRMath;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 import edu.nr.lib.units.Distance;
@@ -21,16 +20,14 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 	private double profileStartTimeMs = 0;
 	private int index = 0;
 
-	private final Distance END_THRESHOLD = Drive.END_THRESHOLD;
-
 	public EnableTwoDMotionProfileSmartDashboardCommand() {
 		super(Drive.getInstance());
 	}
 
 	@Override
 	public void onStart() {
-		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.drivePercent,
-				Drive.accelPercent, Drive.profileName);
+		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, 
+		Drive.anglePoint1, Drive.drivePercent, Drive.accelPercent, Drive.profileName);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
 		profileStartTime = 0;
@@ -103,7 +100,14 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 		boolean finished;
 
-		finished = Math
+		finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
+		.get(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length() - 1).position, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
+		&& (Drive.getInstance().getRightPosition().sub(initialRightPosition)).sub(new Distance(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
+		.get(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory().length() - 1).position, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
+		&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
+		&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
+
+		/*finished = Math
 				.abs(Math.abs(Drive.getInstance().getLeftPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 						- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))) > (NRMath
 								.hypot(Drive.endX, Drive.endY).sub(Drive.END_THRESHOLD))
@@ -115,7 +119,7 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 										.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))
 
 						&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-						&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
+						&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);*/
 
 		return finished;
 	}

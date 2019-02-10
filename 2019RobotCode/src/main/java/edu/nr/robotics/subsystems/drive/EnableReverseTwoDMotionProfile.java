@@ -1,6 +1,5 @@
 package edu.nr.robotics.subsystems.drive;
 
-import edu.nr.lib.NRMath;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 import edu.nr.lib.units.Angle;
@@ -31,8 +30,6 @@ public class EnableReverseTwoDMotionProfile extends NRCommand {
 		private double profileStartTime = 0;
 		private double profileStartTimeMs = 0;
 		private int index = 0;
-
-		private final Distance END_THRESHOLD = Drive.END_THRESHOLD;
 
 		public EnableReverseTwoDMotionProfile(Distance endX, Distance endY, Angle endAngle, Distance xPoint1,
             Distance yPoint1, Angle anglePoint1, double drivePercent, double accelPercent, String profileName) {
@@ -126,7 +123,14 @@ public class EnableReverseTwoDMotionProfile extends NRCommand {
 
 			boolean finished;
 
-			finished = Math
+			finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
+			.get(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length() - 1).position, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
+			&& (Drive.getInstance().getRightPosition().sub(initialRightPosition)).sub(new Distance(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
+			.get(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory().length() - 1).position, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
+			&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
+			&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
+
+			/*finished = Math
 					.abs(Math.abs(Drive.getInstance().getLeftPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 							- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))) > (NRMath
 									.hypot(Drive.endX, Drive.endY).sub(Drive.END_THRESHOLD))
@@ -138,7 +142,7 @@ public class EnableReverseTwoDMotionProfile extends NRCommand {
 											.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE))
 
 							&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-							&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
+							&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);*/
 
 			return finished;
 			

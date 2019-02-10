@@ -75,7 +75,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.0726;
 	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0691;
 
-		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
+		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0.0786;
 
 		public static Time DRIVE_RAMP_RATE = new Time(0.05, Time.Unit.SECOND);
 		public static Time H_DRIVE_RAMP_RATE = new Time(0.05, Time.Unit.SECOND);
@@ -89,9 +89,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double D_RIGHT = 2.0;
 
 		public static double FF_H = 0;
-		public static double P_H = 0;
+		public static double P_H = 0.2;
 		public static double I_H = 0;
-		public static double D_H = 0;
+		public static double D_H = 2.0;
 
 		public static double kVOneD = 1 / MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
 		public static double kAOneD = 0.0;
@@ -407,17 +407,21 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				leftDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT * leftMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LEFT) * 1023.0) 
 				/ leftMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
+			
 				rightDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT * rightMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_RIGHT) * 1023.0) 
 				/ rightMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
+
+				hDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_H * hMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_H) * 1023.0)
+				/ hMotorSetpoint.abs().get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 						leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.div(MAX_SPEED_DRIVE));
 						rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint.div(MAX_SPEED_DRIVE));
-						rightDrive.set(hDrive.getControlMode(), hMotorSetpoint.div(MAX_SPEED_DRIVE));
+						hDrive.set(hDrive.getControlMode(), hMotorSetpoint.div(MAX_SPEED_DRIVE));
 				} else {
 					leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
-					if (Math.abs(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)) < 0.05){
+					if (Math.abs(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)) < 0.05) {
 							hDrive.set(ControlMode.PercentOutput, 0); //stop if velocity is really low
 				} else 
 						hDrive.set(ControlMode.Velocity, hMotorSetpoint.get(Distance.Unit.ENCODER_REV_H, Time.Unit.MINUTE));
@@ -510,10 +514,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 					(int) (Math.PI * WHEEL_DIAMETER_EFFECTIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)),
 					WHEEL_DIAMETER.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE),
 					WHEEL_BASE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), false, profileFile);
-
-			System.out.println(profileFile.getName());
 			
 			if (!profileFile.exists()) {
+				System.out.println(profileFile.getName());
 				System.out.println("endX: " + endX.get(Distance.Unit.FOOT) + "	endY: "
 						+ endY.get(Distance.Unit.FOOT) + "	end Angle: " + endAngle.get(Angle.Unit.DEGREE));
 				points = new Waypoint[] { new Waypoint(0, 0, 0), new Waypoint(x1Point.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), y1Point.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), angle1Point.get(Angle.Unit.RADIAN)),
