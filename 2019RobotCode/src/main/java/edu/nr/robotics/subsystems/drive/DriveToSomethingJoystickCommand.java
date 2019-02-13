@@ -2,18 +2,23 @@ package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.network.LimelightNetworkTable;
-import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
-import edu.nr.robotics.OI;
+import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
+import edu.nr.robotics.OI;
+import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
 
-public class DriveToCargoJoystickCommand extends NRCommand {
+public class DriveToSomethingJoystickCommand extends NRCommand {
 
-    public DriveToCargoJoystickCommand() {
+    Pipeline pipeline;
+
+    public DriveToSomethingJoystickCommand(Pipeline pipeline) {
         super(Drive.getInstance());
+        this.pipeline = pipeline;
     }
 
     protected void onStart() {
         new EnableLimelightCommand(true).start();
+        LimelightNetworkTable.getInstance().setPipeline(pipeline);
     }
 
     //make sure limelight tracking cargo
@@ -44,6 +49,7 @@ public class DriveToCargoJoystickCommand extends NRCommand {
 
     protected void onEnd() {
         new EnableLimelightCommand(false).start();
+        LimelightNetworkTable.getInstance().setPipeline(Pipeline.DriverCam);
 
     }
 

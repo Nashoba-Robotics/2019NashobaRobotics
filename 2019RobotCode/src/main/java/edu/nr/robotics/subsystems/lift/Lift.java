@@ -22,7 +22,7 @@ public class Lift extends NRSubsystem {
 
     private CANSparkMax lift;
 
-    public static final double INCH_PER_REVOLUTION_LIFT = 0;
+    public static final double INCH_PER_REVOLUTION_LIFT = 1 / (4.0928);
 
     public static final Speed MAX_SPEED_LIFT = Speed.ZERO;
 

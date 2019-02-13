@@ -14,23 +14,21 @@ public class RobotMap {
     public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = -1;
     public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = -1;
 
-    public static final int CARGO_INTAKE_SENSOR_PORT_1 = -1;
-    public static final int CARGO_INTAKE_SENSOR_PORT_2 = -1;
-    public static final int CARGO_INTAKE_SENSOR_PORT_3 = -1;
+    public static final int CARGO_INTAKE_SENSOR_PORT_1 = 1;
+    public static final int CARGO_INTAKE_SENSOR_PORT_2 = 2;
+    public static final int CARGO_INTAKE_SENSOR_PORT_3 = 3;
 
-    public static final int FLOOR_SENSOR_PORT_1 = -1;
-    public static final int FLOOR_SENSOR_PORT_2 = -1;
-    public static final int FLOOR_SENSOR_PORT_3 = -1;
-    public static final int FLOOR_SENSOR_PORT_4 = -1;
-    public static final int FLOOR_SENSOR_PORT_5 = -1;
+    public static final int FLOOR_SENSOR_PORT_1 = 4;
+    public static final int FLOOR_SENSOR_PORT_2 = 5;
+    public static final int FLOOR_SENSOR_PORT_3 = 6;
+    public static final int FLOOR_SENSOR_PORT_4 = 7;
+    public static final int FLOOR_SENSOR_PORT_5 = 8;
 
+    public static final int ELEVATOR_SENSOR_PORT = 0;
 
-
-    public static final int ELEVATOR_SENSOR_PORT = -1;
-
-    public static final int ELEVATOR_TALON = -1;
-    public static final int ELEVATOR_FOLLOW_ONE = -1;
-    public static final int ELEVATOR_FOLLOW_TWO = -1;
+    public static final int ELEVATOR_TALON =6;
+    public static final int ELEVATOR_FOLLOW_ONE = 2;
+    public static final int ELEVATOR_FOLLOW_TWO = 3;
     public static final int ELEVATOR_FOLLOW_ONE_CURRENT = -1;
     public static final int ELEVATOR_FOLLOW_TWO_CURRENT = -1;
 

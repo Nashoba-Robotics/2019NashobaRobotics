@@ -16,7 +16,6 @@ public class EnableLimelightCommand extends NRCommand {
 
 	protected void onStart() {
 		EnabledSensors.limelightEnabled = boo;
-		LimelightNetworkTable.getInstance().setPipeline(Pipeline.PowerCube);
 
 		if (boo) {
 			LimelightNetworkTable.getInstance().lightLED(true);

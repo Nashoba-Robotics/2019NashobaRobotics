@@ -324,7 +324,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		}
 
 		public Distance getRightPosition() {
-			if(rightDrive != null){
+			if(rightDrive != null) {
 				return new Distance(rightDrive.getSelectedSensorPosition(PID_TYPE), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
 			} else {
 				return Distance.ZERO;
@@ -332,7 +332,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		}
 
 		public Distance getLeftPosition() {
-			if(leftDrive != null){
+			if(leftDrive != null) {
 				return new Distance(leftDrive.getSelectedSensorPosition(PID_TYPE), Unit.MAGNETIC_ENCODER_TICK_DRIVE);
 			} else {
 				return Distance.ZERO;
@@ -340,7 +340,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		}
 
 		public Distance getHPosition() {
-			if(hDrive != null){
+			if(hDrive != null) {
 				return new Distance(hDrive.getEncoder().getPosition(), Unit.ENCODER_REV_H); // already integrated for h drive?
 			} else {
 				return Distance.ZERO;

@@ -19,7 +19,7 @@ public class LimelightNetworkTable extends TimerTask {
 	
 	private static final Time DEFAULT_PERIOD = new Time(10, Time.Unit.MILLISECOND);
 	private static final boolean DEFAULT_LED_LIGHT = false;
-	private static final Pipeline DEFAULT_PIPELINE = Pipeline.PowerCube;
+	private static final Pipeline DEFAULT_PIPELINE = Pipeline.DriverCam;
 	
 	private static final Time IMAGE_CAPTURE_LATENCY = new Time(11, Time.Unit.MILLISECOND);
 	
@@ -37,7 +37,7 @@ public class LimelightNetworkTable extends TimerTask {
 	private static LimelightNetworkTable singleton;
 	
 	public enum Pipeline {
-		PowerCube
+		Cargo, DriverCam, Target
 	}
 	
 	public static LimelightNetworkTable getInstance() {
@@ -126,8 +126,12 @@ public class LimelightNetworkTable extends TimerTask {
 	}
 	
 	public void setPipeline(Pipeline pipeline) {
-		if (pipeline == Pipeline.PowerCube) {
+		if (pipeline == Pipeline.DriverCam) {
 			limelightTable.getEntry("pipeline").setDouble(0);
+		} else if (pipeline == Pipeline.Cargo) {
+			limelightTable.getEntry("pipeline").setDouble(1);
+		} else if (pipeline == Pipeline.Target) {
+			limelightTable.getEntry("pipeline").setDouble(2);
 		}
 	}
 	

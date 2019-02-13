@@ -6,10 +6,8 @@ import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
 import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
-import edu.nr.robotics.subsystems.sensors.EnabledSensors;
-import edu.nr.robotics.subsystems.sensors.SensorVoting;
 
-public class DriveToBallCommand extends NRCommand {
+public class DriveToTargetCommand extends NRCommand {
 
     Equation dist = new Equation() {
     
@@ -35,14 +33,14 @@ public class DriveToBallCommand extends NRCommand {
     double outputLeft;
     double outputRight;
 
-	public DriveToBallCommand() {
+	public DriveToTargetCommand() {
 		super(Drive.getInstance());
 	}
 	
 	@Override
 	protected void onStart() {
         new EnableLimelightCommand(true).start();
-        LimelightNetworkTable.getInstance().setPipeline(Pipeline.Cargo);
+        LimelightNetworkTable.getInstance().setPipeline(Pipeline.Target);
 	}
 	
 	@Override
@@ -87,6 +85,6 @@ public class DriveToBallCommand extends NRCommand {
 	
 	@Override
 	protected boolean isFinishedNR() {
-		return new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue();
+		return false;
 	}
 }

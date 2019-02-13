@@ -18,6 +18,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -32,12 +33,12 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     private TalonSRX elevatorTalon;
     private VictorSPX elevatorVictorFollowOne;
-    private VictorSPX elevatorVictorFollowTwo; // follow may be other type of talon
+    private VictorSPX elevatorVictorFollowTwo;
     private PowerDistributionPanel pdp;
 
     private DoubleSolenoid gearShifter;
 
-    public static final double ENC_TICK_PER_INCH_CARRIAGE = 0; // find everything, these are 2018 numbers for testing
+    public static final double ENC_TICK_PER_INCH_CARRIAGE = 50000 / 82;
 
     public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;// find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
@@ -143,7 +144,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = Distance.ZERO;
-	public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
+    public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
+    
+    public static int heightCounter = 1;
 
     private Speed velSetpoint = Speed.ZERO;
     private Distance posSetpoint = Distance.ZERO;
@@ -188,8 +191,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorVictorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
             pdp = new PowerDistributionPanel();
 
-            gearShifter = new DoubleSolenoid(RobotMap.ELEVATOR_GEAR_SWITCHER_PCM_PORT,
-            RobotMap.ELEVATOR_GEAR_SWITCHER_FORWARD_CHANNEL, RobotMap.ELEVATOR_GEAR_SWITCHER_REVERSE_CHANNEL);
+            //gearShifter = new DoubleSolenoid(RobotMap.ELEVATOR_GEAR_SWITCHER_PCM_PORT,
+           // RobotMap.ELEVATOR_GEAR_SWITCHER_FORWARD_CHANNEL, RobotMap.ELEVATOR_GEAR_SWITCHER_REVERSE_CHANNEL);
             
             elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
         
@@ -386,8 +389,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public void setMotorSpeedPercent(double percent) {
         if (elevatorTalon != null) {
-            //elevTalon.set(ControlMode.PercentOutput, percent);
-            if(getCurrentGear() == Gear.elevator)
+            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED)
+                elevatorTalon.set(ControlMode.PercentOutput, percent);
+            else if(getCurrentGear() == Gear.elevator)
                 setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(percent));
             else
                 setMotorSpeed(MAX_CLIMB_SPEED_UP.mul(percent));
@@ -408,8 +412,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                     ((VOLTAGE_PERCENT_VELOCITY_SLOPE_CLIMB_UP * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
                             + MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP) * 1023.0)
                             / velSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
-                                    Time.Unit.HUNDRED_MILLISECOND),
-                    DEFAULT_TIMEOUT);
+                                    Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 
                 elevatorTalon.selectProfileSlot(VEL_ELEV_UP_SLOT, DEFAULT_TIMEOUT);
             } else if (getCurrentGear() == Gear.elevator) {
@@ -417,8 +420,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                     ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
                             + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP) * 1023.0)
                             / velSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
-                                    Time.Unit.HUNDRED_MILLISECOND),
-                    DEFAULT_TIMEOUT);
+                                    Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
             }
 
             if(EnabledSubsystems.ELEVATOR_DUMB_ENABLED) {
@@ -450,7 +452,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 							Time.Unit.HUNDRED_MILLISECOND),
 					MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
 							Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND), RAMPED_PROFILE_TIME_MULT_ELEVATOR));
-		}else {
+		} else {
 
 			basicProfiler = new OneDimensionalMotionProfilerBasic(this, this, kV_DOWN, kA_DOWN, kP_DOWN, kD_DOWN);
 			basicProfiler.setTrajectory(new OneDimensionalTrajectoryRamped(
@@ -558,10 +560,6 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 SmartDashboard.putNumber("Elevator Encoder Ticks: ", elevatorTalon.getSelectedSensorPosition(PID_TYPE));
             }
         }  
-    //replace with Hall Effect Sensor
-   // public boolean isRevLimitSwitchClosed() {
-     //   return elevatorTalon.getSensorCollection().isRevLimitClosed();
-    //}
 
     @Override
     public void periodic() {
@@ -571,8 +569,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             } else{ 
                 PROFILE_VEL_PERCENT_ELEVATOR = 0.8;
             }
-            if (elevatorTalon.getSensorCollection().isRevLimitSwitchClosed()) {
-                elevatorTalon.getSensorCollection().setQuadraturePosition((int) CARGO_PICKUP_HEIGHT_ELEVATOR.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV), DEFAULT_TIMEOUT);
+            
+            if (EnabledSensors.elevatorSensor.get()) {
+                heightCounter += 1 * getVelocity().signum();
             }
         }
     }
