@@ -51,7 +51,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	private PowerDistributionPanel pdp;
 	// these may change because of new talons
 
-	// fix all of these
+	//TODO: fix all of these
 	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 0;
 	public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 0;
 
@@ -199,6 +199,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
 				leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
+
 				rightDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
 				rightDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
 
@@ -429,6 +430,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				leftDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT * leftMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LEFT) * 1023.0) 
 				/ leftMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
+				
 				rightDrive.config_kF(VEL_SLOT, ((VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT * rightMotorSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_RIGHT) * 1023.0) 
 				/ rightMotorSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 
@@ -439,6 +441,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				} else {
 					leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
+					
 					if (Math.abs(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)) < 0.05){
 							hDrive.set(0); //stop if velocity is really low
 				} else 
@@ -468,8 +471,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public void arcadeDrive(double move, double turn, double strafeRaw) {
 			double [] motorPercents = DriveTypeCalculations.arcadeDrive(move, turn);
-
 			double strafe = NRMath.limit(strafeRaw);
+
 			tankDrive(motorPercents[0], motorPercents[1], strafe);
 		}
 

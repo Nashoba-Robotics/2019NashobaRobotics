@@ -4,6 +4,7 @@ import edu.nr.lib.commandbased.DoNothingJoystickCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,7 +13,10 @@ public class HatchMechanism extends NRSubsystem {
 	public static HatchMechanism singleton;
 
     private DoubleSolenoid deploySolenoid;
-    private DoubleSolenoid hatchSolenoid;
+	private DoubleSolenoid hatchSolenoid;
+
+	public boolean forceSensors = false;
+	public boolean prevForceSensors = false;
 
 	public enum State {
 		DEPLOYED, RETRACTED;
@@ -50,7 +54,7 @@ public class HatchMechanism extends NRSubsystem {
 			deploySolenoid = new DoubleSolenoid(RobotMap.HATCH_MECHANISM_DEPLOY_PCM_PORT, RobotMap.HATCH_MECHANISM_DEPLOY_FORWARD,
                     RobotMap.HATCH_MECHANISM_DEPLOY_REVERSE);
             hatchSolenoid = new DoubleSolenoid(RobotMap.HATCH_MECHANISM_HATCH_PCM_PORT, RobotMap.HATCH_MECHANISM_HATCH_FORWARD,
-             RobotMap.HATCH_MECHANISM_HATCH_REVERSE);
+			 RobotMap.HATCH_MECHANISM_HATCH_REVERSE);
 		}
 	}
 
@@ -106,6 +110,16 @@ public class HatchMechanism extends NRSubsystem {
 
 	@Override
 	public void periodic() {
+		forceSensors = !EnabledSensors.forceSensorOne.get() && !EnabledSensors.forceSensorTwo.get();
+
+		if (forceSensors && (forceSensors != prevForceSensors)) {
+			if (getInstance().currentHatchState() == State.DEPLOYED) 
+				getInstance().retractHatchMechanism();
+			else
+				getInstance().deployHatchMechanism();
+		}
+		prevForceSensors = forceSensors;
+
 	}
 
 	@Override

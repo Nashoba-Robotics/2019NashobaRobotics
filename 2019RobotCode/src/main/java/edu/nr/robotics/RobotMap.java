@@ -24,7 +24,10 @@ public class RobotMap {
     public static final int FLOOR_SENSOR_PORT_4 = -1;
     public static final int FLOOR_SENSOR_PORT_5 = -1;
 
+    public static final int FORCE_SENSOR_1 = -1;
+    public static final int FORCE_SENSOR_2 = -1;
 
+    public static final int HATCH_SENSOR = -1;
 
     public static final int ELEVATOR_SENSOR_PORT = -1;
 

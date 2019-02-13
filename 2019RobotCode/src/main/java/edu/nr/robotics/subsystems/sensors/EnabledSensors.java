@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.sensors;
 
 import edu.nr.robotics.RobotMap;
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalGlitchFilter;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class EnabledSensors {
@@ -25,7 +26,10 @@ public class EnabledSensors {
     public static DigitalInput floorSensorFour = new DigitalInput(RobotMap.FLOOR_SENSOR_PORT_4);
     public static DigitalInput floorSensorFive = new DigitalInput(RobotMap.FLOOR_SENSOR_PORT_5);
 
-	public static Counter elevatorCounter = new Counter(elevatorSensor);
+    public static DigitalInput forceSensorOne = new DigitalInput(RobotMap.FORCE_SENSOR_1);
+    public static DigitalInput forceSensorTwo = new DigitalInput(RobotMap.FORCE_SENSOR_2);
+
+    public static DigitalInput hatchSensor = new DigitalInput(RobotMap.HATCH_SENSOR);
 
 }
 
