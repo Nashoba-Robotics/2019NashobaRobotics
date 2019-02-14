@@ -40,10 +40,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double ENC_TICK_PER_INCH_CARRIAGE = 50000 / 82;
 
-    public static final Speed MAX_SPEED_ELEVATOR_UP = Speed.ZERO;// find
+    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(17.14, Distance.Unit.FOOT, Time.Unit.SECOND);// find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
 
-    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = Acceleration.ZERO;// find
+    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration(50, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);// find
     public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = Acceleration.ZERO;
 
     public static final Speed MAX_CLIMB_SPEED_UP = Speed.ZERO;
@@ -56,11 +56,11 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
 	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.; //find
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.0649; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
     public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = 0;
 
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0;
+    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.131;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_CLIMB_UP = 0;
     
@@ -85,9 +85,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 	public static double I_POS_ELEVATOR_DOWN = 0;
 	public static double D_POS_ELEVATOR_DOWN = 0;
 
-    public static double P_VEL_ELEVATOR_UP = 0;
+    public static double P_VEL_ELEVATOR_UP = 0.2;
 	public static double I_VEL_ELEVATOR_UP = 0;
-	public static double D_VEL_ELEVATOR_UP = 0;
+	public static double D_VEL_ELEVATOR_UP = 2;
 
 	public static double P_VEL_ELEVATOR_DOWN = 0; //  Find elevator velocity PID values for down
 	public static double I_VEL_ELEVATOR_DOWN = 0;
@@ -214,10 +214,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorVictorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
             elevatorVictorFollowTwo.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
             
-            elevatorTalon.setInverted(false);
-            elevatorTalon.setSensorPhase(true);
-            elevatorVictorFollowOne.setInverted(false);
-            elevatorVictorFollowTwo.setInverted(false);
+            elevatorTalon.setInverted(true);
+            elevatorTalon.setSensorPhase(false);
+            elevatorVictorFollowOne.setInverted(true);
+            elevatorVictorFollowTwo.setInverted(true);
 
             elevatorTalon.enableVoltageCompensation(true);
             elevatorTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_ELEVATOR, DEFAULT_TIMEOUT);
@@ -225,7 +225,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorTalon.enableCurrentLimit(true);
             elevatorTalon.configPeakCurrentLimit(PEAK_CURRENT_ELEVATOR, DEFAULT_TIMEOUT);
             elevatorTalon.configPeakCurrentDuration(PEAK_CURRENT_DURATION_ELEVATOR, DEFAULT_TIMEOUT);
-			//elevTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_ELEVATOR, DEFAULT_TIMEOUT);
+			elevatorTalon.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_ELEVATOR, DEFAULT_TIMEOUT);
 
             elevatorTalon.configClosedloopRamp(VOLTAGE_RAMP_RATE_ELEVATOR.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
             elevatorTalon.configOpenloopRamp(VOLTAGE_RAMP_RATE_ELEVATOR.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
@@ -414,8 +414,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                             / velSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
                                     Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
 
-                elevatorTalon.selectProfileSlot(VEL_ELEV_UP_SLOT, DEFAULT_TIMEOUT);
             } else if (getCurrentGear() == Gear.elevator) {
+                elevatorTalon.selectProfileSlot(VEL_ELEV_UP_SLOT, DEFAULT_TIMEOUT);
+                
                 elevatorTalon.config_kF(VEL_ELEV_UP_SLOT,
                     ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
                             + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP) * 1023.0)
@@ -440,6 +441,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
         }
     }
+
     public void enableMotionProfiler(Distance dist,double maxVelPercent, double maxAccelPercent) {
         Distance tempDist = dist;//.mul(1.227).add(new Distance(-4.533, Distance.Unit.INCH));
 
@@ -465,70 +467,74 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
         basicProfiler.enable();
     }
-        public void disableProfiler() {
-            basicProfiler.disable();
-        }
-        public void setPIDSourceType(PIDSourceType pidSource) {
-            type = pidSource;
-        }
-        public PIDSourceType getPIDSourceType() {
-            return type;
-        }
-        
-        public double pidGet() {
-                if(type == PIDSourceType.kRate) {
-                    return getInstance().getVelocity().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
-					    Time.Unit.HUNDRED_MILLISECOND);
-                } else{
-                        return getInstance().getPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV);
-                }
-        }
-        public void pidWrite(double output) {
-            setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(output));
 
-        }
-        public void smartDashboardInit() {
-            if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
-                SmartDashboard.putNumber("Elevator Profile Delta Inches: ", 0);
-                SmartDashboard.putNumber("Voltage Ramp Rate Elevator Seconds: ",
-                        VOLTAGE_RAMP_RATE_ELEVATOR.get(Time.Unit.SECOND));
+    public void disableProfiler() {
+        basicProfiler.disable();
+    }
+
+    public void setPIDSourceType(PIDSourceType pidSource) {
+        type = pidSource;
+    }
+
+    public PIDSourceType getPIDSourceType() {
+        return type;
+    }
     
-                SmartDashboard.putNumber("Elevator kA Up: ", kA_UP);
-                SmartDashboard.putNumber("Elevator kP Up: ", kP_UP);
-                SmartDashboard.putNumber("Elevator kD Up: ", kD_UP);
-                SmartDashboard.putNumber("F Pos Elevator Up: ", F_POS_ELEVATOR_UP);
-                SmartDashboard.putNumber("P Pos Elevator Up: ", P_POS_ELEVATOR_UP);
-                SmartDashboard.putNumber("I Pos Elevator Up: ", I_POS_ELEVATOR_UP);
-                SmartDashboard.putNumber("D Pos Elevator Up: ", D_POS_ELEVATOR_UP);
-                SmartDashboard.putNumber("P Vel Elevator Up: ", P_VEL_ELEVATOR_UP);
-                SmartDashboard.putNumber("I Vel Elevator Up: ", I_VEL_ELEVATOR_UP);
-                SmartDashboard.putNumber("D Vel Elevator Up: ", D_VEL_ELEVATOR_UP);
-    
-                SmartDashboard.putNumber("Elevator kA Down: ", kA_DOWN);
-                SmartDashboard.putNumber("Elevator kP Down: ", kP_DOWN);
-                SmartDashboard.putNumber("Elevator kD Down: ", kD_DOWN);
-                SmartDashboard.putNumber("F Pos Elevator Down: ", F_POS_ELEVATOR_DOWN);
-                SmartDashboard.putNumber("P Pos Elevator Down: ", P_POS_ELEVATOR_DOWN);
-                SmartDashboard.putNumber("I Pos Elevator Down: ", I_POS_ELEVATOR_DOWN);
-                SmartDashboard.putNumber("D Pos Elevator Down: ", D_POS_ELEVATOR_DOWN);
-                SmartDashboard.putNumber("P Vel Elevator Down: ", P_VEL_ELEVATOR_DOWN);
-                SmartDashboard.putNumber("I Vel Elevator Down: ", I_VEL_ELEVATOR_DOWN);
-                SmartDashboard.putNumber("D Vel Elevator Down: ", D_VEL_ELEVATOR_DOWN);
-    
-                SmartDashboard.putNumber("Profile Vel Percent Elevator: ", PROFILE_VEL_PERCENT_ELEVATOR);
-                SmartDashboard.putNumber("Profile Accel Percent Elevator: ", PROFILE_ACCEL_PERCENT_ELEVATOR);
+    public double pidGet() {
+            if(type == PIDSourceType.kRate) {
+                return getInstance().getVelocity().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
+                    Time.Unit.HUNDRED_MILLISECOND);
+            } else{
+                    return getInstance().getPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV);
             }
+    }
+
+    public void pidWrite(double output) {
+        setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(output));
+    }
+
+    public void smartDashboardInit() {
+        if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putNumber("Elevator Profile Delta Inches: ", 0);
+            SmartDashboard.putNumber("Voltage Ramp Rate Elevator Seconds: ",
+                    VOLTAGE_RAMP_RATE_ELEVATOR.get(Time.Unit.SECOND));
+
+            SmartDashboard.putNumber("Elevator kA Up: ", kA_UP);
+            SmartDashboard.putNumber("Elevator kP Up: ", kP_UP);
+            SmartDashboard.putNumber("Elevator kD Up: ", kD_UP);
+            SmartDashboard.putNumber("F Pos Elevator Up: ", F_POS_ELEVATOR_UP);
+            SmartDashboard.putNumber("P Pos Elevator Up: ", P_POS_ELEVATOR_UP);
+            SmartDashboard.putNumber("I Pos Elevator Up: ", I_POS_ELEVATOR_UP);
+            SmartDashboard.putNumber("D Pos Elevator Up: ", D_POS_ELEVATOR_UP);
+            SmartDashboard.putNumber("P Vel Elevator Up: ", P_VEL_ELEVATOR_UP);
+            SmartDashboard.putNumber("I Vel Elevator Up: ", I_VEL_ELEVATOR_UP);
+            SmartDashboard.putNumber("D Vel Elevator Up: ", D_VEL_ELEVATOR_UP);
+
+            SmartDashboard.putNumber("Elevator kA Down: ", kA_DOWN);
+            SmartDashboard.putNumber("Elevator kP Down: ", kP_DOWN);
+            SmartDashboard.putNumber("Elevator kD Down: ", kD_DOWN);
+            SmartDashboard.putNumber("F Pos Elevator Down: ", F_POS_ELEVATOR_DOWN);
+            SmartDashboard.putNumber("P Pos Elevator Down: ", P_POS_ELEVATOR_DOWN);
+            SmartDashboard.putNumber("I Pos Elevator Down: ", I_POS_ELEVATOR_DOWN);
+            SmartDashboard.putNumber("D Pos Elevator Down: ", D_POS_ELEVATOR_DOWN);
+            SmartDashboard.putNumber("P Vel Elevator Down: ", P_VEL_ELEVATOR_DOWN);
+            SmartDashboard.putNumber("I Vel Elevator Down: ", I_VEL_ELEVATOR_DOWN);
+            SmartDashboard.putNumber("D Vel Elevator Down: ", D_VEL_ELEVATOR_DOWN);
+
+            SmartDashboard.putNumber("Profile Vel Percent Elevator: ", PROFILE_VEL_PERCENT_ELEVATOR);
+            SmartDashboard.putNumber("Profile Accel Percent Elevator: ", PROFILE_ACCEL_PERCENT_ELEVATOR);
         }
+    }
 
         @Override
         public void smartDashboardInfo() {
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_BASIC_ENABLED) {
-                SmartDashboard.putNumberArray("ElevatorCurrent: ", new double[] {getMasterCurrent()}); //Put in follower current
+                SmartDashboard.putNumberArray("ElevatorCurrent: ", new double[] {getMasterCurrent(), getFollowOneCurrent(), getFollowTwoCurrent()});
                 SmartDashboard.putNumberArray("Elevator Velocity vs. Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
                 SmartDashboard.putNumberArray("Elevator Position vs. Set Position: ", new double[] {getPosition().get(Distance.Unit.INCH), posSetpoint.get(Distance.Unit.INCH)});
             }             
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
-            profilePos = new Distance(SmartDashboard.getNumber("Elevator Profile Delta Inches: ", 0), Distance.Unit.INCH);
+                profilePos = new Distance(SmartDashboard.getNumber("Elevator Profile Delta Inches: ", 0), Distance.Unit.INCH);
                 F_POS_ELEVATOR_UP = SmartDashboard.getNumber("F Pos Elevator Up: ", F_POS_ELEVATOR_UP);
                 elevatorTalon.config_kF(MOTION_MAGIC_ELEV_UP_SLOT, F_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
                 P_POS_ELEVATOR_UP = SmartDashboard.getNumber("P Pos Elevator Up: ", P_POS_ELEVATOR_UP);
@@ -564,11 +570,11 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     @Override
     public void periodic() {
         if (EnabledSubsystems.ELEVATOR_ENABLED) {
-            if (OI.getInstance().isKidModeOn()) {
+         /*   if (OI.getInstance().isKidModeOn()) {
                 PROFILE_VEL_PERCENT_ELEVATOR = 0.6;
             } else{ 
                 PROFILE_VEL_PERCENT_ELEVATOR = 0.8;
-            }
+            }*/
             
             if (EnabledSensors.elevatorSensor.get()) {
                 heightCounter += 1 * getVelocity().signum();
@@ -580,4 +586,4 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public void disable() {
         setMotorSpeedPercent(0);
     }
-    } 
+} 

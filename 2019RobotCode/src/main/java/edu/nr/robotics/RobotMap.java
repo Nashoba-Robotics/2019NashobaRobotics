@@ -24,13 +24,16 @@ public class RobotMap {
     public static final int FLOOR_SENSOR_PORT_4 = 7;
     public static final int FLOOR_SENSOR_PORT_5 = 8;
 
+    public static final int FORCE_SENSOR_1 = 9;
+    public static final int FORCE_SENSOR_2 = 10;
+
     public static final int ELEVATOR_SENSOR_PORT = 0;
 
-    public static final int ELEVATOR_TALON =6;
+    public static final int ELEVATOR_TALON = 6;
     public static final int ELEVATOR_FOLLOW_ONE = 2;
     public static final int ELEVATOR_FOLLOW_TWO = 3;
-    public static final int ELEVATOR_FOLLOW_ONE_CURRENT = -1;
-    public static final int ELEVATOR_FOLLOW_TWO_CURRENT = -1;
+    public static final int ELEVATOR_FOLLOW_ONE_CURRENT = 0;
+    public static final int ELEVATOR_FOLLOW_TWO_CURRENT = 1;
 
     public static final int LIFT = -1;
 

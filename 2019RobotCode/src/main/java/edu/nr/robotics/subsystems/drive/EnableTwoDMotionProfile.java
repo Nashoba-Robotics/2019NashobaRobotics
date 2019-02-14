@@ -136,7 +136,6 @@ public class EnableTwoDMotionProfile extends NRCommand {
 				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 
-
 			return finished;
 			
 		}

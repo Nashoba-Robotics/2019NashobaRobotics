@@ -39,6 +39,7 @@ import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
+import edu.nr.robotics.subsystems.elevator.ElevatorPositionSmartDashboardCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -122,7 +123,8 @@ public void robotInit(){
         if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new ElevatorDeltaPositionSmartDashboardCommand());
 			SmartDashboard.putData(new ElevatorMoveBasicSmartDashboardCommand());	
-			SmartDashboard.putData(new ElevatorProfileSmartDashboardCommandGroup());
+            SmartDashboard.putData(new ElevatorProfileSmartDashboardCommandGroup());
+            SmartDashboard.putData(new ElevatorPositionSmartDashboardCommand());
         }
 
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
