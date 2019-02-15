@@ -55,7 +55,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.;//0.1
 
-	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.;
+    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.;
+    
+    public static final double HOLD_BOTTOM_PERCENT = 0;
+    public static boolean holdingBottom = false;
 
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.0649; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
@@ -588,16 +591,14 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             }*/
 
             if (!EnabledSensors.elevatorSensor.get()) {
-                if (getPosition().lessThan(new Distance(3, Distance.Unit.INCH))) {
+                if ((getPosition().lessThan(new Distance(3, Distance.Unit.INCH)) && (!holdingBottom))) {
                     elevatorTalon.setSelectedSensorPosition(0);
                 
                     if (elevatorTalon.getMotorOutputPercent() < 0) {
-                        System.out.println("595");
                         setMotorPercentRaw(0);
                     }
                 } else if (TOP_HEIGHT_ELEVATOR.sub(getPosition()).lessThan(new Distance(3, Distance.Unit.INCH))) {
                     if (elevatorTalon.getMotorOutputPercent() > 0) {
-                        System.out.println("600");
                         if (elevatorTalon.getMotorOutputPercent() < 0) {
                         setMotorPercentRaw(0);
                     }

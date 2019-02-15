@@ -2,7 +2,6 @@ package edu.nr.robotics.subsystems.intakerollers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -10,6 +9,8 @@ import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.sensors.SensorVoting;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -112,7 +113,7 @@ public class IntakeRollers extends NRSubsystem {
 	}
 
 	void retractIntakeRollers() {
-		if (deployRollers != null) {
+		if ((deployRollers != null) && !(new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue())) {
 			deployRollers.set(State.RETRACTED_VALUE);
 		}
     }
