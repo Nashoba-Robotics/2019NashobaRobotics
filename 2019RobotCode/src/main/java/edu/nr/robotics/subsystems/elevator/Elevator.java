@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.nr.lib.commandbased.CancelCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
 import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
@@ -52,7 +53,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Acceleration MAX_CLIMB_ACCEL_UP = Acceleration.ZERO;
     public static final Acceleration MAX_CLIMB_ACCEL_DOWN = Acceleration.ZERO;
 
-    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.;
+    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.;//0.1
 
 	public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.;
 
@@ -145,8 +146,12 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
+
+   /*public static final Distance[] Counter_Heights = { HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR, REST_HEIGHT_ELEVATOR,
+            CARGO_PLACE_LOW_HEIGHT_ELEVATOR, HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR, CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR,
+            HATCH_PLACE_TOP_HEIGHT_ELEVATOR, CARGO_PLACE_TOP_HEIGHT_ELEVATOR, TOP_HEIGHT_ELEVATOR };
     
-    public static int heightCounter = 1;
+    public static int heightCounter = 1;*/
 
     private Speed velSetpoint = Speed.ZERO;
     private Distance posSetpoint = Distance.ZERO;
@@ -528,6 +533,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
         @Override
         public void smartDashboardInfo() {
+            SmartDashboard.putBoolean("Hall Effect Value", EnabledSensors.elevatorSensor.get());
+
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_BASIC_ENABLED) {
                 SmartDashboard.putNumberArray("ElevatorCurrent: ", new double[] {getMasterCurrent(), getFollowOneCurrent(), getFollowTwoCurrent()});
                 SmartDashboard.putNumberArray("Elevator Velocity vs. Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
@@ -574,11 +581,30 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 PROFILE_VEL_PERCENT_ELEVATOR = 0.6;
             } else{ 
                 PROFILE_VEL_PERCENT_ELEVATOR = 0.8;
-            }*/
-            
-            if (EnabledSensors.elevatorSensor.get()) {
-                heightCounter += 1 * getVelocity().signum();
             }
+            */
+            /*if (EnabledSensors.elevatorSensor1.get() && !(getApproxHeight().sub(getPosition()).abs().lessThan(new Distance(1, Distance.Unit.INCH)))) {
+                heightCounter += 1 * getVelocity().signum();
+            }*/
+
+            if (!EnabledSensors.elevatorSensor.get()) {
+                if (getPosition().lessThan(new Distance(3, Distance.Unit.INCH))) {
+                    elevatorTalon.setSelectedSensorPosition(0);
+                
+                    if (elevatorTalon.getMotorOutputPercent() < 0) {
+                        System.out.println("595");
+                        setMotorPercentRaw(0);
+                    }
+                } else if (TOP_HEIGHT_ELEVATOR.sub(getPosition()).lessThan(new Distance(3, Distance.Unit.INCH))) {
+                    if (elevatorTalon.getMotorOutputPercent() > 0) {
+                        System.out.println("600");
+                        if (elevatorTalon.getMotorOutputPercent() < 0) {
+                        setMotorPercentRaw(0);
+                    }
+                    }
+                }
+            }
+
         }
     }
 
@@ -586,4 +612,12 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public void disable() {
         setMotorSpeedPercent(0);
     }
-} 
+
+    /*public Distance getApproxHeight() {
+        if ((heightCounter < Counter_Heights.length) && (heightCounter >= 0))
+            return Counter_Heights[heightCounter];
+        else
+            return Distance.ZERO;
+        
+        }*/ 
+    }
