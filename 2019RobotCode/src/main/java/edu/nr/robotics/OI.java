@@ -12,6 +12,17 @@ public class OI implements SmartDashboardSource {
 
     private static final int CANCEL_ALL_BUTTON_NUMBER = 0; //find all of these and make them too
     private static final int KID_MODE_SWITCH = 1;
+    private static final int CARGO_TOP_BUTTON_NUMBER = 2;
+    private static final int CARGO_MIDDLE_BUTTON_NUMBER = 3;
+    private static final int CARGO_BOTTOM_BUTTON_NUMBER = 4;
+    private static final int HATCH_TOP_BUTTON_NUMBER = 5;
+    private static final int HATCH_MIDDLE_BUTTON_NUMBER = 6;
+    private static final int HATCH_BOTTOM_BUTTON_NUMBER = 7;
+    private static final int ELEVATOR_BOTTOM_BUTTON_NUMBER = 8;
+    private static final int GROUND_PICKUP_HATCH_BUTTON_NUMBER = 9;
+    private static final int CLIMB_HIEGHT_HIGH_BUTTON_NUMBER = 10;
+    private static final int CLIMB_HIEGHT_LOW_BUTTON_NUMBER = 11;
+    private static final int CLIMB_BUTTON_NUMBER = 12;
 
     private double driveSpeedMultiplier = 1;
 
