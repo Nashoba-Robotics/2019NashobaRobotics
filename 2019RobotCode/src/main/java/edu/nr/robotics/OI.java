@@ -1,10 +1,8 @@
 package edu.nr.robotics;
-import edu.wpi.first.wpilibj.Joystick;
+
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.nr.robotics.Robot;
-import edu.nr.robotics.subsystems.elevator.Elevator;
-
+import edu.wpi.first.wpilibj.Joystick;
 
 public class OI implements SmartDashboardSource {
 
