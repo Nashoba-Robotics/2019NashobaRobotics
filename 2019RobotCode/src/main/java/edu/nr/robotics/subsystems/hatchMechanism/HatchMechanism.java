@@ -5,6 +5,7 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.sensors.SensorVoting;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -124,6 +125,10 @@ public class HatchMechanism extends NRSubsystem {
 
 	@Override
 	public void disable() {
+	}
+
+	public boolean hasHatch() {
+		return (new SensorVoting(EnabledSensors.forceSensorOne, EnabledSensors.forceSensorTwo, EnabledSensors.forceSensorThree).isTrue());
 	}
 
 	public boolean isHatchMechanismDeployed() {
