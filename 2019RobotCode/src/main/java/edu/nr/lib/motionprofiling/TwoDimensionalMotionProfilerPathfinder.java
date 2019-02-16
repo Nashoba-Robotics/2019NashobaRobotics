@@ -20,6 +20,7 @@ import edu.nr.lib.interfaces.DoublePIDSource;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
+import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import jaci.pathfinder.Pathfinder;
@@ -152,7 +153,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 				velocityGoalLeft = Drive.getInstance().MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND)*(prelimOutputLeft);
 				velocityGoalRight = Drive.getInstance().MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND)*(prelimOutputRight);
 				
-				currentHeading = -Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getYaw().get(Angle.Unit.DEGREE);
+				currentHeading = -Pigeon.getPigeon(RobotMap.PIGEON_ID).getYaw().get(Angle.Unit.DEGREE);
 				
 				//double currentHeading = -gyroCorrection.getAngleErrorDegrees();
 				desiredHeading = Pathfinder.r2d(left.getHeading());
@@ -212,7 +213,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 		gyroCorrection.clearInitialValue();
 		timeSinceStart = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 		lastTime = timeSinceStart;
-		Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).reset();
+		Pigeon.getPigeon(RobotMap.PIGEON_ID).reset();
 	}
 	
 	/**

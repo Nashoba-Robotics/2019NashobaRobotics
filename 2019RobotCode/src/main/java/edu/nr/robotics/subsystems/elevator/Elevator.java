@@ -53,7 +53,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Acceleration MAX_CLIMB_ACCEL_UP = Acceleration.ZERO;
     public static final Acceleration MAX_CLIMB_ACCEL_DOWN = Acceleration.ZERO;
 
-    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.;//0.1
+    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.1;//0.1
 
     public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.;
     

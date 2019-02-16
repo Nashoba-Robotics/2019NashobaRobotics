@@ -206,8 +206,25 @@ public class CTRECreator {
     	return createPigeon(talon, defaultConfiguration);
     }
     
+    public static PigeonIMU createPigeon(int id) {
+        return createPigeon(id, defaultConfiguration);
+    }
+
     public static PigeonIMU createPigeon(TalonSRX talon, Configuration config) {
     	PigeonIMU pigeon = new PigeonIMU(talon);
+    	pigeon.setAccumZAngle(0, config.TIMEOUT);
+    	pigeon.setControlFramePeriod(PigeonIMU_ControlFrame.Control_1, config.CONTROL_FRAME_PERIOD_MS);
+    	pigeon.setFusedHeading(0, config.TIMEOUT);
+    	pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.BiasedStatus_2_Gyro, config.GYRO_STATUS_FRAME_PERIOD_MS, config.TIMEOUT);
+    	pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.BiasedStatus_4_Mag, config.MAG_STATUS_FRAME_PERIOD_MS, config.TIMEOUT);
+    	pigeon.setStatusFramePeriod(PigeonIMU_StatusFrame.BiasedStatus_6_Accel, config.ACCEL_STATUS_FRAME_PERIOD_MS, config.TIMEOUT);
+    	pigeon.setYaw(0, config.TIMEOUT);
+    	
+    	return pigeon;
+    }
+
+    public static PigeonIMU createPigeon(int id, Configuration config) {
+        PigeonIMU pigeon = new PigeonIMU(id);
     	pigeon.setAccumZAngle(0, config.TIMEOUT);
     	pigeon.setControlFramePeriod(PigeonIMU_ControlFrame.Control_1, config.CONTROL_FRAME_PERIOD_MS);
     	pigeon.setFusedHeading(0, config.TIMEOUT);

@@ -7,6 +7,7 @@ import edu.nr.lib.gyro.Pigeon;
 import edu.nr.lib.units.Angle;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.Robot;
+import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
 
 public class DriveJoystickCommand extends JoystickCommand {
@@ -76,7 +77,7 @@ public class DriveJoystickCommand extends JoystickCommand {
                     break;
 
                 case fieldCentricDrive:
-                    Angle robotAngle = Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getYaw().sub(new Angle(90, Angle.Unit.DEGREE));
+                    Angle robotAngle = Pigeon.getPigeon(RobotMap.PIGEON_ID).getYaw().sub(new Angle(90, Angle.Unit.DEGREE));
                     
                     double inputForward = OI.getInstance().getArcadeMoveValue();
                     double inputSide = OI.getInstance().getArcadeHValue();

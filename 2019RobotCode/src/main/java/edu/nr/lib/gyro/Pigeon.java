@@ -13,8 +13,9 @@ public class Pigeon extends Gyro implements Periodic {
 
 	private static Pigeon singleton;
 	
+	//private PigeonIMU pigeon;
+	private static int talonID = 0;
 	private PigeonIMU pigeon;
-	private static int talonID = 6; //intake rollers
 	
 	private double[] yawPitchRoll;
 	private short[] XYZError;
@@ -33,6 +34,19 @@ public class Pigeon extends Gyro implements Periodic {
 			System.out.println("Error instantiating Pigeon IMU");
 		}
 	}
+
+	public Pigeon(int id) {
+		pigeon = CTRECreator.createPigeon(id);
+		talonID = id;
+
+		yawPitchRoll = new double[3];
+
+		try {
+			periodics.add(this);
+		} catch (Exception ex) {
+			System.out.println("Error instantiating Pigeon IMU");
+		}
+	}
 	
 	public static Pigeon getPigeon(TalonSRX talon) {
 		if (singleton == null) {
@@ -45,18 +59,29 @@ public class Pigeon extends Gyro implements Periodic {
 			return null;
 		}
 	}
+
+	public static Pigeon getPigeon(int id) {
+		if (singleton == null) {
+			init(id);
+		}
+		if (id == talonID) {
+			return singleton;
+		} else {
+			System.out.println("Pigeon doesn't exist");
+			return null;
+		}
+	}
 	
 	public synchronized static void init(TalonSRX talon) {
 		if(singleton == null) {
 			singleton = new Pigeon(talon);
 		}
 	}
-	
-	/**
-	 * This is not yet a working function since no Pigeon logging has been created
-	 */
-	public Angle getHistoricalYaw(Time deltaTime) {
-		return Angle.ZERO;
+
+	public synchronized static void init(int id) {
+		if (singleton == null) {
+			singleton = new Pigeon(id);
+		}
 	}
 	
 	public Angle getYaw() {

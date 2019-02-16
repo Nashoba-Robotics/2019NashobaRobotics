@@ -45,7 +45,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	private static Drive singleton;
 
-	private TalonSRX leftDrive, rightDrive, pigeonTalon;
+	private TalonSRX leftDrive, rightDrive;
 	private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
 	private CANSparkMax hDrive;
 	private PowerDistributionPanel pdp;
@@ -195,15 +195,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
 				rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
 				hDrive = SparkMax.createSpark(RobotMap.H_DRIVE, true);
-				pdp = new PowerDistributionPanel();
+				pdp = new PowerDistributionPanel(62);
 
 				leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
 				leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
 
 				rightDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
 				rightDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
-
-				pigeonTalon = CTRECreator.createMasterTalon(RobotMap.PIGEON_TALON);
 
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 					leftDrive.set(ControlMode.PercentOutput,0);
@@ -413,8 +411,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		}
 
 		public void setMotorSpeedInPercent(double left, double right, double strafe) {
-
-			if (OI.driveMode == DriveMode.fieldCentricDrive) {
+			if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
+				leftDrive.set(ControlMode.PercentOutput, left);
+				rightDrive.set(ControlMode.PercentOutput, right);
+				hDrive.set(strafe);
+			} else if (OI.driveMode == DriveMode.fieldCentricDrive) {
 				setMotorSpeed(MAX_SPEED_DRIVE_H.mul(left), MAX_SPEED_DRIVE_H.mul(right), MAX_SPEED_DRIVE_H.mul(strafe));	
 			} else {
 				setMotorSpeed(MAX_SPEED_DRIVE.mul(left), MAX_SPEED_DRIVE.mul(right), MAX_SPEED_DRIVE_H.mul(strafe));
@@ -442,7 +443,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 					leftDrive.set(leftDrive.getControlMode(), leftMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					rightDrive.set(rightDrive.getControlMode(), rightMotorSetpoint.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND));
 					
-					if (Math.abs(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)) < 0.05){
+					if (Math.abs(hMotorSetpoint.div(MAX_SPEED_DRIVE_H)) < 0.05) {
 							hDrive.set(0); //stop if velocity is really low
 				} else 
 						hDrive.getPIDController().setReference(hMotorSetpoint.get(Distance.Unit.ENCODER_REV_H, Time.Unit.MINUTE), ControlType.kVelocity);
@@ -484,10 +485,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 			tankDrive(cheesyMotorPercents[0], cheesyMotorPercents[1], strafe);
 
-		}
-
-		public TalonSRX getPigeonTalon() {
-			return pigeonTalon;
 		}
 
 		public void setPIDSourceType(PIDSourceType pidSource) {
@@ -638,7 +635,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				SmartDashboard.putNumberArray("Drive Right Current", new double [] {getRightCurrent(), getRightFollow1Current(), getRightFollow2Current()});
 				SmartDashboard.putNumber("Drive H Current", getHCurrent());
 
-				SmartDashboard.putNumber("Gyro Yaw", (-Pigeon.getPigeon(getInstance().getPigeonTalon()).getYaw().get(Angle.Unit.DEGREE))% 360);
+				SmartDashboard.putNumber("Gyro Yaw", (-Pigeon.getPigeon(RobotMap.PIGEON_ID).getYaw().get(Angle.Unit.DEGREE))% 360);
 
 				SmartDashboard.putNumberArray("Drive Left Velocity", new double[] {getLeftVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), leftMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
 				SmartDashboard.putNumberArray("Drive Right Velocity", new double[] {getRightVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), rightMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});

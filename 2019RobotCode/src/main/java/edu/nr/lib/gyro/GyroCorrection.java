@@ -2,6 +2,7 @@ package edu.nr.lib.gyro;
 
 import edu.nr.lib.gyro.Gyro.ChosenGyro;
 import edu.nr.lib.units.Angle;
+import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
 
 public class GyroCorrection
@@ -15,7 +16,7 @@ public class GyroCorrection
 	Gyro gyro;
 	
 	public GyroCorrection(Angle angle) {
-		this.gyro = Pigeon.getPigeon(Drive.getInstance().getPigeonTalon());
+		this.gyro = Pigeon.getPigeon(RobotMap.PIGEON_ID);
 		goalAngle = angle;
 		initialAngle = gyro.getYaw();
 	}

@@ -4,6 +4,7 @@ import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.gyro.GyroCorrection;
 import edu.nr.lib.gyro.Pigeon;
 import edu.nr.lib.units.Angle;
+import edu.nr.robotics.RobotMap;
 
 public class TurnToAngleCommand extends NRCommand {
 
@@ -19,10 +20,10 @@ public class TurnToAngleCommand extends NRCommand {
 
 	protected void onStart() {
 
-		if (Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getYaw().signum() <= 0) {
-			angleToTurn = new Angle(-angleGoal.get(Angle.Unit.DEGREE) - ((Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getYaw().get(Angle.Unit.DEGREE)) % 360), Angle.Unit.DEGREE).negate();
+		if (Pigeon.getPigeon(RobotMap.PIGEON_ID).getYaw().signum() <= 0) {
+			angleToTurn = new Angle(-angleGoal.get(Angle.Unit.DEGREE) - ((Pigeon.getPigeon(RobotMap.PIGEON_ID).getYaw().get(Angle.Unit.DEGREE)) % 360), Angle.Unit.DEGREE).negate();
 		} else {
-			angleToTurn = new Angle(angleGoal.get(Angle.Unit.DEGREE) - ((Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getYaw().get(Angle.Unit.DEGREE)) % 360), Angle.Unit.DEGREE).negate();
+			angleToTurn = new Angle(angleGoal.get(Angle.Unit.DEGREE) - ((Pigeon.getPigeon(RobotMap.PIGEON_ID).getYaw().get(Angle.Unit.DEGREE)) % 360), Angle.Unit.DEGREE).negate();
 		}
 
 		gyro = new GyroCorrection(angleToTurn, Drive.MAX_PROFILE_TURN_PERCENT);

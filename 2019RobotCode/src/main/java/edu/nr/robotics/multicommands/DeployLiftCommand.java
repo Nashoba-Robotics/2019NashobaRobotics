@@ -7,6 +7,7 @@ import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
+import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.lift.Lift;
@@ -28,7 +29,7 @@ public class DeployLiftCommand extends NRCommand {
     }
 
     protected void onExecute() {
-        Lift.getInstance().setMotorSpeed(Elevator.getInstance().getVelocity().add(new Speed(Lift.getInstance().P_Angle * Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getPitch().get(Angle.Unit.DEGREE), Distance.Unit.FOOT, Time.Unit.SECOND)));
+        Lift.getInstance().setMotorSpeed(Elevator.getInstance().getVelocity().add(new Speed(Lift.getInstance().P_Angle * Pigeon.getPigeon(RobotMap.PIGEON_ID).getPitch().get(Angle.Unit.DEGREE), Distance.Unit.FOOT, Time.Unit.SECOND)));
     }
 
     protected void onEnd() {

@@ -1,18 +1,17 @@
 package edu.nr.robotics;
 
 public class RobotMap {
-    public static final int RIGHT_DRIVE = -1;  //define these
-    public static final int LEFT_DRIVE = -1;
-    public static final int H_DRIVE = -1;
-    public static final int RIGHT_DRIVE_FOLLOW_1 = -1;  //define these
-    public static final int RIGHT_DRIVE_FOLLOW_2 = -1;  
-    public static final int LEFT_DRIVE_FOLLOW_1 = -1;
-    public static final int LEFT_DRIVE_FOLLOW_2 = -1;
-    public static final int H_DRIVE_FOLLOW = -1;
-    public static final int RIGHT_DRIVE_FOLLOW_1_CURRENT = -1;
-    public static final int RIGHT_DRIVE_FOLLOW_2_CURRENT = -1;
-    public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = -1;
-    public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = -1;
+    public static final int RIGHT_DRIVE = 7;  //define these
+    public static final int LEFT_DRIVE = 8;
+    public static final int H_DRIVE = 11;
+    public static final int RIGHT_DRIVE_FOLLOW_1 = 3;  //define these
+    public static final int RIGHT_DRIVE_FOLLOW_2 = 13;  
+    public static final int LEFT_DRIVE_FOLLOW_1 = 2;
+    public static final int LEFT_DRIVE_FOLLOW_2 = 1;
+    public static final int RIGHT_DRIVE_FOLLOW_1_CURRENT = 13;
+    public static final int RIGHT_DRIVE_FOLLOW_2_CURRENT = 14;
+    public static final int LEFT_DRIVE_FOLLOW_1_CURRENT = 1;
+    public static final int LEFT_DRIVE_FOLLOW_2_CURRENT = 2;
 
     public static final int CARGO_INTAKE_SENSOR_PORT_1 = 13;
     public static final int CARGO_INTAKE_SENSOR_PORT_2 = 12;
@@ -26,7 +25,7 @@ public class RobotMap {
 
     public static final int FORCE_SENSOR_1 = 4;
     public static final int FORCE_SENSOR_2 = 5;
-    public static final int FORCE_SENSOR_3 = -1;
+    public static final int FORCE_SENSOR_3 = 2;
 
     public static final int ELEVATOR_SENSOR_PORT = 9;
     //public static final int ELEVATOR_SENSOR_PORT_2 = 8;
@@ -46,7 +45,7 @@ public class RobotMap {
 
     public static final int AUX_DRIVE = -1;
 
-    public static final int PIGEON_TALON = -1;
+    public static final int PIGEON_ID = 10;
 
     public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = -1;
     public static final int HATCH_MECHANISM_DEPLOY_FORWARD = -1;
