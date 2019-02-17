@@ -44,6 +44,7 @@ public class RobotMap {
     public static final int INTAKE_ROLLERS_CURRENT = -1;
 
     public static final int AUX_DRIVE = -1;
+    public static final int AUX_DRIVE_CURRENT = -1;
 
     public static final int PIGEON_ID = 10;
 
@@ -62,6 +63,8 @@ public class RobotMap {
     public static final int INTAKE_ROLLERS_PCM_PORT = -1;
     public static final int INTAKE_ROLLERS_FORWARD_CHANNEL = -1;
     public static final int INTAKE_ROLLERS_REVERSE_CHANNEL = -1;
+
+    public static final int PDP_ID = 62;
 
     ///sensor ports too
 

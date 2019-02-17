@@ -75,7 +75,7 @@ public class IntakeRollers extends NRSubsystem {
         if(EnabledSubsystems.INTAKE_ROLLERS_ENABLED) {
 
             intakeRollers = CTRECreator.createMasterVictor(RobotMap.INTAKE_ROLLERS);
-            pdp = new PowerDistributionPanel();
+            pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
             deployRollers = new DoubleSolenoid(RobotMap.INTAKE_ROLLERS_PCM_PORT, RobotMap.INTAKE_ROLLERS_FORWARD_CHANNEL, RobotMap.INTAKE_ROLLERS_REVERSE_CHANNEL);
 

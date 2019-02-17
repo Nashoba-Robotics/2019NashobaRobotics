@@ -195,7 +195,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
 				rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
 				hDrive = SparkMax.createSpark(RobotMap.H_DRIVE, true);
-				pdp = new PowerDistributionPanel(62);
+				pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
 				leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
 				leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);

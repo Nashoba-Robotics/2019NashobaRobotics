@@ -199,7 +199,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorTalon = CTRECreator.createMasterTalon(RobotMap.ELEVATOR_TALON);
             elevatorVictorFollowOne = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
             elevatorVictorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
-            pdp = new PowerDistributionPanel();
+            pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
             //gearShifter = new DoubleSolenoid(RobotMap.ELEVATOR_GEAR_SWITCHER_PCM_PORT,
            // RobotMap.ELEVATOR_GEAR_SWITCHER_FORWARD_CHANNEL, RobotMap.ELEVATOR_GEAR_SWITCHER_REVERSE_CHANNEL);
