@@ -162,5 +162,13 @@ public class IntakeRollers extends NRSubsystem {
         setMotorPercent(0);
     }
 
+    public boolean isRunning() {
+        return intakeRollers.getMotorOutputPercent() != 0;
+    }
+
+    public boolean hasCargo() {
+        return !(new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue());
+    }
+
 
 }

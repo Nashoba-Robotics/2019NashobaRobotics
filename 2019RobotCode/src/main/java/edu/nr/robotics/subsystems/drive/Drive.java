@@ -52,45 +52,45 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	// these may change because of new talons
 
 	//TODO: fix all of these
-	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 0;
-	public static final double REAL_ENC_TICK_PER_INCH_H_DRIVE = 0;
+	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6*Math.PI);
+	public static final double REAL_ENC_REV_PER_INCH_H_DRIVE = 1/(4*Math.PI);
 
-	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = 0;
-	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = 0;
+	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE;
+	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = REAL_ENC_REV_PER_INCH_H_DRIVE;
 
 	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
 	public static final Distance WHEEL_BASE = Distance.ZERO;
 
-	public static final Speed MAX_SPEED_DRIVE = Speed.ZERO;
-	public static final Speed MAX_SPEED_DRIVE_H = Speed.ZERO;
+	public static final Speed MAX_SPEED_DRIVE = new Speed(13.48, Distance.Unit.FOOT, Time.Unit.SECOND);
+	public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.5, Distance.Unit.FOOT, Time.Unit.SECOND);
 
-	public static final Acceleration MAX_ACCEL_DRIVE = Acceleration.ZERO;
-	public static final Acceleration MAX_ACCEL_DRIVE_H = Acceleration.ZERO;
+	public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(20, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
+	public static final Acceleration MAX_ACCEL_DRIVE_H = new Acceleration(10, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
 
-	public static final Jerk MAX_JERK_DRIVE = Jerk.ZERO;
+	public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND, Time.Unit.SECOND);
 
-	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0;
-	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.103;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.0983;
 
 	public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
 
-	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0;
-	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0;
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.0665;
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0656;
 
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
 
 		public static Time DRIVE_RAMP_RATE = Time.ZERO;
 		public static Time H_DRIVE_RAMP_RATE = Time.ZERO;
 
-		public static double P_LEFT = 0;
+		public static double P_LEFT = 0.3;
 		public static double I_LEFT = 0;
-		public static double D_LEFT = 0;
+		public static double D_LEFT = 3;
 
-		public static double P_RIGHT = 0;
+		public static double P_RIGHT = 0.3;
 		public static double I_RIGHT = 0;
-		public static double D_RIGHT = 0;
+		public static double D_RIGHT = 3;
 
 		public static double FF_H = 0;
 		public static double P_H = 0;
@@ -125,7 +125,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double MOVE_JOYSTICK_MULTIPLIER = 0;
 
 		public static final double MAX_PROFILE_TURN_PERCENT = 0;
-		public static final double MIN_PROFILE_TURN_PERCENT = 0;
+		public static final double MIN_PROFILE_TURN_PERCENT = 0.02;
 
 		public static final double DRIVE_TO_HATCH_PERCENT = 0;
 		public static final double DRIVE_TO_CARGO_PERCENT = 0;
@@ -182,7 +182,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double accelPercent;
 		public static Angle angleToTurn;
 
-		private OneDimensionalMotionProfilerTwoMotor diagonalProfiler;
+		public OneDimensionalMotionProfilerTwoMotor diagonalProfiler;
 		private TwoDimensionalMotionProfilerPathfinder twoDProfiler;
 		private Waypoint[] points;
 
@@ -228,9 +228,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDriveFollow1.setInverted(false);
 				leftDriveFollow2.setInverted(false);
 
-				leftDrive.setSensorPhase(false);
-				leftDriveFollow1.setSensorPhase(false);
-				leftDriveFollow2.setSensorPhase(false);
+				leftDrive.setSensorPhase(true);
 
 				leftDrive.enableVoltageCompensation(true);
 				leftDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
@@ -264,8 +262,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				rightDriveFollow2.setInverted(true);
 
 				rightDrive.setSensorPhase(false);
-				rightDriveFollow1.setSensorPhase(false);
-				rightDriveFollow2.setSensorPhase(false);
 
 				rightDrive.enableVoltageCompensation(true);
 				rightDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
@@ -553,10 +549,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 			if(distX.equals(Distance.ZERO) && !distY.equals(Distance.ZERO)) {
 				minVel = MAX_SPEED_DRIVE_H.mul(maxVelPercent).get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND);
-			}  else if (distY.equals(Distance.ZERO) && !distX.equals(Distance.ZERO)) {
+			} else if(distY.equals(Distance.ZERO) && !distX.equals(Distance.ZERO)) {
+						System.out.println("this is what's running");
 						minVel = MAX_SPEED_DRIVE.mul(maxVelPercent).get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
 						minAccel = MAX_ACCEL_DRIVE.mul(maxAccelPercent).get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND);
-			}	else if(!distX.equals(Distance.ZERO) && !distY.equals(Distance.ZERO)) {
+			} else if(!distX.equals(Distance.ZERO) && !distY.equals(Distance.ZERO)) {
 					minVel = Math.min((NRMath.hypot(distX, distY).div(distX)) * MAX_SPEED_DRIVE.mul(maxVelPercent).get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND),
 					 (NRMath.hypot(distX, distY).div(distY)) * MAX_SPEED_DRIVE_H.mul(drivePercent).get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND));
 					minAccel = Math.min((NRMath.hypot(distX, distY).div(distX)) * MAX_ACCEL_DRIVE.mul(maxAccelPercent).get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND,
@@ -567,6 +564,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 					System.out.println("No Distances Set");
 				}
 //fix 
+				System.out.println("distX: " + distX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE));
+				System.out.println("distY: " + distY.get(Distance.Unit.ENCODER_REV_H));
+				System.out.println("minvel: " + minVel);
+				System.out.println("minaccel: " + minAccel);
+
 				diagonalProfiler = new OneDimensionalMotionProfilerTwoMotor(this, this, kVOneD, kAOneD, kPOneD, kIOneD, kDOneD, kP_thetaOneD);
 				diagonalProfiler.setTrajectory(new RampedDiagonalHTrajectory(distX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), distY.get(Distance.Unit.ENCODER_REV_H), minVel, minAccel));
 				diagonalProfiler.enable();

@@ -32,11 +32,11 @@ public class RobotMap {
     //public static final int ELEVATOR_SENSOR_PORT_3 = 7;
     //public static final int ELEVATOR_SENSOR_PORT_4 = 6;
 
-    public static final int ELEVATOR_TALON = 6;
+    public static final int ELEVATOR_TALON = 4;
     public static final int ELEVATOR_FOLLOW_ONE = 2;
-    public static final int ELEVATOR_FOLLOW_TWO = 3;
-    public static final int ELEVATOR_FOLLOW_ONE_CURRENT = 0;
-    public static final int ELEVATOR_FOLLOW_TWO_CURRENT = 1;
+    public static final int ELEVATOR_FOLLOW_TWO = 6;
+    public static final int ELEVATOR_FOLLOW_ONE_CURRENT = 5;
+    public static final int ELEVATOR_FOLLOW_TWO_CURRENT = 6;
 
     public static final int LIFT = -1;
 

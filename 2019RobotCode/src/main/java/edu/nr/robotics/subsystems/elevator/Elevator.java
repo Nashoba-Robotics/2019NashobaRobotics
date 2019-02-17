@@ -148,6 +148,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = Distance.ZERO;
+    public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
+    public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
 
    /*public static final Distance[] Counter_Heights = { HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR, REST_HEIGHT_ELEVATOR,

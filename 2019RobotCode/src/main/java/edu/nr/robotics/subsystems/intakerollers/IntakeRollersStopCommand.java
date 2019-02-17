@@ -14,6 +14,7 @@ public class IntakeRollersStopCommand extends NRCommand {
 	@Override
 	protected void onStart() {
 		IntakeRollers.getInstance().disable();
+	
 	}
 	
 	@Override

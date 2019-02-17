@@ -57,6 +57,7 @@ public class IntakeRollersIntakeCommand extends NRCommand {
 			else if (!hasStopped) {
 				hasStopped = true;
 				IntakeRollers.getInstance().setMotorPercent(0);
+				
 				initStopTime = Timer.getFPGATimestamp();
 			} else {
 				if (Timer.getFPGATimestamp() - initStopTime > TIME_STOPPED_AFTER_STUCK.get(Time.Unit.SECOND)) {
@@ -66,6 +67,7 @@ public class IntakeRollersIntakeCommand extends NRCommand {
 					stuckTooLong = false;
 					hasStopped = false;
 					IntakeRollers.getInstance().setMotorPercent(IntakeRollers.INTAKE_PERCENT);
+					
 				}
 			}
 		}
@@ -74,6 +76,7 @@ public class IntakeRollersIntakeCommand extends NRCommand {
 	@Override
 	public void onEnd() {
 		IntakeRollers.getInstance().disable();
+		
 	}
 	
 	@Override

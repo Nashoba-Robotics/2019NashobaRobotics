@@ -59,11 +59,11 @@ public AutoChoosers.Platform selectedPlatform;
 public AutoChoosers.Destination2 selectedDestination2;
 public double autoWaitTime;
 
-public synchronized static Robot getInstance(){
+public synchronized static Robot getInstance() {
     return singleton;
 }
 
-public void robotInit(){
+public void robotInit() {
     singleton = this;
 
     m_period = 0.01;  //period that code runs at

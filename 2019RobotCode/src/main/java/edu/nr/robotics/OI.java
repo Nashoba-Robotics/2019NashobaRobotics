@@ -6,12 +6,27 @@ import edu.nr.lib.gyro.ResetGyroCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
+import edu.nr.robotics.multicommands.ClimbCommand;
+import edu.nr.robotics.multicommands.GetHatchStationCommand;
+import edu.nr.robotics.multicommands.IntakeToggleCommand;
+import edu.nr.robotics.multicommands.PrepareClimbCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
+import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
+import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
+import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
 import edu.nr.robotics.subsystems.drive.TurnToAngleCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
+import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToClimbGearCommand;
+import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToElevatorGearCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersScoreCommand;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersToggleCommand;
 import edu.nr.robotics.subsystems.sensors.ToggleLimelightCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -38,13 +53,15 @@ public class OI implements SmartDashboardSource {
     private static final int CLIMB_BUTTON_NUMBER = 12;
     private static final int HATCH_DEPLOY_TOGGLE_NUMBER = 13;
     private static final int HATCH_GRAB_TOGGLE_NUMBER = 14;
-    private static final int INTAKE_ROLLERS_DEPLOY_NUMBER = 15;
+    private static final int HATCH_SCORE_NUMBER = 34;
+    private static final int TOGGLE_INTAKE_NUMBER = 36;
+    private static final int INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER = 37;
     private static final int SWITCH_ELEVATOR_GEAR_NUMBER = 16;
-    private static final int INTAKE_ROLLERS_RUN_NUMBER = 17;
+    //private static final int INTAKE_ROLLERS_RUN_NUMBER = 17;
     private static final int INTAKE_ROLLERS_PUKE_NUMBER = 18;
     private static final int GET_HATCH_STATION_NUMBER = 19;
-    private static final int GET_HATCH_GROUND_NUMBER = 20;
-    private static final int GET_CARGO_NUMBER = 21;
+    //private static final int GET_HATCH_GROUND_NUMBER = 20;
+    //private static final int GET_CARGO_NUMBER = 21;
 
     private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 22;
     private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 23;
@@ -72,6 +89,7 @@ public class OI implements SmartDashboardSource {
     private final Joystick elevatorStick;
 
     private JoystickButton kidModeSwitch;
+    private JoystickButton elevGearSwitcherSwitch;
 
     private static final int STICK_LEFT = 0; //find these
     private static final int STICK_RIGHT = 1; 
@@ -89,11 +107,11 @@ public class OI implements SmartDashboardSource {
 
         elevatorStick = operatorRight;
 
-        initDriveLeft();
-        initDriveRight();
+      // initDriveLeft();
+       //initDriveRight();
 
-        initOperatorLeft();
-        initOperatorRight();
+       initOperatorLeft();
+       //initOperatorRight();
 
         SmartDashboardSource.sources.add(this);
 
@@ -115,7 +133,8 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(driveLeft, DRIVE_TO_CARGO_AUTO_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
 
         //sniper mode
-       // new JoystickButton(driveLeft, SNIPER_MODE_FORWARD)
+        new JoystickButton(driveLeft, SNIPER_MODE_FORWARD).whenPressed(new EnableSniperForwardMode(true));
+        new JoystickButton(driveLeft, SNIPER_MODE_FORWARD).whenPressed(new EnableSniperForwardMode(false));
 
         //tuning command too
 
@@ -135,30 +154,66 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(driveRight, TURN_90_LEFT_NUMBER).whenPressed(new TurnCommand(Drive.getInstance(), 
             new Angle(-90, Angle.Unit.DEGREE), Drive.MAX_PROFILE_TURN_PERCENT));
 
+        //sniper mode
+        new JoystickButton(driveLeft, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(true));
+        new JoystickButton(driveLeft, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(false));
+
+        //dumb drive
+		new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
+
         
     }
 
     public void initOperatorLeft() {
-        new JoystickButton(operatorLeft, CANCEL_ALL_BUTTON_NUMBER).whenPressed(new CancelAllCommand());
+       // new JoystickButton(operatorLeft, CANCEL_ALL_BUTTON_NUMBER).whenPressed(new CancelAllCommand());
 
+        //kid mode boi
         kidModeSwitch = new JoystickButton(operatorLeft, KID_MODE_SWITCH);
+        /*
+        //elev gear boi
+        elevGearSwitcherSwitch = new JoystickButton(operatorLeft, SWITCH_ELEVATOR_GEAR_NUMBER);
+        elevGearSwitcherSwitch.whenPressed(new ElevatorSwitchToClimbGearCommand());
+        elevGearSwitcherSwitch.whenReleased(new ElevatorSwitchToElevatorGearCommand());
 
-        //cargo
+        //cargo heights
         new JoystickButton(operatorLeft, CARGO_TOP_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PLACE_TOP_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, CARGO_MIDDLE_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, CARGO_BOTTOM_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PLACE_LOW_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, CARGO_PICKUP_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PICKUP_HEIGHT_ELEVATOR));
 
-        //hatch
+        //hatch heights
         new JoystickButton(operatorLeft, HATCH_TOP_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_TOP_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, HATCH_MIDDLE_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, HATCH_BOTTOM_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_LOW_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, GROUND_PICKUP_HATCH_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR));
 
+        //climb heights
+        new JoystickButton(operatorLeft, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
+        new JoystickButton(operatorLeft, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
+
+
+        //GEARSHIFT COMMAND GONE?
+       // new JoyStickButton(operatorLeft, CLIMB_BUTTON_NUMBER).whenPressed(new Gear);
+    
+       //hatch
+        new JoystickButton(operatorLeft, HATCH_DEPLOY_TOGGLE_NUMBER).whenPressed(new DeployHatchToggleCommand());
+        new JoystickButton(operatorLeft, HATCH_GRAB_TOGGLE_NUMBER).whenPressed(new GrabHatchToggleCommand());
+    
+        new JoystickButton(operatorLeft, HATCH_SCORE_NUMBER).whenPressed(new ScoreHatchCommand());
+        new JoystickButton(operatorLeft, GET_HATCH_STATION_NUMBER).whenPressed(new GetHatchStationCommand());
+
+        //intake
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_NUMBER).whenPressed(new IntakeRollersToggleCommand());
+        new JoystickButton(operatorLeft, INTAKE_ROLLERS_PUKE_NUMBER).whenPressed(new IntakeRollersScoreCommand());
+        new JoystickButton(operatorLeft, INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER).whenPressed(new IntakeToggleCommand());
+
+        //climb
+        new JoystickButton(operatorLeft, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommand());
+*/
     }
 
     public void initOperatorRight() {
-        //do later also
+        
     }
 
     public static OI getInstance() {

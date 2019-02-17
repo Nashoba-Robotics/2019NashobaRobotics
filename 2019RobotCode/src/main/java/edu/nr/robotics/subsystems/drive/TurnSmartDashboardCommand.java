@@ -13,6 +13,8 @@ public class TurnSmartDashboardCommand extends NRCommand {
     private Angle initialAngle;
     private GyroCorrection gyro;
     private boolean reachedSetVel = false;
+    double outputLeft, outputRight;
+    double headingAdjustment;
 
     public TurnSmartDashboardCommand() {
         super(Drive.getInstance());
@@ -30,13 +32,10 @@ public class TurnSmartDashboardCommand extends NRCommand {
 
     public void onExecute() {
 
-        double headingAdjustment = gyro.getTurnValue(true);
+        headingAdjustment = gyro.getTurnValue(true);
         if(Math.abs(headingAdjustment) < Drive.MIN_PROFILE_TURN_PERCENT) {
             headingAdjustment = Drive.MIN_PROFILE_TURN_PERCENT * Math.signum(headingAdjustment);
         }
-
-        double outputLeft, outputRight;
-
 
         if((Drive.getInstance().getLeftVelocity().abs().div(Drive.MAX_SPEED_DRIVE)) > Math.abs(headingAdjustment)
          || (Drive.getInstance().getRightVelocity().abs().div(Drive.MAX_SPEED_DRIVE)) > Math.abs(headingAdjustment)) {
@@ -45,7 +44,7 @@ public class TurnSmartDashboardCommand extends NRCommand {
 
         if(!reachedSetVel) {
             outputLeft = -1*Math.signum(headingAdjustment);
-            outputRight = -1*Math.signum(headingAdjustment);
+            outputRight = 1*Math.signum(headingAdjustment);
         }else{
             outputLeft = -headingAdjustment;
             outputRight = headingAdjustment;
