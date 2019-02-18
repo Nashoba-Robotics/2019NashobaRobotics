@@ -20,7 +20,7 @@ public class Lift extends NRSubsystem {
 
     private static Lift singleton;
 
-    private CANSparkMax liftFront, liftBack;
+    private CANSparkMax /*liftFront,*/ liftBack;
 
     public static final double INCH_PER_REVOLUTION_LIFT = 1;
 
@@ -97,51 +97,51 @@ public class Lift extends NRSubsystem {
     public static Distance backSetPos = Distance.ZERO;
     public static Speed frontSetVel = Speed.ZERO;
     public static Speed backSetVel = Speed.ZERO;
-    public static double frontPercent = 0;
-    public static double backPercent = 0;
+    public static double frontPercent = 0.1;
+    public static double backPercent = 0.1;
 
     private Lift() {
         if (EnabledSubsystems.LIFT_ENABLED) {
-            liftFront = SparkMax.createSpark(RobotMap.LIFT_FRONT, true);
+            //liftFront = SparkMax.createSpark(RobotMap.LIFT_FRONT, true);
             liftBack = SparkMax.createSpark(RobotMap.LIFT_BACK, true);
 
-            liftFront.getPIDController().setFF(F_VEL_LIFT_FRONT, VEL_SLOT);
+            /*liftFront.getPIDController().setFF(F_VEL_LIFT_FRONT, VEL_SLOT);
             liftFront.getPIDController().setP(P_VEL_LIFT_FRONT, VEL_SLOT);
             liftFront.getPIDController().setI(I_VEL_LIFT_FRONT, VEL_SLOT);
-            liftFront.getPIDController().setD(D_VEL_LIFT_FRONT, VEL_SLOT);
+            liftFront.getPIDController().setD(D_VEL_LIFT_FRONT, VEL_SLOT);*/
 
             liftBack.getPIDController().setFF(F_VEL_LIFT_BACK, VEL_SLOT);
             liftBack.getPIDController().setP(P_VEL_LIFT_BACK, VEL_SLOT);
             liftBack.getPIDController().setI(I_VEL_LIFT_BACK, VEL_SLOT);
             liftBack.getPIDController().setD(D_VEL_LIFT_BACK, VEL_SLOT);
 
-            liftFront.getPIDController().setFF(F_POS_LIFT_FRONT, POS_SLOT);
+            /*liftFront.getPIDController().setFF(F_POS_LIFT_FRONT, POS_SLOT);
             liftFront.getPIDController().setP(P_POS_LIFT_FRONT, POS_SLOT);
             liftFront.getPIDController().setI(I_POS_LIFT_FRONT, POS_SLOT);
-            liftFront.getPIDController().setD(D_POS_LIFT_FRONT, POS_SLOT);
+            liftFront.getPIDController().setD(D_POS_LIFT_FRONT, POS_SLOT);*/
 
             liftBack.getPIDController().setFF(F_POS_LIFT_BACK, POS_SLOT);
             liftBack.getPIDController().setP(P_POS_LIFT_BACK, POS_SLOT);
             liftBack.getPIDController().setI(I_POS_LIFT_BACK, POS_SLOT);
             liftBack.getPIDController().setD(D_POS_LIFT_BACK, POS_SLOT);
 
-            liftFront.setIdleMode(IDLE_MODE_LIFT);
+            //liftFront.setIdleMode(IDLE_MODE_LIFT);
             liftBack.setIdleMode(IDLE_MODE_LIFT);
 
-            liftFront.setInverted(false);
+            //liftFront.setInverted(false);
             liftBack.setInverted(false);
 
-            liftFront.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_LIFT);
-            liftFront.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
+            //liftFront.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_LIFT);
+            //liftFront.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
             liftBack.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_LIFT);
             liftBack.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
 
-            liftFront.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
+            //liftFront.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
             liftBack.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
 
-            liftFront.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
+            //liftFront.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
             liftBack.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
-            liftFront.getPIDController().setOutputRange(-1, 1, POS_SLOT);
+            //liftFront.getPIDController().setOutputRange(-1, 1, POS_SLOT);
             liftBack.getPIDController().setOutputRange(-1, 1, POS_SLOT);
 
             smartDashboardInit();
@@ -163,13 +163,13 @@ public class Lift extends NRSubsystem {
         }
     }
 
-    public Distance getFrontPosition() {
-        if(liftFront != null){
+    /*public Distance getFrontPosition() {
+        if(liftFront != null) {
             return new Distance(liftFront.getEncoder().getPosition(), Distance.Unit.REVOLUTION_LIFT);
         } else {
             return Distance.ZERO;
         }
-    }
+    }*/
 
     public Distance getBackPosition() {
         if(liftBack != null){
@@ -179,13 +179,13 @@ public class Lift extends NRSubsystem {
         }
     }
 
-    public Speed getFrontVelocity() {
+    /*public Speed getFrontVelocity() {
         if(liftFront != null){
             return new Speed(liftFront.getEncoder().getVelocity(), Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE);
         } else {
             return Speed.ZERO;
         }
-    }
+    }*/
 
     public Speed getBackVelocity() {
         if(liftBack != null){
@@ -195,12 +195,12 @@ public class Lift extends NRSubsystem {
         }
     }
 
-    public double getFrontCurrent() {
+    /*public double getFrontCurrent() {
         if(liftFront != null) {
             return liftFront.getOutputCurrent();
         }
         return 0;
-    }
+    }*/
 
     public double getBackCurrent() {
         if(liftBack != null) {
@@ -210,21 +210,21 @@ public class Lift extends NRSubsystem {
     }
 
     public void setPosition(Distance frontPos, Distance backPos) {
-        if (liftFront != null && liftBack != null) {
+        if (/*liftFront != null &&*/ liftBack != null) {
             frontPosSetpoint = frontPos;
             backPosSetpoint = backPos;
             frontVelSetpoint = Speed.ZERO;
             backVelSetpoint = Speed.ZERO;
 
-            System.out.println("FF: " + liftFront.getPIDController().getFF(POS_SLOT));
-            liftFront.getPIDController().setReference(frontPos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);//, liftFront.getPIDController().getFF(POS_SLOT));
+            //System.out.println("FF: " + liftFront.getPIDController().getFF(POS_SLOT));
+            //liftFront.getPIDController().setReference(frontPos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);//, liftFront.getPIDController().getFF(POS_SLOT));
             liftBack.getPIDController().setReference(backPos.get(Distance.Unit.REVOLUTION_LIFT), ControlType.kPosition, POS_SLOT);//, liftBack.getPIDController().getFF(POS_SLOT));
         }
 
     }
 
     public void setMotorSpeedRaw(double front, double back) {
-        liftFront.set(front);
+        //liftFront.set(front);
         liftBack.set(back);
     }
 
@@ -234,7 +234,7 @@ public class Lift extends NRSubsystem {
     }
 
     public void setMotorSpeed(Speed front, Speed back) {
-        if(liftFront != null && liftBack != null) {
+        if(/*liftFront != null &&*/ liftBack != null) {
 
             frontVelSetpoint = front;
             backVelSetpoint = back;
@@ -242,10 +242,10 @@ public class Lift extends NRSubsystem {
             //liftBack.getPIDController().setFF(((VOLTAGE_VELOCITY_SLOPE_LIFT_BACK * backVelSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) + MIN_MOVE_VOLTAGE_PERCENT_LIFT_BACK) * 1/335), VEL_SLOT);
 
             if(EnabledSubsystems.LIFT_DUMB_ENABLED) {
-                    liftFront.set(front.div(MAX_SPEED_LIFT));
+                    //liftFront.set(front.div(MAX_SPEED_LIFT));
                     liftBack.set(back.div(MAX_SPEED_LIFT));
             } else {              
-                    liftFront.getPIDController().setReference(front.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);//, liftFront.getPIDController().getFF(VEL_SLOT));
+                    //liftFront.getPIDController().setReference(front.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);//, liftFront.getPIDController().getFF(VEL_SLOT));
                     liftBack.getPIDController().setReference(back.get(Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);//, liftBack.getPIDController().getFF(VEL_SLOT));
             }
 
@@ -253,7 +253,7 @@ public class Lift extends NRSubsystem {
     }
 
     public void setVoltageRamp(Time time) {
-        liftFront.setRampRate(time.get(Time.Unit.SECOND));
+        //liftFront.setRampRate(time.get(Time.Unit.SECOND));
         liftBack.setRampRate(time.get(Time.Unit.SECOND));
     }
 
@@ -294,13 +294,13 @@ public class Lift extends NRSubsystem {
 
     public void smartDashboardInfo() {
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_BASIC_ENABLED) {
-            SmartDashboard.putNumber("Lift Front Current: ", getFrontCurrent());
+            //SmartDashboard.putNumber("Lift Front Current: ", getFrontCurrent());
             SmartDashboard.putNumber("Lift Back Current: ", getBackCurrent());
 
-            SmartDashboard.putNumberArray("Lift Front Velocity vs Set Velocity: ", new double[] {getFrontVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), frontVelSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
+            //SmartDashboard.putNumberArray("Lift Front Velocity vs Set Velocity: ", new double[] {getFrontVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), frontVelSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
             SmartDashboard.putNumberArray("Lift Back Velocity vs Set Velocity: ", new double[] {getBackVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), backVelSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
         
-            SmartDashboard.putNumberArray("Lift Front Position vs Set Position: ", new double[] {getFrontPosition().get(Distance.Unit.FOOT), frontPosSetpoint.get(Distance.Unit.FOOT)});
+            //SmartDashboard.putNumberArray("Lift Front Position vs Set Position: ", new double[] {getFrontPosition().get(Distance.Unit.FOOT), frontPosSetpoint.get(Distance.Unit.FOOT)});
             SmartDashboard.putNumberArray("Lift Back Position vs Set Position: ", new double[] {getBackPosition().get(Distance.Unit.FOOT), backPosSetpoint.get(Distance.Unit.FOOT)});
         
         }
@@ -330,7 +330,7 @@ public class Lift extends NRSubsystem {
             P_VEL_LIFT_BACK = SmartDashboard.getNumber("D Vel Lift Back: ", D_VEL_LIFT_BACK);
             liftBack.getPIDController().setD(D_VEL_LIFT_BACK, VEL_SLOT);
             
-            F_POS_LIFT_FRONT = SmartDashboard.getNumber("F Pos Lift Front: ", F_POS_LIFT_FRONT);
+            /*F_POS_LIFT_FRONT = SmartDashboard.getNumber("F Pos Lift Front: ", F_POS_LIFT_FRONT);
             liftFront.getPIDController().setFF(F_POS_LIFT_FRONT, POS_SLOT);
             P_POS_LIFT_FRONT = SmartDashboard.getNumber("P Pos Lift Front: ", P_POS_LIFT_FRONT);
             liftFront.getPIDController().setP(P_POS_LIFT_FRONT, POS_SLOT);
@@ -345,7 +345,7 @@ public class Lift extends NRSubsystem {
             I_VEL_LIFT_FRONT = SmartDashboard.getNumber("I Vel Lift Front: ", I_VEL_LIFT_FRONT);
             liftFront.getPIDController().setI(I_VEL_LIFT_FRONT, VEL_SLOT);
             D_VEL_LIFT_FRONT = SmartDashboard.getNumber("D Vel Lift Front: ", D_VEL_LIFT_FRONT);
-            liftFront.getPIDController().setD(D_VEL_LIFT_FRONT, VEL_SLOT);
+            liftFront.getPIDController().setD(D_VEL_LIFT_FRONT, VEL_SLOT);*/
 			
             PROFILE_VEL_PERCENT_LIFT = SmartDashboard.getNumber("Profile Vel Percent Lift: ", PROFILE_VEL_PERCENT_LIFT);
             

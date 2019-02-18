@@ -1,28 +1,16 @@
 package edu.nr.robotics;
 
+import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.interfaces.Periodic;
+import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
-import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
-import edu.nr.robotics.subsystems.drive.Drive;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
-import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
-import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
-import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
-import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
-import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.auton.AutoChoosers;
-import edu.nr.robotics.auton.DriveOverBaselineAutoCommand;
 import edu.nr.robotics.auton.AutoChoosers.Destination;
 import edu.nr.robotics.auton.AutoChoosers.Destination2;
 import edu.nr.robotics.auton.AutoChoosers.GamePiece;
 import edu.nr.robotics.auton.AutoChoosers.Platform;
 import edu.nr.robotics.auton.AutoChoosers.StartPos;
+import edu.nr.robotics.auton.DriveOverBaselineAutoCommand;
 import edu.nr.robotics.auton.automap.StartPosLeftCargoShipSideCommand;
 import edu.nr.robotics.auton.automap.StartPosLeftRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosLeftRocketFrontCommand;
@@ -31,61 +19,75 @@ import edu.nr.robotics.auton.automap.StartPosMiddleCargoShipFrontRightCommand;
 import edu.nr.robotics.auton.automap.StartPosRightCargoShipSideCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
-import edu.nr.robotics.multicommands.DeployLiftCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
-import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
-import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
-import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
+import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
+import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.DriveForwardBasicSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.DriveForwardSmartDashboardCommandH;
+import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionSmartDashboardCommand;
-import edu.nr.lib.interfaces.SmartDashboardSource;
-import edu.nr.lib.interfaces.Periodic;
-import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
+import edu.nr.robotics.subsystems.lift.Lift;
+import edu.nr.robotics.subsystems.lift.LiftMoveBasicSmartDashboardCommand;
+import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
-private double prevTime = 0;
+    private double prevTime = 0;
 
-private static Robot singleton;
+    private static Robot singleton;
 
-private Command autonomousCommand;
-public AutoChoosers.StartPos selectedStartPos;
-public AutoChoosers.GamePiece selectedGamePiece;
-public AutoChoosers.GamePiece selectedGamePiece2;
-public AutoChoosers.Destination selectedDestination;
-public AutoChoosers.Platform selectedPlatform;
-public AutoChoosers.Destination2 selectedDestination2;
-public double autoWaitTime;
+    private Command autonomousCommand;
+    public AutoChoosers.StartPos selectedStartPos;
+    public AutoChoosers.GamePiece selectedGamePiece;
+    public AutoChoosers.GamePiece selectedGamePiece2;
+    public AutoChoosers.Destination selectedDestination;
+    public AutoChoosers.Platform selectedPlatform;
+    public AutoChoosers.Destination2 selectedDestination2;
+    public double autoWaitTime;
 
-public synchronized static Robot getInstance() {
-    return singleton;
-}
+    public synchronized static Robot getInstance() {
+        return singleton;
+    }
 
-public void robotInit() {
-    singleton = this;
+    public void robotInit() {
+        singleton = this;
 
-    m_period = 0.01;  //period that code runs at
+        m_period = 0.01; // period that code runs at
 
-    smartDashboardInit();
-    autoChooserInit();
-    OI.init();
-    Drive.getInstance();
-    Elevator.getInstance();
-    IntakeRollers.getInstance();
-    //CameraInit();
+        smartDashboardInit();
+        autoChooserInit();
+        OI.init();
+        Drive.getInstance();
+        Elevator.getInstance();
+        IntakeRollers.getInstance();
+        Lift.getInstance();
+        // CameraInit();
 
-    LimelightNetworkTable.getInstance().lightLED(false);
-    System.out.println("end of robot init");
+        LimelightNetworkTable.getInstance().lightLED(false);
+        System.out.println("end of robot init");
 
-}
-    
+    }
+
     public void autoChooserInit() {
         AutoChoosers.autoStartPosChooser.addDefault("Start Pos Left", StartPos.left);
         AutoChoosers.autoStartPosChooser.addObject("Start Pos Middle", StartPos.middle);
-		AutoChoosers.autoStartPosChooser.addObject("Start Pos Right", StartPos.right);
+        AutoChoosers.autoStartPosChooser.addObject("Start Pos Right", StartPos.right);
 
         AutoChoosers.autoGamePiece1Chooser.addDefault("Game Piece", GamePiece.hatch);
         AutoChoosers.autoGamePiece1Chooser.addObject("Game Piece", GamePiece.cargo);
@@ -135,6 +137,7 @@ public void robotInit() {
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
+            SmartDashboard.putData(new LiftMoveBasicSmartDashboardCommand());
         }
 
     }

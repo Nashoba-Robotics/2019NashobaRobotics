@@ -61,7 +61,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
-	public static final Distance WHEEL_BASE = Distance.ZERO;
+	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
 
 	public static final Speed MAX_SPEED_DRIVE = new Speed(13.48, Distance.Unit.FOOT, Time.Unit.SECOND);
 	public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.5, Distance.Unit.FOOT, Time.Unit.SECOND);
@@ -132,7 +132,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public static final double SENSOR_STRAFE_PERCENT = 0;
 
-		public static final Distance END_THRESHOLD = Distance.ZERO;
+		public static final Distance END_THRESHOLD = new Distance(2, Distance.Unit.INCH);
 		public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
 		public static final Speed PROFILE_END_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(0.10);
 
@@ -290,11 +290,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				
 				hDrive.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT);
 				hDrive.setSecondaryCurrentLimit(PEAK_DRIVE_CURRENT);
+
+				hDrive.enableVoltageCompensation(VOLTAGE_COMPENSATION_LEVEL);
 				
-				hDrive.setRampRate(H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
+				hDrive.setClosedLoopRampRate(H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
+				hDrive.setOpenLoopRampRate(H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
 
 				hDrive.getPIDController().setOutputRange(-1, 1);
-				
+
+				hDrive.setEncPosition(0);
 			
 				smartDashboardInit();
 
@@ -459,7 +463,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		
 		//will it work?
 		public void setVoltageRampH(Time time) {
-			hDrive.setRampRate(time.get(Time.Unit.SECOND));
+			hDrive.setClosedLoopRampRate(time.get(Time.Unit.SECOND));
+			hDrive.setOpenLoopRampRate(time.get(Time.Unit.SECOND));
 		}
 
 		public void tankDrive(double left, double right, double strafe) {

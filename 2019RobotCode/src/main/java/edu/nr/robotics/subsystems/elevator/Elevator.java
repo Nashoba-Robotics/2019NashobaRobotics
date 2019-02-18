@@ -41,10 +41,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double ENC_TICK_PER_INCH_CARRIAGE = 50000 / 82;
 
-    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(17.14, Distance.Unit.FOOT, Time.Unit.SECOND);// find
+    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(7.03, Distance.Unit.FOOT, Time.Unit.SECOND);// find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
 
-    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration(50, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);// find
+    public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration(30, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);// find
     public static final Acceleration MAX_ACCEL_ELEVATOR_DOWN = Acceleration.ZERO;
 
     public static final Speed MAX_CLIMB_SPEED_UP = Speed.ZERO;
@@ -60,21 +60,21 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final double HOLD_BOTTOM_PERCENT = 0;
     public static boolean holdingBottom = false;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.0649; //find
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.128; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
     public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = 0;
 
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.131;
+    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.124;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_CLIMB_UP = 0;
     
     public static Time VOLTAGE_RAMP_RATE_ELEVATOR = Time.ZERO;
 
-    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.9;
+    public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.6;
     public static final double DROP_PERCENT_ELEVATOR = -0.4;
     public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0.9;
 
-    public static double F_POS_ELEVATOR_UP = 0.;
+    public static double F_POS_ELEVATOR_UP = 0.5;
 
     public static double P_POS_ELEVATOR_UP = 0.0;
     public static double I_POS_ELEVATOR_UP = 0;
@@ -85,9 +85,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     / MAX_SPEED_ELEVATOR_DOWN.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
     Time.Unit.HUNDRED_MILLISECOND);
 
-    public static double P_POS_ELEVATOR_DOWN = 0; // Find elevator MagicMotion PID values
+    public static double P_POS_ELEVATOR_DOWN = 1; // Find elevator MagicMotion PID values
 	public static double I_POS_ELEVATOR_DOWN = 0;
-	public static double D_POS_ELEVATOR_DOWN = 0;
+	public static double D_POS_ELEVATOR_DOWN = 10;
 
     public static double P_VEL_ELEVATOR_UP = 0.2;
 	public static double I_VEL_ELEVATOR_UP = 0;
@@ -111,7 +111,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final int PEAK_CURRENT_ELEVATOR = 80;
     public static final int PEAK_CURRENT_DURATION_ELEVATOR = 1000;
-    public static final int CONTINUOUS_CURRENT_LIMIT_ELEVATOR = 40;
+    public static final int CONTINUOUS_CURRENT_LIMIT_ELEVATOR = 60;
 
     public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_ELEVATOR = VelocityMeasPeriod.Period_10Ms;
     public static final double VELOCITY_MEASUREMENT_WINDOW_ELEVATOR = 32;
@@ -362,10 +362,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             if (getCurrentGear() == Gear.elevator) {     
                 elevatorTalon.selectProfileSlot(MOTION_MAGIC_ELEV_UP_SLOT, DEFAULT_TIMEOUT);
                 
-                elevatorTalon.configMotionCruiseVelocity((int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+                elevatorTalon.configMotionCruiseVelocity(2*(int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
                         Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
                                 DEFAULT_TIMEOUT);
-                elevatorTalon.configMotionAcceleration((int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+                elevatorTalon.configMotionAcceleration(2*(int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
                         Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
                         DEFAULT_TIMEOUT);
                 

@@ -31,7 +31,9 @@ public class Lift extends NRSubsystem {
     public static final double MIN_MOVE_VOLTAGE_PERCENT_LIFT = 0;
     
     public static final double VOLTAGE_VELOCITY_SLOPE_LIFT = 0;
+    
     public static Time VOLTAGE_RAMP_RATE_LIFT = Time.ZERO;
+    public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
 
     public static double F_POS_LIFT = 0; //Leave F at 0
     public static double P_POS_LIFT = 0;
@@ -49,7 +51,7 @@ public class Lift extends NRSubsystem {
     //public static final int PEAK_CURRENT_DURATION_LIFT = 250;
     public static final int CONTINUOUS_CURRENT_LIMIT_LIFT = 40;
 
-    public static double PROFILE_VEL_PERCENT_LIFT = 0;
+    public static double profilePercent = 0.9;
 
     public static final Distance PROFILE_END_THRESHOLD_LIFT = new Distance(1, Distance.Unit.INCH);
     public static final Speed PROFILE_STOP_SPEED_THRESHOLD = new Speed(0.1, Distance.Unit.INCH, Time.Unit.SECOND);
@@ -80,6 +82,7 @@ public class Lift extends NRSubsystem {
     private Distance posSetpoint = Distance.ZERO;
 
     public static Distance setPos = Distance.ZERO;
+    public static Distance deltaPos = Distance.ZERO;
 
     public static boolean deployed = false;
 
@@ -99,15 +102,20 @@ public class Lift extends NRSubsystem {
 
             lift.setIdleMode(IDLE_MODE_LIFT);
 
-            lift.setInverted(false);
+            lift.setInverted(true);
 
             lift.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT_LIFT);
             lift.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
 
-            lift.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
+            lift.enableVoltageCompensation(VOLTAGE_COMPENSATION_LEVEL);
+
+            lift.setClosedLoopRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
+            lift.setOpenLoopRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
 
             lift.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
             lift.getPIDController().setOutputRange(-1, 1, POS_SLOT);
+
+            lift.setEncPosition(0);
 
             smartDashboardInit();
 
@@ -116,8 +124,9 @@ public class Lift extends NRSubsystem {
     }
 
     public static Lift getInstance() {
-        if(singleton == null)
+        if(singleton == null) {
             init();
+        }
         return singleton;
     }
 
@@ -186,12 +195,13 @@ public class Lift extends NRSubsystem {
     }
 
     public void setVoltageRamp(Time time) {
-        lift.setRampRate(time.get(Time.Unit.SECOND));
+        lift.setClosedLoopRampRate(time.get(Time.Unit.SECOND));
     }
 
     private void smartDashboardInit() {
-        if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
+        if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putNumber("Lift Pos Setpoint: ", 0);
+            SmartDashboard.putNumber("Lift Delta Pos: ", 0);
 			SmartDashboard.putNumber("Voltage Ramp Rate Lift Seconds: ",
 					VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND));
             
@@ -204,7 +214,7 @@ public class Lift extends NRSubsystem {
 			SmartDashboard.putNumber("I Vel Lift: ", I_VEL_LIFT);
 			SmartDashboard.putNumber("D Vel Lift: ", D_VEL_LIFT);
 			
-			SmartDashboard.putNumber("Profile Vel Percent Lift: ", PROFILE_VEL_PERCENT_LIFT);
+			SmartDashboard.putNumber("Profile Vel Percent Lift: ", profilePercent);
 		}
     
     }
@@ -219,9 +229,10 @@ public class Lift extends NRSubsystem {
         }
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
-            setPos = new Distance(SmartDashboard.getNumber("Lift Pos Setpoint: ", 0), Distance.Unit.FOOT);
+            setPos = new Distance(SmartDashboard.getNumber("Lift Pos Setpoint: ", 0), Distance.Unit.INCH);
+            deltaPos = new Distance(SmartDashboard.getNumber("Lift Delta Pos: ", 0), Distance.Unit.INCH);
 			VOLTAGE_RAMP_RATE_LIFT = new Time(SmartDashboard.getNumber("Voltage Ramp Rate Lift Seconds: ",
-					VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND)), Time.Unit.SECOND);
+                    VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND)), Time.Unit.SECOND);
             
             F_POS_LIFT = SmartDashboard.getNumber("F Pos Lift: ", F_POS_LIFT);
             lift.getPIDController().setFF(F_POS_LIFT, POS_SLOT);
@@ -247,7 +258,7 @@ public class Lift extends NRSubsystem {
             P_VEL_LIFT = SmartDashboard.getNumber("D Vel Lift: ", D_VEL_LIFT);
             lift.getPIDController().setD(D_VEL_LIFT, VEL_SLOT);
            
-			PROFILE_VEL_PERCENT_LIFT = SmartDashboard.getNumber("Profile Vel Percent Lift: ", PROFILE_VEL_PERCENT_LIFT);
+			profilePercent = SmartDashboard.getNumber("Profile Vel Percent Lift: ", profilePercent);
 
         }
 
