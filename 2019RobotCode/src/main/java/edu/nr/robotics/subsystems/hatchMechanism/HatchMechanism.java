@@ -111,13 +111,10 @@ public class HatchMechanism extends NRSubsystem {
 
 	@Override
 	public void periodic() {
-		forceSensors = !EnabledSensors.forceSensorOne.get() && !EnabledSensors.forceSensorTwo.get();
+		forceSensors = !(new SensorVoting(EnabledSensors.forceSensorOne, EnabledSensors.forceSensorTwo, EnabledSensors.forceSensorThree).isTrue());
 
 		if (forceSensors && (forceSensors != prevForceSensors)) {
-			if (getInstance().currentHatchState() == State.DEPLOYED) 
-				getInstance().retractHatchMechanism();
-			else
-				getInstance().deployHatchMechanism();
+			new HatchMechanismGrabCommand().start();
 		}
 		prevForceSensors = forceSensors;
 
