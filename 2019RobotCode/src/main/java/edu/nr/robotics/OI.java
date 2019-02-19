@@ -89,6 +89,7 @@ public class OI implements SmartDashboardSource {
     private final Joystick operatorRight;
 
     private final Joystick elevatorStick;
+    private final Joystick liftStick;
 
     private JoystickButton kidModeSwitch;
     private JoystickButton elevGearSwitcherSwitch;
@@ -108,6 +109,7 @@ public class OI implements SmartDashboardSource {
         operatorRight = new Joystick(STICK_OPERATOR_RIGHT);
 
         elevatorStick = operatorRight;
+        liftStick = operatorLeft;
 
        initDriveLeft();
        initDriveRight();
@@ -269,7 +271,11 @@ public class OI implements SmartDashboardSource {
 
     public double getElevatorJoystickValue() {
 		return snapDriveJoysticks(-elevatorStick.getX());
-	}
+    }
+    
+    public double getLiftJoystickValue() {
+        return snapDriveJoysticks(-liftStick.getX());
+    }
 
     public double getDriveSpeedMultiplier(){
         return driveSpeedMultiplier;
@@ -319,6 +325,10 @@ public class OI implements SmartDashboardSource {
 
     public boolean isElevatorNonZero() {
         return getElevatorJoystickValue() != 0;
+    }
+
+    public boolean isLiftNonZero() {
+        return getLiftJoystickValue() != 0;
     }
     
     public boolean isHDriveZero() {

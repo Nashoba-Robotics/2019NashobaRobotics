@@ -133,8 +133,8 @@ public class Lift extends NRSubsystem {
     public synchronized static void init() {
         if(singleton == null) {
             singleton = new Lift();
-            //if(EnabledSubsystems.LIFT_ENABLED)
-            //singleton.setJoystickCommand(new LiftJoystickCommand());
+            if(EnabledSubsystems.LIFT_ENABLED)
+            singleton.setJoystickCommand(new LiftJoystickCommand());
         }
     }
 
