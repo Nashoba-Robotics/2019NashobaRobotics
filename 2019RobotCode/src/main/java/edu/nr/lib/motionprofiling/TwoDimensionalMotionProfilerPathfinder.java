@@ -1,18 +1,9 @@
 package edu.nr.lib.motionprofiling;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import edu.nr.lib.gyro.Gyro;
-import edu.nr.lib.gyro.Gyro.ChosenGyro;
 import edu.nr.lib.gyro.GyroCorrection;
 import edu.nr.lib.gyro.Pigeon;
 import edu.nr.lib.interfaces.DoublePIDOutput;
@@ -35,7 +26,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 	
 	//In milliseconds
 	private final long period;
-	private static final long defaultPeriod = 20; //50 Hz 
+	private static final long defaultPeriod = 10; //100 Hz 
 		
 	private boolean enabled = true;
 	private DoublePIDOutput out;

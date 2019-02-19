@@ -11,19 +11,21 @@ import edu.nr.robotics.subsystems.sensors.SensorVoting;
 
 public class DriveToBallCommand extends NRCommand {
 
+    //returns the distance in inches based on the height of the box drawn by the limelight
     Equation dist = new Equation() {
     
         @Override
         public double getValue(double x) {
-            return 0;
+            return 2280.64 / (10.6409 + 0.831893*x);
         }
     };
 
+    //returns the ideal vel percent based on the distance in inches
     Equation velPercent = new Equation() {
 
         @Override
         public double getValue(double x) {
-            return 0;
+            return Math.pow(x, 1.6) / 1000;
         }
 
     };
@@ -37,11 +39,11 @@ public class DriveToBallCommand extends NRCommand {
 
 	public DriveToBallCommand() {
 		super(Drive.getInstance());
-	}
+    }
 	
 	@Override
 	protected void onStart() {
-        new EnableLimelightCommand(true).start();
+        //new EnableLimelightCommand(true).start();
         LimelightNetworkTable.getInstance().setPipeline(Pipeline.Cargo);
 	}
 	
@@ -65,14 +67,18 @@ public class DriveToBallCommand extends NRCommand {
         moveValue *= 0.7;
  
 		
-		headingAdjustment = ((-Math.cos(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN) 
+        headingAdjustment =  -0.25 * Math.sin(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN));
+        /*((-Math.cos(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN) 
 				/ ((Drive.DRIVE_STOP_ANGLE.get(Angle.Unit.DEGREE) / 90) * 3)) 
 				* (1 - Drive.MIN_PROFILE_TURN_PERCENT)) + 1 + Drive.MIN_PROFILE_TURN_PERCENT) 
-				* -LimelightNetworkTable.getInstance().getHorizOffset().signum();
+				* -LimelightNetworkTable.getInstance().getHorizOffset().signum();*/
 		if (Math.abs(headingAdjustment) < Drive.MIN_PROFILE_TURN_PERCENT) {
 			headingAdjustment = Drive.MIN_PROFILE_TURN_PERCENT * Math.signum(headingAdjustment);
 		}
-		
+        
+        System.out.println("move val: " + moveValue);
+        System.out.println("heading adjustment: " + headingAdjustment);
+
 		outputLeft = moveValue - headingAdjustment;
 		outputRight = moveValue + headingAdjustment;
 		

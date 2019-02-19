@@ -17,7 +17,8 @@ public class DriveToSomethingJoystickCommand extends NRCommand {
     }
 
     protected void onStart() {
-        new EnableLimelightCommand(true).start();
+        if(pipeline == Pipeline.Target)
+            new EnableLimelightCommand(true).start();
         LimelightNetworkTable.getInstance().setPipeline(pipeline);
     }
 
@@ -28,22 +29,21 @@ public class DriveToSomethingJoystickCommand extends NRCommand {
 
         double headingAdjustment;
 
-        headingAdjustment = ((-Math.cos(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN) 
-
+        headingAdjustment = -0.25 * Math.sin(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN));/*((-Math.cos(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN) 
 				/ ((Drive.DRIVE_STOP_ANGLE.get(Angle.Unit.DEGREE) / 90) * 3)) 
-
 				* (1 - Drive.MIN_PROFILE_TURN_PERCENT)) + 1 + Drive.MIN_PROFILE_TURN_PERCENT) 
-
-				* -LimelightNetworkTable.getInstance().getHorizOffset().signum();
+				* -LimelightNetworkTable.getInstance().getHorizOffset().signum();*/
 
 		if (Math.abs(headingAdjustment) < Drive.MIN_PROFILE_TURN_PERCENT) {
 
 			headingAdjustment = Drive.MIN_PROFILE_TURN_PERCENT * Math.signum(headingAdjustment);
 
-		}
+        }
 
 		double outputLeft = moveValue - headingAdjustment;
         double outputRight = moveValue + headingAdjustment;   
+
+        Drive.getInstance().setMotorSpeedInPercent(outputLeft, outputRight, 0);
 
     }
 

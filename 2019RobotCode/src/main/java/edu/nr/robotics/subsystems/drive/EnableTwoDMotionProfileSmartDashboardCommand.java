@@ -45,35 +45,27 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 			if (index < TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length()) {
 				Drive.getInstance().setPIDSourceType(PIDSourceType.kRate);
+			
 				SmartDashboard.putNumberArray("Motion Profiler V Left", new double[] {
 						new Speed(Drive.getInstance().pidGetLeft(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE,
 								Time.Unit.HUNDRED_MILLISECOND).get(Distance.Unit.FOOT, Time.Unit.SECOND),
-						new Speed(
-								TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().get(index).velocity,
+						new Speed(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().get(index).velocity,
 								Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND)
 										.get(Distance.Unit.FOOT, Time.Unit.SECOND) });
+			
 				SmartDashboard.putNumberArray("Motion Profiler V Right",
-						new double[] {
-								new Speed(Drive.getInstance().pidGetRight(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE,
+						new double[] {new Speed(Drive.getInstance().pidGetRight(), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE,
 										Time.Unit.HUNDRED_MILLISECOND).get(Distance.Unit.FOOT, Time.Unit.SECOND),
-								new Speed(
-										TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
+								new Speed(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
 												.get(index).velocity,
 										Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND)
 												.get(Distance.Unit.FOOT, Time.Unit.SECOND) });
 
 				Drive.getInstance().setPIDSourceType(PIDSourceType.kDisplacement);
 
-				SmartDashboard
-						.putNumberArray("Motion Profiler X Left",
-								new double[] {
-										new Distance(
-												(Drive.getInstance().pidGetLeft() - initialLeftPosition
-														.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)),
-												Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.FOOT),
-										new Distance(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
-												.get(index).position, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
-														.get(Distance.Unit.FOOT) });
+				SmartDashboard.putNumberArray("Motion Profiler X Left", new double[] {new Distance((Drive.getInstance().pidGetLeft() - initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)),
+					Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.FOOT),new Distance(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
+							.get(index).position, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.FOOT) });
 				SmartDashboard
 						.putNumberArray("Motion Profiler X Right",
 								new double[] {

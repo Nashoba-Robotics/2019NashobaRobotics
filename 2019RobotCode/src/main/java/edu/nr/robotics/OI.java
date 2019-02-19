@@ -11,7 +11,9 @@ import edu.nr.robotics.multicommands.GetHatchStationCommand;
 import edu.nr.robotics.multicommands.IntakeToggleCommand;
 import edu.nr.robotics.multicommands.PrepareClimbCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
+import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
+import edu.nr.robotics.subsystems.drive.DriveToTargetCommand;
 import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
 import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
@@ -63,18 +65,18 @@ public class OI implements SmartDashboardSource {
     //private static final int GET_HATCH_GROUND_NUMBER = 20;
     //private static final int GET_CARGO_NUMBER = 21;
 
-    private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 22;
-    private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 23;
-    private static final int DRIVE_TO_TARGET_AUTO_NUMBER = 24;
-    private static final int DRIVE_TO_TARGET_HYBRID_NUMBER = 25;
-    private static final int TURN_90_LEFT_NUMBER = 26;
-    private static final int TURN_90_RIGHT_NUMBER = 27;
-    private static final int TURN_180_NUMBER = 28;
-    private static final int TOGGLE_LIMELIGHT_NUMBER = 29;
-    private static final int RESET_GYRO_NUMBER = 30;
-    private static final int SNIPER_MODE_FORWARD = 31;
-    private static final int SNIPER_MODE_TURN = 32;
-    private static final int DUMB_DRIVE_NUMBER = 33;
+    private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 13;
+    private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
+    private static final int DRIVE_TO_TARGET_AUTO_NUMBER = 7;
+    private static final int DRIVE_TO_TARGET_HYBRID_NUMBER = 2;
+    private static final int TURN_90_LEFT_NUMBER = 3;
+    private static final int TURN_90_RIGHT_NUMBER = 4;
+    private static final int TURN_180_NUMBER = 2;
+    private static final int TOGGLE_LIMELIGHT_NUMBER = 8;
+    private static final int RESET_GYRO_NUMBER = 10;
+    private static final int SNIPER_MODE_FORWARD = 1;
+    private static final int SNIPER_MODE_TURN = 1;
+    private static final int DUMB_DRIVE_NUMBER = 14;
 
     private double driveSpeedMultiplier = 1;
 
@@ -107,8 +109,8 @@ public class OI implements SmartDashboardSource {
 
         elevatorStick = operatorRight;
 
-      // initDriveLeft();
-       //initDriveRight();
+       initDriveLeft();
+       initDriveRight();
 
        initOperatorLeft();
        //initOperatorRight();
@@ -123,20 +125,22 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
 
         new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Target));
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
-
-        //auto track
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_AUTO_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Cargo));
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
-
-        new JoystickButton(driveLeft, DRIVE_TO_TARGET_AUTO_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Target));
+        new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
+                //auto track
+        new JoystickButton(driveLeft, DRIVE_TO_CARGO_AUTO_NUMBER).whenPressed(new DriveToBallCommand());
         new JoystickButton(driveLeft, DRIVE_TO_CARGO_AUTO_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
+
+        new JoystickButton(driveLeft, DRIVE_TO_TARGET_AUTO_NUMBER).whenPressed(new DriveToTargetCommand());
+        new JoystickButton(driveLeft, DRIVE_TO_TARGET_AUTO_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
 
         //sniper mode
         new JoystickButton(driveLeft, SNIPER_MODE_FORWARD).whenPressed(new EnableSniperForwardMode(true));
         new JoystickButton(driveLeft, SNIPER_MODE_FORWARD).whenPressed(new EnableSniperForwardMode(false));
 
         //tuning command too
+
+        //dumb drive
+		new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
 
     }
 
@@ -157,11 +161,6 @@ public class OI implements SmartDashboardSource {
         //sniper mode
         new JoystickButton(driveLeft, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(true));
         new JoystickButton(driveLeft, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(false));
-
-        //dumb drive
-		new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
-
-        
     }
 
     public void initOperatorLeft() {

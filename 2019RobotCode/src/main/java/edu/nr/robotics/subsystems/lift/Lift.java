@@ -172,11 +172,13 @@ public class Lift extends NRSubsystem {
     }
 
     public void setMotorSpeedRaw(double percent) {
-        lift.set(percent);
+        if (lift != null)
+            lift.set(percent);
     }
 
     public void setMotorSpeedPercent(double percent) {
-        setMotorSpeed(MAX_SPEED_LIFT.mul(percent));
+        if (lift != null)
+            setMotorSpeed(MAX_SPEED_LIFT.mul(percent));
 
     }
 

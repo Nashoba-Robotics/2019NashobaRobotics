@@ -20,7 +20,7 @@ import edu.nr.lib.gyro.ResetGyroCommand;
 import edu.nr.lib.interfaces.DoublePIDOutput;
 import edu.nr.lib.interfaces.DoublePIDSource;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerTwoMotor;
-import edu.nr.lib.motionprofiling.RampedDiagonalHTrajectory;
+import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
 import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.motorcontrollers.SparkMax;
@@ -55,7 +55,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6*Math.PI);
 	public static final double REAL_ENC_REV_PER_INCH_H_DRIVE = 1/(4*Math.PI);
 
-	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE;
+	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE * 1.01; //* 1.02;
 	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = REAL_ENC_REV_PER_INCH_H_DRIVE;
 
 	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
@@ -63,10 +63,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
 
-	public static final Speed MAX_SPEED_DRIVE = new Speed(13.48, Distance.Unit.FOOT, Time.Unit.SECOND);
+	public static final Speed MAX_SPEED_DRIVE = new Speed(13.48*1.024, Distance.Unit.FOOT, Time.Unit.SECOND);
 	public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.5, Distance.Unit.FOOT, Time.Unit.SECOND);
 
-	public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(20, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
+	public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(25, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
 	public static final Acceleration MAX_ACCEL_DRIVE_H = new Acceleration(10, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
 
 	public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND, Time.Unit.SECOND);
@@ -132,7 +132,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public static final double SENSOR_STRAFE_PERCENT = 0;
 
-		public static final Distance END_THRESHOLD = new Distance(2, Distance.Unit.INCH);
+		public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH);
 		public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
 		public static final Speed PROFILE_END_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(0.10);
 
@@ -171,6 +171,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		private PIDSourceType type = PIDSourceType.kRate;
 
+		public static double timeMult = 70;
 		public static Distance endX;
 		public static Distance endY;
 		public static Angle endAngle = new Angle(0, Angle.Unit.DEGREE); // set next two to SD...
@@ -575,7 +576,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				System.out.println("minaccel: " + minAccel);
 
 				diagonalProfiler = new OneDimensionalMotionProfilerTwoMotor(this, this, kVOneD, kAOneD, kPOneD, kIOneD, kDOneD, kP_thetaOneD);
-				diagonalProfiler.setTrajectory(new RampedDiagonalHTrajectory(distX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), distY.get(Distance.Unit.ENCODER_REV_H), minVel, minAccel));
+				diagonalProfiler.setTrajectory(new OneDimensionalTrajectoryRamped(distX.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), minVel, minAccel, timeMult));
 				diagonalProfiler.enable();
 	}
 
@@ -611,11 +612,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putNumber("kDOneD Value: ", kDOneD);
 			SmartDashboard.putNumber("kP_thetaOneD Value: ", kP_thetaOneD);
 
-			SmartDashboard.putNumber("kVOneDH Value: ", kVOneDH);
-			SmartDashboard.putNumber("kAOneDH Value: ", kAOneDH);
-			SmartDashboard.putNumber("kPOneDH Value: ", kPOneDH);
-			SmartDashboard.putNumber("kIOneDH Value: ", kIOneDH);
-			SmartDashboard.putNumber("kDOneDH Value: ", kDOneDH);
+			SmartDashboard.putNumber("kVTwoD Value: ", kVTwoD);
+			SmartDashboard.putNumber("kATwoD Value: ", kATwoD);
+			SmartDashboard.putNumber("kPTwoD Value: ", kPTwoD);
+			SmartDashboard.putNumber("kITwoD Value: ", kITwoD);
+			SmartDashboard.putNumber("kDTwoD Value: ", kDTwoD);
 
 			SmartDashboard.putNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
 			SmartDashboard.putNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
@@ -635,7 +636,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	public void smartDashboardInfo() {
-		if(leftDrive != null && rightDrive != null){
+		if(leftDrive != null && rightDrive != null) {
 			if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 
 				SmartDashboard.putNumberArray("Drive Left Current", new double[] {getLeftCurrent(), getLeftFollow1Current(), getLeftFollow2Current()});

@@ -64,6 +64,15 @@ public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
 	public boolean isFinishedNR() {
 
 		boolean finished;
+
+		System.out.println("thing1: " + new Distance((Math.abs(Drive.getInstance().getLeftPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
+		- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) - OneDimensionalMotionProfilerTwoMotor.posPoints
+				.get(OneDimensionalMotionProfilerTwoMotor.posPoints.size() - 1))), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH));
+
+		System.out.println("thing2: " + new Distance(Math.abs(Drive.getInstance().getRightPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
+		- initialRightPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) - OneDimensionalMotionProfilerTwoMotor.posPoints
+				.get(OneDimensionalMotionProfilerTwoMotor.posPoints.size() - 1)), Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE).get(Distance.Unit.INCH));
+
 		finished = Math.abs(Drive.getInstance().getLeftPosition().get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 				- initialLeftPosition.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE) - OneDimensionalMotionProfilerTwoMotor.posPoints
 						.get(OneDimensionalMotionProfilerTwoMotor.posPoints.size() - 1)) < Drive.END_THRESHOLD
@@ -73,9 +82,7 @@ public class EnableMotionProfileSmartDashboardCommand extends NRCommand {
 						.get(OneDimensionalMotionProfilerTwoMotor.posPoints.size() - 1)) < Drive.END_THRESHOLD
 				.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)
 								&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-				&& Drive.getInstance().getHVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
-
+				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 		return finished;
 	}
 }

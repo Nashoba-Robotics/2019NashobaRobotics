@@ -13,7 +13,7 @@ public class DriveToTargetCommand extends NRCommand {
     
         @Override
         public double getValue(double x) {
-            return 0;
+            return 1768 / (-2.88771 + (0.964029 * x));
         }
     };
 
@@ -21,7 +21,7 @@ public class DriveToTargetCommand extends NRCommand {
 
         @Override
         public double getValue(double x) {
-            return 0;
+            return Math.pow(x, 1.6) / 1000;
         }
 
     };
@@ -63,10 +63,11 @@ public class DriveToTargetCommand extends NRCommand {
         moveValue *= 0.7;
  
 		
-		headingAdjustment = ((-Math.cos(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN) 
+        headingAdjustment = -0.25 * Math.sin(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN));
+        /*((-Math.cos(LimelightNetworkTable.getInstance().getHorizOffset().get(Angle.Unit.RADIAN) 
 				/ ((Drive.DRIVE_STOP_ANGLE.get(Angle.Unit.DEGREE) / 90) * 3)) 
 				* (1 - Drive.MIN_PROFILE_TURN_PERCENT)) + 1 + Drive.MIN_PROFILE_TURN_PERCENT) 
-				* -LimelightNetworkTable.getInstance().getHorizOffset().signum();
+				* -LimelightNetworkTable.getInstance().getHorizOffset().signum();*/
 		if (Math.abs(headingAdjustment) < Drive.MIN_PROFILE_TURN_PERCENT) {
 			headingAdjustment = Drive.MIN_PROFILE_TURN_PERCENT * Math.signum(headingAdjustment);
 		}
