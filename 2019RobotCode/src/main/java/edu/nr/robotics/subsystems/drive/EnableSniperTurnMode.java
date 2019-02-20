@@ -20,6 +20,8 @@ public class EnableSniperTurnMode extends NRCommand {
 		} else {
 			Drive.TURN_JOYSTICK_MULTIPLIER = TURN_JOYSTICK_MULTIPLIER_HIGH;
 		}
+
+		System.out.println(Drive.TURN_JOYSTICK_MULTIPLIER + " turneyboi multiboi");
 		
 		Drive.sniperModeEnabled = bool;
 	}

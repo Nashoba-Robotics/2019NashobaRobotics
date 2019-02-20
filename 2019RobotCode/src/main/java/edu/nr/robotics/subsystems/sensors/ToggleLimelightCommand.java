@@ -10,7 +10,8 @@ public class ToggleLimelightCommand extends NRCommand {
     }
 
     protected void onStart() {
-        if(LimelightNetworkTable.getInstance().getLED() == 0) {
+        System.out.println(LimelightNetworkTable.getInstance().getLED());
+        if(LimelightNetworkTable.getInstance().getLED() != 1) {
             LimelightNetworkTable.getInstance().lightLED(false);
         } else {
             LimelightNetworkTable.getInstance().lightLED(true);

@@ -41,7 +41,7 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 			profileStartTime = Timer.getFPGATimestamp();
 			profileStartTimeMs = (profileStartTime * 1000);
 		} else if (TwoDimensionalMotionProfilerPathfinder.twoDEnabled) {
-			index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / 20.0);
+			index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / 10.0);
 
 			if (index < TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length()) {
 				Drive.getInstance().setPIDSourceType(PIDSourceType.kRate);
@@ -92,6 +92,16 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 	public boolean isFinishedNR() {
 
 		boolean finished;
+
+		System.out.println("left error: " + (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
+			TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
+				.get(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length() - 1).position,
+			Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).get(Distance.Unit.INCH));
+
+		System.out.println("right error: " + (Drive.getInstance().getRightPosition().sub(initialRightPosition)).sub(new Distance(
+			TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
+				.get(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory().length() - 1).position,
+			Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).get(Distance.Unit.INCH));
 
 		finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
 				TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()

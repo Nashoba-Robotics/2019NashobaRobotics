@@ -61,9 +61,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
-	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
+	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.5);
 
-	public static final Speed MAX_SPEED_DRIVE = new Speed(13.48*1.024, Distance.Unit.FOOT, Time.Unit.SECOND);
+	public static final Speed MAX_SPEED_DRIVE = new Speed(13.98, Distance.Unit.FOOT, Time.Unit.SECOND);
 	public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.5, Distance.Unit.FOOT, Time.Unit.SECOND);
 
 	public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(25, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);
@@ -71,17 +71,17 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND, Time.Unit.SECOND);
 
-	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.103;
-	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.0983;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.0907;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.089;
 
 	public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
 
-	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.0665;
-	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0656;
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.065;
+	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0645;
 
 		public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
 
-		public static Time DRIVE_RAMP_RATE = Time.ZERO;
+		public static Time DRIVE_RAMP_RATE = new Time(0.0, Time.Unit.SECOND);
 		public static Time H_DRIVE_RAMP_RATE = Time.ZERO;
 
 		public static double P_LEFT = 0.3;
@@ -99,9 +99,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public static double kVOneD = 1 / MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
 		public static double kAOneD = 0.0;
-		public static double kPOneD = 0.0;
+		public static double kPOneD = 0.000000002;
 		public static double kIOneD = 0;
-		public static double kDOneD = 0;
+		public static double kDOneD = 0.0000000002;
 		public static double kP_thetaOneD = 0;
 
 		public static double kVOneDH = 1 / MAX_SPEED_DRIVE.get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND);
@@ -113,7 +113,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double kVTwoD = 1
 		/ MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
 		public static double kATwoD = 0;
-		public static double kPTwoD = 0;
+		public static double kPTwoD = 0.0000000;
 		public static double kITwoD = 0;
 		public static double kDTwoD = 0;
 		public static double kP_thetaTwoD = 0;
@@ -124,7 +124,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static double TURN_JOYSTICK_MULTIPLIER = 0;
 		public static double MOVE_JOYSTICK_MULTIPLIER = 0;
 
-		public static final double MAX_PROFILE_TURN_PERCENT = 0;
+		public static final double MAX_PROFILE_TURN_PERCENT = 1;
 		public static final double MIN_PROFILE_TURN_PERCENT = 0.02;
 
 		public static final double DRIVE_TO_HATCH_PERCENT = 0;
@@ -683,11 +683,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			kDOneD = SmartDashboard.getNumber("kDOneD Value: ", kDOneD);
 			kP_thetaOneD = SmartDashboard.getNumber("kP_thetaOneD Value: ", kP_thetaOneD);
 				
-			kVOneDH = SmartDashboard.getNumber("kVOneDH Value: ", kVOneDH);
-			kAOneDH = SmartDashboard.getNumber("kAOneDH Value: ", kAOneDH);
-			kPOneDH = SmartDashboard.getNumber("kPOneDH Value: ", kPOneDH);
-			kIOneDH = SmartDashboard.getNumber("kIOneDH Value: ", kIOneDH);
-			kDOneDH = SmartDashboard.getNumber("kDOneDH Value: ", kDOneDH);
+			kVTwoD = SmartDashboard.getNumber("kVTwoD Value: ", kVTwoD);
+			kATwoD = SmartDashboard.getNumber("kATwoD Value: ", kATwoD);
+			kPTwoD = SmartDashboard.getNumber("kPTwoD Value: ", kPTwoD);
+			kITwoD = SmartDashboard.getNumber("kITwoD Value: ", kITwoD);
+			kDTwoD = SmartDashboard.getNumber("kDTwoD Value: ", kDTwoD);
 
 			DRIVE_RAMP_RATE = new Time(SmartDashboard.getNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND)), Time.Unit.SECOND);
 			H_DRIVE_RAMP_RATE = new Time(SmartDashboard.getNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND)), Time.Unit.SECOND);

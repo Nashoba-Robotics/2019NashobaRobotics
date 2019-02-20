@@ -32,6 +32,7 @@ import edu.nr.robotics.subsystems.intakerollers.IntakeRollersToggleCommand;
 import edu.nr.robotics.subsystems.sensors.ToggleLimelightCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.PrintCommand;
 
 public class OI implements SmartDashboardSource {
 
@@ -137,7 +138,7 @@ public class OI implements SmartDashboardSource {
 
         //sniper mode
         new JoystickButton(driveLeft, SNIPER_MODE_FORWARD).whenPressed(new EnableSniperForwardMode(true));
-        new JoystickButton(driveLeft, SNIPER_MODE_FORWARD).whenPressed(new EnableSniperForwardMode(false));
+        new JoystickButton(driveLeft, SNIPER_MODE_FORWARD).whenReleased(new EnableSniperForwardMode(false));
 
         //tuning command too
 
@@ -161,8 +162,8 @@ public class OI implements SmartDashboardSource {
             new Angle(-90, Angle.Unit.DEGREE), Drive.MAX_PROFILE_TURN_PERCENT));
 
         //sniper mode
-        new JoystickButton(driveLeft, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(true));
-        new JoystickButton(driveLeft, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(false));
+        new JoystickButton(driveRight, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(true));
+        new JoystickButton(driveRight, SNIPER_MODE_TURN).whenReleased(new EnableSniperTurnMode(false));
     }
 
     public void initOperatorLeft() {

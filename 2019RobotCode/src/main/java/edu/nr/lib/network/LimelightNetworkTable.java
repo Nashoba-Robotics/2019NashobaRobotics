@@ -119,7 +119,7 @@ public class LimelightNetworkTable extends TimerTask {
 
 	public void lightLED(boolean bool) {
 		if (bool) {
-			limelightTable.getEntry("ledMode").setDouble(0);
+			limelightTable.getEntry("ledMode").setDouble(3);
 		} else {
 			limelightTable.getEntry("ledMode").setDouble(1);
 		}
