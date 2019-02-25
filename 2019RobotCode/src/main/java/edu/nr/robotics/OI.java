@@ -29,6 +29,8 @@ import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersScoreCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersToggleCommand;
+import edu.nr.robotics.subsystems.lift.Lift;
+import edu.nr.robotics.subsystems.lift.LiftSetPositionCommand;
 import edu.nr.robotics.subsystems.sensors.ToggleLimelightCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -59,6 +61,7 @@ public class OI implements SmartDashboardSource {
     private static final int HATCH_SCORE_NUMBER = 34;
     private static final int TOGGLE_INTAKE_NUMBER = 36;
     private static final int INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER = 37;
+    private static final int LIFT_RETRACT_NUMBER = 38;
     private static final int SWITCH_ELEVATOR_GEAR_NUMBER = 16;
     //private static final int INTAKE_ROLLERS_RUN_NUMBER = 17;
     private static final int INTAKE_ROLLERS_PUKE_NUMBER = 18;
@@ -171,6 +174,10 @@ public class OI implements SmartDashboardSource {
 
         //kid mode boi
         kidModeSwitch = new JoystickButton(operatorLeft, KID_MODE_SWITCH);
+
+        //lifty retracty boi
+        //new JoystickButton(operatorLeft, LIFT_RETRACT_NUMBER).whenPressed(new LiftSetPositionCommand(Lift.TOP_POSITION));
+        
         /*
         //elev gear boi
         elevGearSwitcherSwitch = new JoystickButton(operatorLeft, SWITCH_ELEVATOR_GEAR_NUMBER);
