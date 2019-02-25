@@ -13,7 +13,7 @@ public class ResetGyroCommand extends NRCommand {
 
 	@Override
 	protected void onStart() {
-		Pigeon.getPigeon(RobotMap.PIGEON_ID).reset();
+		Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).reset();
 		
 	}
 	

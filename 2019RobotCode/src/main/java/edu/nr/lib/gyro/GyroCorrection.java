@@ -16,7 +16,7 @@ public class GyroCorrection
 	Gyro gyro;
 	
 	public GyroCorrection(Angle angle) {
-		this.gyro = Pigeon.getPigeon(RobotMap.PIGEON_ID);
+		this.gyro = Pigeon.getPigeon(Drive.getInstance().getPigeonTalon());
 		goalAngle = angle;
 		initialAngle = gyro.getYaw();
 	}

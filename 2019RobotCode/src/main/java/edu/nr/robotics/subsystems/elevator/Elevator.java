@@ -5,9 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.nr.lib.commandbased.CancelCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
 import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
@@ -16,7 +14,6 @@ import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
-import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -32,9 +29,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     private static Elevator singleton;
 
-    private TalonSRX elevatorTalon;
-    private VictorSPX elevatorVictorFollowOne;
-    private VictorSPX elevatorVictorFollowTwo;
+    private TalonSRX elevatorTalon, elevatorFollowOne, elevatorFollowTwo;
     private PowerDistributionPanel pdp;
 
     private DoubleSolenoid gearShifter;
@@ -197,8 +192,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private Elevator() {
         if(EnabledSubsystems.ELEVATOR_ENABLED) {
             elevatorTalon = CTRECreator.createMasterTalon(RobotMap.ELEVATOR_TALON);
-            elevatorVictorFollowOne = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
-            elevatorVictorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
+            elevatorFollowOne = CTRECreator.createFollowerTalon(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
+            elevatorFollowTwo = CTRECreator.createFollowerTalon(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
             //gearShifter = new DoubleSolenoid(RobotMap.ELEVATOR_GEAR_SWITCHER_PCM_PORT,
@@ -221,13 +216,13 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorTalon.config_kD(MOTION_MAGIC_CLIMB_UP_SLOT, D_POS_CLIMB_UP, DEFAULT_TIMEOUT);
 
             elevatorTalon.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
-            elevatorVictorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
-            elevatorVictorFollowTwo.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            elevatorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
+            elevatorFollowTwo.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
             
             elevatorTalon.setInverted(true);
             elevatorTalon.setSensorPhase(false);
-            elevatorVictorFollowOne.setInverted(true);
-            elevatorVictorFollowTwo.setInverted(true);
+            elevatorFollowOne.setInverted(true);
+            elevatorFollowTwo.setInverted(true);
 
             elevatorTalon.enableVoltageCompensation(true);
             elevatorTalon.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_ELEVATOR, DEFAULT_TIMEOUT);
@@ -344,14 +339,14 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     }
 
     public double getFollowOneCurrent() {
-        if (elevatorVictorFollowOne != null)
-            return pdp.getCurrent(RobotMap.ELEVATOR_FOLLOW_ONE_CURRENT);
+        if (elevatorFollowOne != null)
+            return elevatorFollowOne.getOutputCurrent();
         return 0;
     }
 
     public double getFollowTwoCurrent() {
-        if (elevatorVictorFollowTwo != null)
-            return pdp.getCurrent(RobotMap.ELEVATOR_FOLLOW_TWO_CURRENT);
+        if (elevatorFollowTwo != null)
+            return elevatorFollowTwo.getOutputCurrent();
         return 0;
     }
 

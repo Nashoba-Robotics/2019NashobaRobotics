@@ -29,7 +29,7 @@ public class DeployLiftCommand extends NRCommand {
     }
 
     protected void onExecute() {
-        Lift.getInstance().setMotorSpeed(Elevator.getInstance().getVelocity().add(new Speed(Lift.getInstance().P_Angle * Pigeon.getPigeon(RobotMap.PIGEON_ID).getPitch().get(Angle.Unit.DEGREE), Distance.Unit.FOOT, Time.Unit.SECOND)));
+        Lift.getInstance().setMotorSpeed(Elevator.getInstance().getVelocity().add(new Speed(Lift.getInstance().P_Angle * Pigeon.getPigeon(Drive.getInstance().getPigeonTalon()).getPitch().get(Angle.Unit.DEGREE), Distance.Unit.FOOT, Time.Unit.SECOND)));
     }
 
     protected void onEnd() {

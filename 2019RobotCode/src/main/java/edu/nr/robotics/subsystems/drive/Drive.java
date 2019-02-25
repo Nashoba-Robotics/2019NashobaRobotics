@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
@@ -45,11 +44,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	private static Drive singleton;
 
-	private TalonSRX leftDrive, rightDrive;
-	private VictorSPX leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2;
+	private TalonSRX leftDrive, rightDrive, leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2, pigeonTalon;
 	private CANSparkMax hDrive;
 	private PowerDistributionPanel pdp;
-	// these may change because of new talons
 
 	//TODO: fix all of these
 	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6*Math.PI);
@@ -195,14 +192,15 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			if(EnabledSubsystems.DRIVE_ENABLED) {
 				leftDrive = CTRECreator.createMasterTalon(RobotMap.LEFT_DRIVE);
 				rightDrive = CTRECreator.createMasterTalon(RobotMap.RIGHT_DRIVE);
+				pigeonTalon = CTRECreator.createMasterTalon(RobotMap.PIGEON_ID);
 				hDrive = SparkMax.createSpark(RobotMap.H_DRIVE, true);
 				pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
-				leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
-				leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
+				leftDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
+				leftDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
 
-				rightDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
-				rightDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
+				rightDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
+				rightDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
 
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 					leftDrive.set(ControlMode.PercentOutput,0);
@@ -375,13 +373,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public double getRightFollow1Current() {
 			if (rightDriveFollow1 != null)
-				return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_1_CURRENT);
+				return rightDriveFollow1.getOutputCurrent();
 			return 0;
 		}
 
 		public double getRightFollow2Current() {
 			if (rightDriveFollow2 != null)
-				return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_2_CURRENT);
+				return rightDriveFollow2.getOutputCurrent();
 			return 0;
 		}
 
@@ -394,13 +392,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public double getLeftFollow1Current() {
 			if (leftDriveFollow1 != null) 
-				return pdp.getCurrent(RobotMap.LEFT_DRIVE_FOLLOW_1_CURRENT);
+				return leftDriveFollow1.getOutputCurrent();
 			return 0;
 		}
 
 		public double getLeftFollow2Current() {
 			if (leftDriveFollow2 != null) 
-				return pdp.getCurrent(RobotMap.LEFT_DRIVE_FOLLOW_2_CURRENT);
+				return leftDriveFollow2.getOutputCurrent();
 			return 0;
 		}
 
@@ -643,7 +641,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				SmartDashboard.putNumberArray("Drive Right Current", new double [] {getRightCurrent(), getRightFollow1Current(), getRightFollow2Current()});
 				SmartDashboard.putNumber("Drive H Current", getHCurrent());
 
-				SmartDashboard.putNumber("Gyro Yaw", (-Pigeon.getPigeon(RobotMap.PIGEON_ID).getYaw().get(Angle.Unit.DEGREE))% 360);
+				SmartDashboard.putNumber("Gyro Yaw", (-Pigeon.getPigeon(getPigeonTalon()).getYaw().get(Angle.Unit.DEGREE))% 360);
 
 				SmartDashboard.putNumberArray("Drive Left Velocity", new double[] {getLeftVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), leftMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
 				SmartDashboard.putNumberArray("Drive Right Velocity", new double[] {getRightVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), rightMotorSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
@@ -722,6 +720,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		}
 
+	}
+
+	public TalonSRX getPigeonTalon() {
+		return pigeonTalon;
 	}
 
 	public void disable() {

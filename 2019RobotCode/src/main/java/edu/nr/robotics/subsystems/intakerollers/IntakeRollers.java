@@ -2,7 +2,7 @@ package edu.nr.robotics.subsystems.intakerollers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
@@ -12,15 +12,15 @@ import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.SensorVoting;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeRollers extends NRSubsystem {
 
     private static IntakeRollers singleton;
 
-    private VictorSPX intakeRollers;
+    private TalonSRX intakeRollers;
     private PowerDistributionPanel pdp;
 
     private DoubleSolenoid deployRollers;
@@ -35,6 +35,9 @@ public class IntakeRollers extends NRSubsystem {
     public static final int CONTINUOUS_CURRENT_LIMIT_INTAKE_ROLLERS = 40;
 
     public static final int VOLTAGE_COMPENSATION_LEVEL_INTAKE_ROLLERS = 12;
+	private static final int PEAK_ROLLERS_CURRENT = 80;//amps
+	private static final int PEAK_ROLLERS_CURRENT_DURATION = 1000;//miliseconds, so one second
+	private static final int CONTINUOUS_CURRENT_LIMIT = 40; //amps
 
     public static final NeutralMode NEUTRAL_MODE_INTAKE_ROLLERS = NeutralMode.Brake;
 
@@ -74,7 +77,7 @@ public class IntakeRollers extends NRSubsystem {
 
         if(EnabledSubsystems.INTAKE_ROLLERS_ENABLED) {
 
-            intakeRollers = CTRECreator.createMasterVictor(RobotMap.INTAKE_ROLLERS);
+            intakeRollers = CTRECreator.createMasterTalon(RobotMap.INTAKE_ROLLERS);
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
             deployRollers = new DoubleSolenoid(RobotMap.INTAKE_ROLLERS_PCM_PORT, RobotMap.INTAKE_ROLLERS_FORWARD_CHANNEL, RobotMap.INTAKE_ROLLERS_REVERSE_CHANNEL);
@@ -83,7 +86,12 @@ public class IntakeRollers extends NRSubsystem {
             intakeRollers.setInverted(true);
             
             intakeRollers.enableVoltageCompensation(true);
-            intakeRollers.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_INTAKE_ROLLERS, DEFAULT_TIMEOUT);         
+            intakeRollers.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
+            
+            intakeRollers.enableCurrentLimit(true);
+			intakeRollers.configPeakCurrentLimit(PEAK_ROLLERS_CURRENT, DEFAULT_TIMEOUT);
+			intakeRollers.configPeakCurrentDuration(PEAK_ROLLERS_CURRENT_DURATION, DEFAULT_TIMEOUT);
+			intakeRollers.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT, DEFAULT_TIMEOUT);
 
 			intakeRollers.configClosedloopRamp(VOLTAGE_RAMP_RATE_INTAKE_ROLLERS.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
             intakeRollers.configOpenloopRamp(VOLTAGE_RAMP_RATE_INTAKE_ROLLERS.get(Time.Unit.SECOND), DEFAULT_TIMEOUT);
@@ -120,7 +128,7 @@ public class IntakeRollers extends NRSubsystem {
 
     public double getCurrent() {
         if(intakeRollers != null) {
-            return pdp.getCurrent(RobotMap.INTAKE_ROLLERS_CURRENT);
+            return intakeRollers.getOutputCurrent();
         }
         return 0;
     }

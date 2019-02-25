@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
@@ -23,7 +23,7 @@ public class AuxiliaryDrive extends NRSubsystem {
 
 	private static AuxiliaryDrive singleton;
 
-	private VictorSPX auxDrive;
+	private TalonSRX auxDrive;
 
 	private PowerDistributionPanel pdp;
 
@@ -57,8 +57,8 @@ public class AuxiliaryDrive extends NRSubsystem {
 	public static final int VELOCITY_MEASUREMENT_WINDOW_DRIVE = 32; //find this
 
 	public static final int VOLTAGE_COMPENSATION_LEVEL = 12;	
-	private static final int PEAK_DRIVE_CURRENT = 80;//amps
-	private static final int PEAK_DRIVE_CURRENT_DURATION = 1000;//miliseconds, so one second
+	private static final int PEAK_AUX_DRIVE_CURRENT = 80;//amps
+	private static final int PEAK_AUX_DRIVE_CURRENT_DURATION = 1000;//miliseconds, so one second
 	private static final int CONTINUOUS_CURRENT_LIMIT = 40; //amps
 
 	public static final double MIN_MOVE_VOLTAGE_PERCENT = 0;
@@ -71,7 +71,7 @@ public class AuxiliaryDrive extends NRSubsystem {
 
     public AuxiliaryDrive() {
 		if (EnabledSubsystems.AUX_DRIVE_ENABLED) {
-			auxDrive = CTRECreator.createMasterVictor(RobotMap.AUX_DRIVE);
+			auxDrive = CTRECreator.createMasterTalon(RobotMap.AUX_DRIVE);
 			pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 			
 			if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
@@ -93,6 +93,11 @@ public class AuxiliaryDrive extends NRSubsystem {
 
 			auxDrive.enableVoltageCompensation(true);
 			auxDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
+
+			auxDrive.enableCurrentLimit(true);
+			auxDrive.configPeakCurrentLimit(PEAK_AUX_DRIVE_CURRENT, DEFAULT_TIMEOUT);
+			auxDrive.configPeakCurrentDuration(PEAK_AUX_DRIVE_CURRENT_DURATION, DEFAULT_TIMEOUT);
+			auxDrive.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT, DEFAULT_TIMEOUT);
 
 			auxDrive.configVelocityMeasurementPeriod(VELOCITY_MEASUREMENT_PERIOD_DRIVE, DEFAULT_TIMEOUT);
 			auxDrive.configVelocityMeasurementWindow(VELOCITY_MEASUREMENT_WINDOW_DRIVE, DEFAULT_TIMEOUT);
@@ -136,7 +141,7 @@ public class AuxiliaryDrive extends NRSubsystem {
 
 	public double getCurrent() {
 		if(auxDrive != null) {
-			return pdp.getCurrent(RobotMap.AUX_DRIVE_CURRENT);
+			return auxDrive.getOutputCurrent();
 		}
 		return 0;
 	}
