@@ -14,6 +14,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lift extends NRSubsystem {
@@ -97,8 +98,8 @@ public class Lift extends NRSubsystem {
     public static Distance backSetPos = Distance.ZERO;
     public static Speed frontSetVel = Speed.ZERO;
     public static Speed backSetVel = Speed.ZERO;
-    public static double frontPercent = 0.1;
-    public static double backPercent = 0.1;
+    public static double frontPercent = 0.0;
+    public static double backPercent = 0.0;
 
     private Lift() {
         if (EnabledSubsystems.LIFT_ENABLED) {
@@ -114,6 +115,8 @@ public class Lift extends NRSubsystem {
             liftBack.getPIDController().setP(P_VEL_LIFT_BACK, VEL_SLOT);
             liftBack.getPIDController().setI(I_VEL_LIFT_BACK, VEL_SLOT);
             liftBack.getPIDController().setD(D_VEL_LIFT_BACK, VEL_SLOT);
+
+            liftBack.setCANTimeout(10);
 
             /*liftFront.getPIDController().setFF(F_POS_LIFT_FRONT, POS_SLOT);
             liftFront.getPIDController().setP(P_POS_LIFT_FRONT, POS_SLOT);
@@ -137,7 +140,7 @@ public class Lift extends NRSubsystem {
             liftBack.setSecondaryCurrentLimit(PEAK_CURRENT_LIFT);
 
             //liftFront.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
-            liftBack.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
+            //liftBack.setRampRate(VOLTAGE_RAMP_RATE_LIFT.get(Unit.SECOND));
 
             //liftFront.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
             liftBack.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
@@ -158,6 +161,12 @@ public class Lift extends NRSubsystem {
     public synchronized static void init() {
         if(singleton == null) {
             singleton = new Lift();
+            /*
+            Notifier thread = new Notifier(()->
+            {
+                getInstance().liftBack.set(backPercent);
+            });
+        thread.startPeriodic(0.01);*/
             //if(EnabledSubsystems.LIFT_ENABLED)
             //singleton.setJoystickCommand(new LiftJoystickCommand());
         }
@@ -172,7 +181,7 @@ public class Lift extends NRSubsystem {
     }*/
 
     public Distance getBackPosition() {
-        if(liftBack != null){
+        if(liftBack != null) {
             return new Distance(liftBack.getEncoder().getPosition(), Distance.Unit.REVOLUTION_LIFT);
         } else {
             return Distance.ZERO;
@@ -188,7 +197,7 @@ public class Lift extends NRSubsystem {
     }*/
 
     public Speed getBackVelocity() {
-        if(liftBack != null){
+        if(liftBack != null) {
             return new Speed(liftBack.getEncoder().getVelocity(), Distance.Unit.REVOLUTION_LIFT, Time.Unit.MINUTE);
         } else {
             return Speed.ZERO;
@@ -254,7 +263,8 @@ public class Lift extends NRSubsystem {
 
     public void setVoltageRamp(Time time) {
         //liftFront.setRampRate(time.get(Time.Unit.SECOND));
-        liftBack.setRampRate(time.get(Time.Unit.SECOND));
+        liftBack.setOpenLoopRampRate(time.get(Time.Unit.SECOND));
+        liftBack.setClosedLoopRampRate(time.get(Time.Unit.SECOND));
     }
 
     private void smartDashboardInit() {
@@ -357,7 +367,7 @@ public class Lift extends NRSubsystem {
     }
 
     public void periodic() {
-
+     //   liftBack.notify();
     }
 
     public void disable() {

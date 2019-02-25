@@ -18,7 +18,8 @@ public class SparkMax {
         spark.setCANTimeout(TIMEOUT);
         spark.setIdleMode(MODE);
         spark.setInverted(INVERT);
-        spark.setRampRate(RAMP_RATE);
+        spark.setOpenLoopRampRate(RAMP_RATE);
+        spark.setClosedLoopRampRate(RAMP_RATE);
 
         if (type == MotorType.kBrushless)
             spark.setSmartCurrentLimit(SMART_LIMIT);
