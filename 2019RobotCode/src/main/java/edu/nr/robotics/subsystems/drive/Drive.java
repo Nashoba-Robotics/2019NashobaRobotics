@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.ControlType;
@@ -44,7 +45,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	private static Drive singleton;
 
-	private TalonSRX leftDrive, rightDrive, leftDriveFollow1, leftDriveFollow2, rightDriveFollow1, rightDriveFollow2, pigeonTalon;
+	private TalonSRX leftDrive, rightDrive, leftDriveFollow1, leftDriveFollow2, pigeonTalon;
+	private VictorSPX  rightDriveFollow1, rightDriveFollow2;
 	private CANSparkMax hDrive;
 	private PowerDistributionPanel pdp;
 
@@ -199,8 +201,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
 				leftDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
 
-				rightDriveFollow1 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
-				rightDriveFollow2 = CTRECreator.createFollowerTalon(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
+				rightDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
+				rightDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
 
 				if(EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 					leftDrive.set(ControlMode.PercentOutput,0);
@@ -285,7 +287,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				hDrive.setIdleMode(IdleMode.kBrake);
 
-				hDrive.setInverted(false);
+				hDrive.setInverted(true);
 				
 				hDrive.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT);
 				hDrive.setSecondaryCurrentLimit(PEAK_DRIVE_CURRENT);
@@ -372,14 +374,14 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		}
 
 		public double getRightFollow1Current() {
-			if (rightDriveFollow1 != null)
-				return rightDriveFollow1.getOutputCurrent();
+			if (rightDriveFollow1 != null && pdp != null)
+				return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_1_CURRENT);
 			return 0;
 		}
 
 		public double getRightFollow2Current() {
-			if (rightDriveFollow2 != null)
-				return rightDriveFollow2.getOutputCurrent();
+			if (rightDriveFollow2 != null && pdp != null)
+			return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_1_CURRENT);
 			return 0;
 		}
 
