@@ -37,6 +37,7 @@ import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandG
 import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanism;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismDeployCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismRetractCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.ReleaseHatchCommand;
@@ -50,6 +51,7 @@ import edu.nr.robotics.subsystems.lift.LiftMoveBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -70,6 +72,8 @@ public class Robot extends TimedRobot {
     public AutoChoosers.Destination2 selectedDestination2;
     public double autoWaitTime;
 
+    public static Compressor robotCompressor;
+
     public synchronized static Robot getInstance() {
         return singleton;
     }
@@ -79,6 +83,9 @@ public class Robot extends TimedRobot {
 
         m_period = 0.01; // period that code runs at
 
+        robotCompressor = new Compressor(0);
+        robotCompressor.start();
+
         smartDashboardInit();
         autoChooserInit();
         OI.init();
@@ -86,6 +93,7 @@ public class Robot extends TimedRobot {
         Elevator.getInstance();
         IntakeRollers.getInstance();
         Lift.getInstance();
+        HatchMechanism.getInstance();
         // CameraInit();
 
         LimelightNetworkTable.getInstance().lightLED(false);

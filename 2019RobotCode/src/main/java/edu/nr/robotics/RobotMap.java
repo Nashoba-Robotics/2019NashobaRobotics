@@ -49,11 +49,11 @@ public class RobotMap {
     public static final int PIGEON_ID = 8;
 
     public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = 6;
-    public static final int HATCH_MECHANISM_DEPLOY_FORWARD = 5;
+    public static final int HATCH_MECHANISM_DEPLOY_FORWARD = 7;
     public static final int HATCH_MECHANISM_DEPLOY_REVERSE = 3;
 
     public static final int HATCH_MECHANISM_HATCH_PCM_PORT = 7;
-    public static final int HATCH_MECHANISM_HATCH_FORWARD = 3;
+    public static final int HATCH_MECHANISM_HATCH_FORWARD = 6;
     public static final int HATCH_MECHANISM_HATCH_REVERSE = 5;
 
     public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = 5;
