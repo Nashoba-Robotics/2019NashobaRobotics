@@ -5,11 +5,16 @@ import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
 import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.SensorVoting;
+import edu.wpi.first.wpilibj.Timer;
 
 public class DriveToBallCommand extends NRCommand {
+
+    double time = 0;
+	double spiketime = 0;
 
     //returns the distance in inches based on the height of the box drawn by the limelight
     Equation dist = new Equation() {
@@ -93,6 +98,18 @@ public class DriveToBallCommand extends NRCommand {
 	
 	@Override
 	protected boolean isFinishedNR() {
-		return new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue();
+        boolean finished = false;
+
+		if (IntakeRollers.getInstance().getCurrent() > 40) {
+			spiketime = Timer.getFPGATimestamp();
+			if ((spiketime - time) > 0.15) 
+				finished = true;
+		}
+		else {
+			time = Timer.getFPGATimestamp();
+		}
+
+		return finished;
+		//return new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue();
 	}
 }

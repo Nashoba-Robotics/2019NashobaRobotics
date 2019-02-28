@@ -6,7 +6,6 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.SensorVoting;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -36,7 +35,7 @@ public class HatchMechanism extends NRSubsystem {
 
 	public State currentDeployState() {
 		if(deploySolenoid != null) {
-			System.out.println(deploySolenoid.get());
+			//System.out.println(deploySolenoid.get());
 			return State.get(deploySolenoid.get());
 		} else {
 			return State.DEPLOYED; //TODO: Should be State.RETRACTED, is deployed for testing
@@ -53,9 +52,9 @@ public class HatchMechanism extends NRSubsystem {
 
 	private HatchMechanism() {
 		if (EnabledSubsystems.HATCH_MECHANISM_ENABLED) {
-			deploySolenoid = new Solenoid(0, RobotMap.HATCH_MECHANISM_DEPLOY_PCM_PORT);
+			deploySolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.HATCH_MECHANISM_DEPLOY_PCM_PORT);
 			//deploySolenoid.set(false);
-            hatchSolenoid = new Solenoid(0, RobotMap.HATCH_MECHANISM_HATCH_PCM_PORT);
+            hatchSolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.HATCH_MECHANISM_HATCH_PCM_PORT);
 			// hatchSolenoid.set(Value.kForward);
 
 		}

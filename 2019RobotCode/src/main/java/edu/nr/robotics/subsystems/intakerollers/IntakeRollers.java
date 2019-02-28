@@ -11,9 +11,8 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.SensorVoting;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeRollers extends NRSubsystem {
@@ -23,7 +22,7 @@ public class IntakeRollers extends NRSubsystem {
     private TalonSRX intakeRollers;
     private PowerDistributionPanel pdp;
 
-    private DoubleSolenoid deployRollers;
+    private Solenoid deployRollers;
 
     public static Time  VOLTAGE_RAMP_RATE_INTAKE_ROLLERS = new Time(0.05, Time.Unit.SECOND);
 
@@ -45,18 +44,19 @@ public class IntakeRollers extends NRSubsystem {
 
     public static final int DEFAULT_TIMEOUT = 0;
     
-    public static Time SCORE_TIME = Time.ZERO; // find
+    public static Time SCORE_TIME = new Time(0.5, Time.Unit.SECOND); // find
 
     //setpoint of subsystem motor velocity
     public double Vel_Setpoint = 0; 
+    public double setVel = 0;
 
 	public enum State {
 		DEPLOYED, RETRACTED;
 		
-		private static Value DEPLOYED_VALUE = Value.kForward;
-		private static Value RETRACTED_VALUE = Value.kReverse;
+		private static boolean DEPLOYED_VALUE = true;
+		private static boolean RETRACTED_VALUE = false;
 		
-		private static State get(Value val) {
+		private static State get(boolean val) {
 			if (val == State.DEPLOYED_VALUE) {
 				return State.DEPLOYED;
 			} else {
@@ -80,7 +80,7 @@ public class IntakeRollers extends NRSubsystem {
             intakeRollers = CTRECreator.createMasterTalon(RobotMap.INTAKE_ROLLERS);
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
-            deployRollers = new DoubleSolenoid(RobotMap.INTAKE_ROLLERS_PCM_PORT, RobotMap.INTAKE_ROLLERS_FORWARD_CHANNEL, RobotMap.INTAKE_ROLLERS_REVERSE_CHANNEL);
+            deployRollers = new Solenoid(RobotMap.PCM_ID, RobotMap.INTAKE_ROLLERS_PCM_PORT);
 
             intakeRollers.setNeutralMode(NEUTRAL_MODE_INTAKE_ROLLERS);
             intakeRollers.setInverted(true);
@@ -121,7 +121,7 @@ public class IntakeRollers extends NRSubsystem {
 	}
 
 	void retractIntakeRollers() {
-		if ((deployRollers != null) && !(new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue())) {
+		if ((deployRollers != null)) {// && !(new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue())) {
 			deployRollers.set(State.RETRACTED_VALUE);
 		}
     }
@@ -144,7 +144,7 @@ public class IntakeRollers extends NRSubsystem {
 
     public void smartDashboardInit() {
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
-            SmartDashboard.putNumber("Intake Rollers Vel Percent: ", Vel_Setpoint);
+            SmartDashboard.putNumber("Intake Rollers Vel Percent: ", setVel);
 
         }
     }
@@ -156,7 +156,7 @@ public class IntakeRollers extends NRSubsystem {
             SmartDashboard.putNumber("Intake Rollers Current: ", getCurrent());
         }
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
-            Vel_Setpoint = SmartDashboard.getNumber("Intake Rollers Vel Percent: ", Vel_Setpoint);
+            setVel = SmartDashboard.getNumber("Intake Rollers Vel Percent: ", setVel);
         }
     }
     

@@ -43,8 +43,9 @@ import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismRetractCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.ReleaseHatchCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployCommand;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersRetractCommand;
-import edu.nr.robotics.subsystems.intakerollers.IntakeRollersToggleCommand;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersReverseCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.lift.LiftMoveBasicSmartDashboardCommand;
@@ -150,9 +151,10 @@ public class Robot extends TimedRobot {
 
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new IntakeRollersVelocitySmartDashboardCommand());
-            SmartDashboard.putData(new IntakeRollersToggleCommand());
+            SmartDashboard.putData(new IntakeRollersDeployToggleCommand());
             SmartDashboard.putData(new IntakeRollersDeployCommand());
             SmartDashboard.putData(new IntakeRollersRetractCommand());
+            SmartDashboard.putData(new IntakeRollersReverseCommand(-0.9));
         }
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {

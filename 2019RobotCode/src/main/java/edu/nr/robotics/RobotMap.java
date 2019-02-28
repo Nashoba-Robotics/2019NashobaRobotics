@@ -40,7 +40,7 @@ public class RobotMap {
 
     public static final int LIFT = -1;
 
-    public static final int INTAKE_ROLLERS = -1;
+    public static final int INTAKE_ROLLERS = 7;
     public static final int INTAKE_ROLLERS_CURRENT = -1;
 
     public static final int AUX_DRIVE = -1;
@@ -49,22 +49,24 @@ public class RobotMap {
     public static final int PIGEON_ID = 8;
 
     public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = 6;
-    public static final int HATCH_MECHANISM_DEPLOY_FORWARD = 7;
-    public static final int HATCH_MECHANISM_DEPLOY_REVERSE = 3;
+    //`public static final int HATCH_MECHANISM_DEPLOY_FORWARD = 7;
+    //public static final int HATCH_MECHANISM_DEPLOY_REVERSE = 3;
 
     public static final int HATCH_MECHANISM_HATCH_PCM_PORT = 7;
-    public static final int HATCH_MECHANISM_HATCH_FORWARD = 6;
-    public static final int HATCH_MECHANISM_HATCH_REVERSE = 5;
+    //public static final int HATCH_MECHANISM_HATCH_FORWARD = 6;
+    //public static final int HATCH_MECHANISM_HATCH_REVERSE = 5;
 
     public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = 5;
-    public static final int ELEVATOR_GEAR_SWITCHER_FORWARD_CHANNEL = 5;
-    public static final int ELEVATOR_GEAR_SWITCHER_REVERSE_CHANNEL = 3;
+    //public static final int ELEVATOR_GEAR_SWITCHER_FORWARD_CHANNEL = 5;
+    //public static final int ELEVATOR_GEAR_SWITCHER_REVERSE_CHANNEL = 3;
 
     public static final int INTAKE_ROLLERS_PCM_PORT = 4;
-    public static final int INTAKE_ROLLERS_FORWARD_CHANNEL = 5;
-    public static final int INTAKE_ROLLERS_REVERSE_CHANNEL = 3;
+    //public static final int INTAKE_ROLLERS_FORWARD_CHANNEL = 5;
+    //public static final int INTAKE_ROLLERS_REVERSE_CHANNEL = 3;
 
     public static final int PDP_ID = 0;
+
+    public static final int PCM_ID = 0;
 
     ///sensor ports too
 
