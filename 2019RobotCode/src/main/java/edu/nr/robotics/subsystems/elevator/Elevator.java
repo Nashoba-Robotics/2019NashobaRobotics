@@ -20,8 +20,7 @@ import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
@@ -37,7 +36,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     private VictorSPX elevatorVictorFollowTwo;
     private PowerDistributionPanel pdp;
 
-    private DoubleSolenoid gearShifter;
+    private Solenoid gearShifter;
 
     public static final double ENC_TICK_PER_INCH_CARRIAGE = 50000 / 82;
 
@@ -171,8 +170,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 		elevator, climb;
 
 		// TODO: Drive: Find which gear directions are forward/reverse
-		private static Value ELEVATOR_VALUE = Value.kForward;
-		private static Value CLIMB_VALUE = Value.kReverse;
+		private static boolean ELEVATOR_VALUE = true;
+		private static boolean CLIMB_VALUE = false;
 
 		private static int ELEVATOR_PROFILE = 0;
 		private static int CLIMB_PROFILE = 1;
@@ -201,8 +200,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorVictorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
-            //gearShifter = new DoubleSolenoid(RobotMap.ELEVATOR_GEAR_SWITCHER_PCM_PORT,
-           // RobotMap.ELEVATOR_GEAR_SWITCHER_FORWARD_CHANNEL, RobotMap.ELEVATOR_GEAR_SWITCHER_REVERSE_CHANNEL);
+            gearShifter = new Solenoid(RobotMap.PCM_ID, RobotMap.ELEVATOR_GEAR_SWITCHER_PCM_PORT);
             
             elevatorTalon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
         

@@ -11,9 +11,8 @@ import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.SensorVoting;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IntakeRollers extends NRSubsystem {
@@ -23,7 +22,7 @@ public class IntakeRollers extends NRSubsystem {
     private VictorSPX intakeRollers;
     private PowerDistributionPanel pdp;
 
-    private DoubleSolenoid deployRollers;
+    private Solenoid deployRollers;
 
     public static Time  VOLTAGE_RAMP_RATE_INTAKE_ROLLERS = new Time(0.05, Time.Unit.SECOND);
 
@@ -50,10 +49,10 @@ public class IntakeRollers extends NRSubsystem {
 	public enum State {
 		DEPLOYED, RETRACTED;
 		
-		private static Value DEPLOYED_VALUE = Value.kForward;
-		private static Value RETRACTED_VALUE = Value.kReverse;
+		private static boolean DEPLOYED_VALUE = true;
+		private static boolean RETRACTED_VALUE = false;
 		
-		private static State get(Value val) {
+		private static State get(boolean val) {
 			if (val == State.DEPLOYED_VALUE) {
 				return State.DEPLOYED;
 			} else {
@@ -77,7 +76,7 @@ public class IntakeRollers extends NRSubsystem {
             intakeRollers = CTRECreator.createMasterVictor(RobotMap.INTAKE_ROLLERS);
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
-            deployRollers = new DoubleSolenoid(RobotMap.INTAKE_ROLLERS_PCM_PORT, RobotMap.INTAKE_ROLLERS_FORWARD_CHANNEL, RobotMap.INTAKE_ROLLERS_REVERSE_CHANNEL);
+            deployRollers = new Solenoid(RobotMap.PCM_ID, RobotMap.INTAKE_ROLLERS_PCM_PORT);
 
             intakeRollers.setNeutralMode(NEUTRAL_MODE_INTAKE_ROLLERS);
             intakeRollers.setInverted(true);

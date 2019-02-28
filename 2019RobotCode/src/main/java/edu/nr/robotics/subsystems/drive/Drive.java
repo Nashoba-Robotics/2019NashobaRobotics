@@ -287,7 +287,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 				hDrive.setIdleMode(IdleMode.kBrake);
 
-				hDrive.setInverted(false);
+				hDrive.setInverted(true);
 				
 				hDrive.setSmartCurrentLimit(CONTINUOUS_CURRENT_LIMIT);
 				hDrive.setSecondaryCurrentLimit(PEAK_DRIVE_CURRENT);
