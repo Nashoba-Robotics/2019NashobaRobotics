@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -39,7 +40,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		talon = CTRECreator.createMasterTalon(7);
+		talon = CTRECreator.createMasterTalon(10);
 		carriageTalon = CTRECreator.createFollowerTalon(1, talon);
 		intakeRoller1 = CTRECreator.createFollowerTalon(6, talon);
 		//intakeRoller2 = CTRECreator.createMasterTalon(4);
@@ -47,6 +48,8 @@ public class Robot extends TimedRobot {
 		talon.configContinuousCurrentLimit(40, 0);
 		talon.configPeakCurrentLimit(50, 0);
 		talon.configPeakCurrentDuration(1000, 0);
+
+		talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
 		carriageTalon.configContinuousCurrentLimit(40, 0);
 		carriageTalon.configPeakCurrentLimit(50, 0);
@@ -147,6 +150,8 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("main Current: ", talon.getOutputCurrent());
 		SmartDashboard.putNumber("Follow1 Current: ", carriageTalon.getOutputCurrent());
 		SmartDashboard.putNumber("Follow2 current: ", intakeRoller1.getOutputCurrent());
+
+		SmartDashboard.putNumber("Encoder", talon.getSelectedSensorPosition());
 
 	}
 
