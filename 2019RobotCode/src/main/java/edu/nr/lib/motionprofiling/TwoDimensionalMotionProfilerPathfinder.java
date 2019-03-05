@@ -1,6 +1,7 @@
 package edu.nr.lib.motionprofiling;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -213,7 +214,11 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 	 */
 	public void setTrajectory(Waypoint[] points) {
         if (profileFile.exists()) {
-        	trajectory = Pathfinder.readFromCSV(profileFile);
+			try {
+				trajectory = Pathfinder.readFromCSV(profileFile);
+			} catch (IOException e) {
+				System.out.println("error reading from csv");
+			}
         } else {
         	this.points = points;
     		this.trajectory = Pathfinder.generate(points, trajectoryConfig);
