@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.hatchmechanism;
 
 import edu.nr.lib.commandbased.DoNothingJoystickCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
@@ -20,13 +21,25 @@ public class HatchMechanism extends NRSubsystem {
 	public boolean forceSensors = false;
 	public boolean prevForceSensors = false;
 
+	public static final Time ACTUATION_TIME = new Time(0.2, Time.Unit.SECOND);
+
 	public enum State {
 		DEPLOYED, RETRACTED;
 		
 		private static boolean DEPLOYED_VALUE = true;
 		private static boolean RETRACTED_VALUE = false;
+		private static boolean DEPLOYED_VALUE_HATCH = false;
+		private static boolean RETRACTED_VALUE_HATCH = true;
 		
-		private static State get(boolean val) {
+		private static State getDeployState(boolean val) {
+			if(val == State.DEPLOYED_VALUE) {
+				return State.DEPLOYED;
+			} else {
+				return State.RETRACTED;
+			}
+		}
+
+		private static State getHatchState(boolean val) {
 			if(val == State.DEPLOYED_VALUE) {
 				return State.DEPLOYED;
 			} else {
@@ -37,7 +50,7 @@ public class HatchMechanism extends NRSubsystem {
 
 	public State currentDeployState() {
 		if(deploySolenoid != null) {
-			return State.get(deploySolenoid.get());
+			return State.getDeployState(deploySolenoid.get());
 		} else {
 			return State.DEPLOYED; //TODO: Should be State.RETRACTED, is deployed for testing
 		}
@@ -45,7 +58,7 @@ public class HatchMechanism extends NRSubsystem {
     
     public State currentHatchState() {
         if(hatchSolenoid != null) {
-            return State.get(hatchSolenoid.get());
+            return State.getHatchState(hatchSolenoid.get());
         } else {
             return State.DEPLOYED;
         }
@@ -86,13 +99,13 @@ public class HatchMechanism extends NRSubsystem {
     
     void grabHatch() {
         if (hatchSolenoid != null) {
-            hatchSolenoid.set(State.DEPLOYED_VALUE);
+            hatchSolenoid.set(State.DEPLOYED_VALUE_HATCH);
         }
     }
 
     void releaseHatch() {
         if (hatchSolenoid != null) {
-            hatchSolenoid.set(State.RETRACTED_VALUE);
+            hatchSolenoid.set(State.RETRACTED_VALUE_HATCH);
         }
     }
 
@@ -123,9 +136,9 @@ public class HatchMechanism extends NRSubsystem {
 	public void disable() {
 	}
 
-	public boolean hasHatch() {
+	/*public boolean hasHatch() {
 		return (new SensorVoting(EnabledSensors.forceSensorOne, EnabledSensors.forceSensorTwo, EnabledSensors.forceSensorThree).isTrue());
-	}
+	}*/
 
 	public boolean isHatchMechanismDeployed() {
 		return currentDeployState() == State.DEPLOYED;

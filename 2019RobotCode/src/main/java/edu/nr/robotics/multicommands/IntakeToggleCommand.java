@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.ConditionalCommand;
 public class IntakeToggleCommand extends CommandGroup { 
 
     public IntakeToggleCommand() {
-        addSequential(new ConditionalCommand(new AnonymousCommandGroup() {
+        /*addSequential(new ConditionalCommand(new AnonymousCommandGroup() {
         
             public void commands() {
                 addSequential(new HatchMechanismReleaseCommand());
@@ -49,7 +49,7 @@ public class IntakeToggleCommand extends CommandGroup {
             }
         });
         
-           
+        */
 
     }
 }
