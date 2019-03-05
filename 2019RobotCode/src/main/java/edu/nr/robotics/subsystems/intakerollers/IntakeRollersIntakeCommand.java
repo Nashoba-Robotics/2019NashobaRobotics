@@ -15,7 +15,11 @@ public class IntakeRollersIntakeCommand extends NRCommand {
 	private double initStopTime = 0;
 	
 	private boolean isSensorBroken = false;
-	
+
+	boolean finished = false;
+	double spiketime = 0;
+	double time = 0;
+
 	public static final Time TIME_STOPPED_AFTER_STUCK = new Time(0.5, Time.Unit.SECOND);
 	
 	public IntakeRollersIntakeCommand() {
@@ -81,6 +85,17 @@ public class IntakeRollersIntakeCommand extends NRCommand {
 	
 	@Override
 	public boolean isFinishedNR() {
-		return (!EnabledSensors.cargoIntakeSensorOne.get() && !EnabledSensors.cargoIntakeSensorTwo.get() && !EnabledSensors.cargoIntakeSensorThree.get()) || isSensorBroken; /*|| IntakeRollers.getInstance().getCurrentLeft() > IntakeRollers.PEAK_CURRENT_INTAKE_ROLLERS || IntakeRollers.getInstance().getCurrentRight() > IntakeRollers.PEAK_CURRENT_INTAKE_ROLLERS*/
+		finished = false;
+
+		if (IntakeRollers.getInstance().getCurrent() > 40) {
+			spiketime = Timer.getFPGATimestamp();
+			if ((spiketime - time) > 0.15) {
+				finished = true;
+			} else {
+				time = Timer.getFPGATimestamp();
+			}
+		}
+
+		return finished;//(!EnabledSensors.cargoIntakeSensorOne.get() && !EnabledSensors.cargoIntakeSensorTwo.get() && !EnabledSensors.cargoIntakeSensorThree.get()) || isSensorBroken; /*|| IntakeRollers.getInstance().getCurrentLeft() > IntakeRollers.PEAK_CURRENT_INTAKE_ROLLERS || IntakeRollers.getInstance().getCurrentRight() > IntakeRollers.PEAK_CURRENT_INTAKE_ROLLERS*/
 	}
 }

@@ -34,13 +34,17 @@ import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCo
 import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
+import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.lift.LiftMoveBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -60,6 +64,7 @@ public class Robot extends TimedRobot {
     public AutoChoosers.Platform selectedPlatform;
     public AutoChoosers.Destination2 selectedDestination2;
     public double autoWaitTime;
+    public Compressor robotCompressor;
 
     public synchronized static Robot getInstance() {
         return singleton;
@@ -77,6 +82,10 @@ public class Robot extends TimedRobot {
         Elevator.getInstance();
         IntakeRollers.getInstance();
         Lift.getInstance();
+
+        robotCompressor = new Compressor(RobotMap.PCM_ID);
+        robotCompressor.start();
+
         // CameraInit();
 
         LimelightNetworkTable.getInstance().lightLED(false);
@@ -133,11 +142,17 @@ public class Robot extends TimedRobot {
 
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new IntakeRollersVelocitySmartDashboardCommand());
+            SmartDashboard.putData(new IntakeRollersDeployToggleCommand());
         }
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new LiftSetPositionSmartDashboardCommand());
             SmartDashboard.putData(new LiftMoveBasicSmartDashboardCommand());
+        }
+
+        if (EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new GrabHatchToggleCommand());
+            SmartDashboard.putData(new DeployHatchToggleCommand());
         }
 
     }

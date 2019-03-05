@@ -1,19 +1,15 @@
 package edu.nr.robotics.subsystems.hatchmechanism;
 
-import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.units.Time;
-import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanism.State;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
-public class ScoreHatchCommand extends CommandGroup {
+public class GrabHatchFromStationCommand extends CommandGroup {
 
-    public ScoreHatchCommand() {
-        addSequential(new HatchMechanismDeployCommand());
+    public GrabHatchFromStationCommand() {
+        addSequential(new HatchMechanismGrabCommand());
 
         addSequential(new WaitCommand(HatchMechanism.ACTUATION_TIME.get(Time.Unit.SECOND)));
-
-        addSequential(new HatchMechanismReleaseCommand());
 
         addSequential(new HatchMechanismRetractCommand());
     }

@@ -5,9 +5,11 @@ import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
 import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.SensorVoting;
+import edu.wpi.first.wpilibj.Timer;
 
 public class DriveToBallCommand extends NRCommand {
 
@@ -36,6 +38,10 @@ public class DriveToBallCommand extends NRCommand {
     double headingAdjustment;
     double outputLeft;
     double outputRight;
+
+    boolean finished = false;
+    double time = 0;
+    double spiketime = 0;
 
 	public DriveToBallCommand() {
 		super(Drive.getInstance());
@@ -93,6 +99,17 @@ public class DriveToBallCommand extends NRCommand {
 	
 	@Override
 	protected boolean isFinishedNR() {
-		return new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue();
+		finished = false;
+
+		if (IntakeRollers.getInstance().getCurrent() > 40) {
+			spiketime = Timer.getFPGATimestamp();
+			if ((spiketime - time) > 0.15) {
+				finished = true;
+			} else {
+				time = Timer.getFPGATimestamp();
+			}
+		}
+
+		return finished; //new SensorVoting(EnabledSensors.cargoIntakeSensorOne, EnabledSensors.cargoIntakeSensorTwo, EnabledSensors.cargoIntakeSensorThree).isTrue();
 	}
 }

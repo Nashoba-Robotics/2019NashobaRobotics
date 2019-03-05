@@ -21,7 +21,7 @@ public class ElevatorHatchPickupCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return HatchMechanism.getInstance().hasHatch();
+        return true;//HatchMechanism.getInstance().hasHatch();
     }
 
 
