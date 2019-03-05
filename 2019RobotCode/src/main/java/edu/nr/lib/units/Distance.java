@@ -61,7 +61,7 @@ public class Distance {
 				return val / ENCODER_TICK_DRIVE_PER_INCH;
 			}
 			if(this == Unit.ENCODER_REV_H) {
-				return val * ENCODER_REV_DRIVE_H_PER_INCH;
+				return val / ENCODER_REV_DRIVE_H_PER_INCH;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return val / ENCODER_TICK_ELEV_PER_INCH;
@@ -89,7 +89,7 @@ public class Distance {
 				return ENCODER_TICK_DRIVE_PER_INCH * val;
 			}
 			if(this == Unit.ENCODER_REV_H) {
-				return val / ENCODER_REV_DRIVE_H_PER_INCH;
+				return val * ENCODER_REV_DRIVE_H_PER_INCH;
 			}
 			if(this == Unit.MAGNETIC_ENCODER_TICK_ELEV) {
 				return ENCODER_TICK_ELEV_PER_INCH * val;

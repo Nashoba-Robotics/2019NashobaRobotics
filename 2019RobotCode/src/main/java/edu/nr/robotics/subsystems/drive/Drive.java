@@ -52,7 +52,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	//TODO: fix all of these
 	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6*Math.PI);
-	public static final double REAL_ENC_REV_PER_INCH_H_DRIVE = 1/(4*Math.PI);
+	public static final double REAL_ENC_REV_PER_INCH_H_DRIVE = 10.2/(4*Math.PI);
 
 	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE * 1.01; //* 1.02;
 	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = REAL_ENC_REV_PER_INCH_H_DRIVE;
@@ -129,7 +129,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final double DRIVE_TO_HATCH_PERCENT = 0;
 		public static final double DRIVE_TO_CARGO_PERCENT = 0;
 
-		public static final double SENSOR_STRAFE_PERCENT = 0;
+		public static final double SENSOR_STRAFE_PERCENT = 0.225;
+		public static final double KICK_PERCENT = 0.7;
+		public static final Time HKICK_TIME = new Time(0.3, Time.Unit.SECOND);
 
 		public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH);
 		public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
@@ -229,7 +231,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				leftDriveFollow1.setInverted(false);
 				leftDriveFollow2.setInverted(false);
 
-				leftDrive.setSensorPhase(true);
+				leftDrive.setSensorPhase(false);
 
 				leftDrive.enableVoltageCompensation(true);
 				leftDrive.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL, DEFAULT_TIMEOUT);
@@ -361,7 +363,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public Speed getHVelocity() {
 			if(hDrive != null)
-					return new Speed(hDrive.get(), Unit.ENCODER_REV_H, Time.Unit.MINUTE);
+					return new Speed(hDrive.getEncoder().getVelocity(), Unit.ENCODER_REV_H, Time.Unit.MINUTE);
 			return Speed.ZERO;	
 			}
 
@@ -601,6 +603,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putNumber("Right I Value: ", I_RIGHT);
 			SmartDashboard.putNumber("Right D Value: ", D_RIGHT);
 
+			SmartDashboard.putNumber("H FF Value: ", FF_H);
 			SmartDashboard.putNumber("H P Value: ", P_H);
 			SmartDashboard.putNumber("H I Value: ", I_H);
 			SmartDashboard.putNumber("H D Value: ", D_H);
@@ -655,7 +658,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putNumber("Drive Right Percent", rightMotorSetpoint.div(MAX_SPEED_DRIVE));
 			SmartDashboard.putNumber("Drive H Percent", hMotorSetpoint.div(MAX_SPEED_DRIVE_H));
 
-			//SmartDashboard.putData(this); what why BEN WHY???
+			//SmartDashboard.putData(this);
 
 			SmartDashboard.putNumber("Drive Left Position", getLeftPosition().get(Distance.Unit.INCH));
 			SmartDashboard.putNumber("Drive Right Position", getRightPosition().get(Distance.Unit.INCH));
@@ -673,6 +676,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			rightDrive.config_kI(VEL_SLOT, SmartDashboard.getNumber("Right I Value: ", I_RIGHT), DEFAULT_TIMEOUT);
 			rightDrive.config_kD(VEL_SLOT, SmartDashboard.getNumber("Right D Value: ", D_RIGHT), DEFAULT_TIMEOUT);
 
+			hDrive.getPIDController().setFF(SmartDashboard.getNumber("H FF Value: ", FF_H));
 			hDrive.getPIDController().setP(SmartDashboard.getNumber("H P Value: ", P_H), VEL_SLOT);
 			hDrive.getPIDController().setI(SmartDashboard.getNumber("H I Value: ", I_H), VEL_SLOT);
 			hDrive.getPIDController().setD(SmartDashboard.getNumber("H D Value: ", D_H), VEL_SLOT);
@@ -709,6 +713,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	public void periodic() {
+	
 		if (OI.getInstance().isKidModeOn()) {
 			MOVE_JOYSTICK_MULTIPLIER = 0.6;
 			if (!sniperModeEnabled) {
@@ -719,6 +724,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				if (!sniperModeEnabled) {
 					TURN_JOYSTICK_MULTIPLIER = 1;	
 			}		
+			
 
 		}
 

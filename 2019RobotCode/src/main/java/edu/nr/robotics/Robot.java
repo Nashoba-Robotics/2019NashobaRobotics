@@ -35,12 +35,12 @@ import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardComman
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
 import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
-import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanism;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismDeployCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismGrabCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismReleaseCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismRetractCommand;
-import edu.nr.robotics.subsystems.hatchmechanism.ReleaseHatchCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
@@ -81,8 +81,8 @@ public class Robot extends TimedRobot {
 
     public void robotInit() {
         singleton = this;
-
-        m_period = 0.01; // period that code runs at
+        m_period = 0.02; // period that code runs at, should be .01
+        //changed to avoid loop error bois
 
         robotCompressor = new Compressor(0);
         robotCompressor.start();
@@ -140,6 +140,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putData(new TurnSmartDashboardCommand());
             SmartDashboard.putData(new EnableTwoDMotionProfileSmartDashboardCommand());
             SmartDashboard.putData(new EnableReverseTwoDMotionProfileSmartDashboardCommand());
+            
         }
 
         if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
@@ -165,8 +166,8 @@ public class Robot extends TimedRobot {
         if (EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new GrabHatchToggleCommand());
             SmartDashboard.putData(new DeployHatchToggleCommand());
-            SmartDashboard.putData(new GrabHatchCommand());
-            SmartDashboard.putData(new ReleaseHatchCommand());
+            SmartDashboard.putData(new HatchMechanismGrabCommand());
+            SmartDashboard.putData(new HatchMechanismReleaseCommand());
             SmartDashboard.putData(new HatchMechanismDeployCommand());
             SmartDashboard.putData(new HatchMechanismRetractCommand());
         }

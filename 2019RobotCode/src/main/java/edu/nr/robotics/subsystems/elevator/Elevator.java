@@ -135,14 +135,15 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static double kP_DOWN = 0;
     public static double kD_DOWN = 0;
 
-    public static final Distance TOP_HEIGHT_ELEVATOR = Distance.ZERO;//find these
+    public static final Distance GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT = Distance.ZERO;
+    public static final Distance TOP_HEIGHT_ELEVATOR = new Distance(82, Distance.Unit.INCH);//find these
     public static final Distance HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = Distance.ZERO;//find these
-    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = Distance.ZERO;
+    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(19, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(47, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(75, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);//find these
+    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(39,Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
+    public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(66.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
+    public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
     public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = Distance.ZERO;
@@ -308,15 +309,16 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             init();
             return singleton;
 
-
     }
 
     public synchronized static void init() {
         if (singleton == null) {
             singleton = new Elevator();
             singleton.setJoystickCommand(new ElevatorJoystickCommand());
-
+            
         }
+        singleton.smartDashboardInit(); //NICK
+        //System.out.println("called");
     }
 
     public Distance getPosition() {
@@ -394,9 +396,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public void setMotorSpeedPercent(double percent) {
         if (elevatorTalon != null) {
-            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED)
-                elevatorTalon.set(ControlMode.PercentOutput, percent);
-            else if(getCurrentGear() == Gear.elevator)
+            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED){   
+            elevatorTalon.set(ControlMode.PercentOutput, percent);
+            }else if(getCurrentGear() == Gear.elevator)
                 setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(percent));
             else
                 setMotorSpeed(MAX_CLIMB_SPEED_UP.mul(percent));
@@ -528,6 +530,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
             SmartDashboard.putNumber("Profile Vel Percent Elevator: ", PROFILE_VEL_PERCENT_ELEVATOR);
             SmartDashboard.putNumber("Profile Accel Percent Elevator: ", PROFILE_ACCEL_PERCENT_ELEVATOR);
+        
+            SmartDashboard.putNumber("Elevator Percent: ", 0);
         }
     }
 
@@ -571,6 +575,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 kD_DOWN = SmartDashboard.getNumber("Elevator kD Down: ", kD_DOWN);
                 
                 SmartDashboard.putNumber("Elevator Encoder Ticks: ", elevatorTalon.getSelectedSensorPosition(PID_TYPE));
+                
+             //   System.out.println(SmartDashboard.getNumber("Elevator Percent: ", 0));
+                setMotorSpeedPercent(SmartDashboard.getNumber("Elevator Percent: ", 0));
             }
         }  
 

@@ -9,6 +9,7 @@ public class DriveForwardSmartDashboardCommandH extends NRCommand {
 
     Distance initialPosition;
     GyroCorrection gyro;
+    double percent;
 
     public DriveForwardSmartDashboardCommandH() {
         super(Drive.getInstance());
@@ -16,6 +17,7 @@ public class DriveForwardSmartDashboardCommandH extends NRCommand {
     }
 
     public void onStart() {
+        Drive.getInstance().setMotorSpeedInPercent(0, 0, Drive.getInstance().drivePercent);
         initialPosition = Drive.getInstance().getHPosition();
         gyro.reset();
     }

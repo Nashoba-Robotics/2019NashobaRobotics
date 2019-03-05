@@ -17,6 +17,9 @@ import edu.nr.robotics.subsystems.drive.DriveToTargetCommand;
 import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
 import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
+import edu.nr.robotics.subsystems.drive.LineSensorStrafeCommand;
+import edu.nr.robotics.subsystems.drive.LineSensorStrafeCommandGroup;
+import edu.nr.robotics.subsystems.drive.LineSensorStrafeLargeCommand;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
 import edu.nr.robotics.subsystems.drive.TurnToAngleCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
@@ -24,6 +27,7 @@ import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToClimbGearCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToElevatorGearCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchFromStationCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
@@ -40,7 +44,7 @@ public class OI implements SmartDashboardSource {
 
     public static final double JOYSTICK_DEAD_ZONE = 0.2;
 
-    public static final double SPEED_MULTIPLIER = 1.0;
+    public static final double SPEED_MULTIPLIER = 1;
 
     private static final int CANCEL_ALL_BUTTON_NUMBER = 0; //find all of these and make them too
     private static final int KID_MODE_SWITCH = 1;
@@ -58,14 +62,14 @@ public class OI implements SmartDashboardSource {
     private static final int CLIMB_BUTTON_NUMBER = 12;
     private static final int HATCH_DEPLOY_TOGGLE_NUMBER = 13;
     private static final int HATCH_GRAB_TOGGLE_NUMBER = 14;
-    private static final int HATCH_SCORE_NUMBER = 34;
+    private static final int HATCH_SCORE_NUMBER = 10;
     private static final int TOGGLE_INTAKE_NUMBER = 36;
     private static final int INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER = 37;
     private static final int LIFT_RETRACT_NUMBER = 38;
     private static final int SWITCH_ELEVATOR_GEAR_NUMBER = 16;
     //private static final int INTAKE_ROLLERS_RUN_NUMBER = 17;
     private static final int INTAKE_ROLLERS_PUKE_NUMBER = 18;
-    private static final int GET_HATCH_STATION_NUMBER = 19;
+    private static final int GET_HATCH_STATION_NUMBER = 7;
     //private static final int GET_HATCH_GROUND_NUMBER = 20;
     //private static final int GET_CARGO_NUMBER = 21;
 
@@ -81,8 +85,8 @@ public class OI implements SmartDashboardSource {
     private static final int SNIPER_MODE_FORWARD = 1;
     private static final int SNIPER_MODE_TURN = 1;
     private static final int DUMB_DRIVE_NUMBER = 14;
-
-    private double driveSpeedMultiplier = 1;
+    private static final int LINE_SENSOR_STRAFE_RIGHT_NUMBER = 16;
+    private static final int LINE_SENSOR_STRAFE_LEFT_NUMBER = 15;
 
     private static OI singleton;
 
@@ -146,7 +150,11 @@ public class OI implements SmartDashboardSource {
         //tuning command too
 
         //dumb drive
-		new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
+        new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
+        
+        //for strafing to center on a line
+        new JoystickButton(driveLeft, LINE_SENSOR_STRAFE_RIGHT_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.getInstance().SENSOR_STRAFE_PERCENT));
+        new JoystickButton(driveLeft, LINE_SENSOR_STRAFE_LEFT_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.getInstance().SENSOR_STRAFE_PERCENT));
 
     }
 
@@ -206,11 +214,11 @@ public class OI implements SmartDashboardSource {
     
        //hatch
         new JoystickButton(operatorLeft, HATCH_DEPLOY_TOGGLE_NUMBER).whenPressed(new DeployHatchToggleCommand());
-        new JoystickButton(operatorLeft, HATCH_GRAB_TOGGLE_NUMBER).whenPressed(new GrabHatchToggleCommand());
+        new JoystickButton(operatorLeft, HATCH_GRAB_TOGGLE_NUMBER).whenPressed(new GrabHatchToggleCommand());*/
     
         new JoystickButton(operatorLeft, HATCH_SCORE_NUMBER).whenPressed(new ScoreHatchCommand());
-        new JoystickButton(operatorLeft, GET_HATCH_STATION_NUMBER).whenPressed(new GetHatchStationCommand());
-
+        new JoystickButton(operatorLeft, GET_HATCH_STATION_NUMBER).whenPressed(new GrabHatchFromStationCommand());
+        /*
         //intake
         new JoystickButton(operatorLeft, TOGGLE_INTAKE_NUMBER).whenPressed(new IntakeRollersToggleCommand());
         new JoystickButton(operatorLeft, INTAKE_ROLLERS_PUKE_NUMBER).whenPressed(new IntakeRollersScoreCommand());
@@ -283,10 +291,6 @@ public class OI implements SmartDashboardSource {
     
     public double getLiftJoystickValue() {
         return snapDriveJoysticks(-liftStick.getX());
-    }
-
-    public double getDriveSpeedMultiplier(){
-        return driveSpeedMultiplier;
     }
 
     private static double snapDriveJoysticks(double value) {

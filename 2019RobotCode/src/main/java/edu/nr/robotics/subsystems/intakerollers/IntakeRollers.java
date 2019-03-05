@@ -47,7 +47,7 @@ public class IntakeRollers extends NRSubsystem {
     public static Time SCORE_TIME = new Time(0.5, Time.Unit.SECOND); // find
 
     //setpoint of subsystem motor velocity
-    public double Vel_Setpoint = 0; 
+    public double Vel_Setpoint = 0;
     public double setVel = 0;
 
 	public enum State {

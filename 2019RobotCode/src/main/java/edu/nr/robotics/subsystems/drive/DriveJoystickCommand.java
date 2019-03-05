@@ -35,7 +35,7 @@ public class DriveJoystickCommand extends JoystickCommand {
                 double hValue = OI.getInstance().getArcadeHValue();
 
                 moveValue = NRMath.powWithSign(moveValue, 3);
-                rotateValue = NRMath.powWithSign(rotateValue, 3);
+                rotateValue = NRMath.powWithSign(rotateValue, 5);
                 hValue = NRMath.powWithSign(hValue, 3);
 
                 if(Math.abs(rotateValue) < 0.05 && (Math.abs(moveValue)) > 0.05 || Math.abs(hValue) > 0.05){
@@ -45,7 +45,7 @@ public class DriveJoystickCommand extends JoystickCommand {
                 }
 
 
-                Drive.getInstance().arcadeDrive(moveValue * OI.getInstance().getDriveSpeedMultiplier(), rotateValue * OI.getInstance().getDriveSpeedMultiplier(), hValue * OI.getInstance().getDriveSpeedMultiplier());
+                Drive.getInstance().arcadeDrive(moveValue, rotateValue, hValue);
 
                 break;
 

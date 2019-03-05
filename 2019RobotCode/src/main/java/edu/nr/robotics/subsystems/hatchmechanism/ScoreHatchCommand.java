@@ -1,28 +1,23 @@
 package edu.nr.robotics.subsystems.hatchmechanism;
 
 import edu.nr.lib.commandbased.NRCommand;
+import edu.nr.lib.units.Time;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanism.State;
+import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
-public class ScoreHatchCommand extends NRCommand {
+public class ScoreHatchCommand extends CommandGroup {
 
     public ScoreHatchCommand() {
-        super(HatchMechanism.getInstance());
-    }
+        addSequential(new HatchMechanismDeployCommand());
 
-    protected void onStart() {
-        if(HatchMechanism.getInstance().hasHatch()) {
-            if(HatchMechanism.getInstance().currentHatchState() == State.RETRACTED) {
-                HatchMechanism.getInstance().deployHatchMechanism();
-            }
-            
-            HatchMechanism.getInstance().releaseHatch();
-            HatchMechanism.getInstance().retractHatchMechanism();
-        }
-    
-    }
+        addSequential(new WaitCommand(HatchMechanism.ACTUATION_TIME.get(Time.Unit.SECOND)));
 
-    protected boolean isFInishedNR() {
-        return true;
+        addSequential(new HatchMechanismReleaseCommand());
+
+        //addSequential(new WaitCommand(HatchMechanism.ACTUATION_TIME.get(Time.Unit.SECOND)));
+
+        addSequential(new HatchMechanismRetractCommand());
     }
 
 }
