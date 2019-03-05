@@ -147,9 +147,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	private static final int PEAK_DRIVE_CURRENT_DURATION = 1000;// miliseconds, so one second
 	private static final int CONTINUOUS_CURRENT_LIMIT = 40; // amps
 
-	public static final double SWITCH_CURRENT_LIMIT = 70;
-	// When Driving into an object, the current when the driving stops
-
 	public static final VelocityMeasPeriod VELOCITY_MEASUREMENT_PERIOD_DRIVE = VelocityMeasPeriod.Period_10Ms; // find
 	public static final int VELOCITY_MEASUREMENT_WINDOW_DRIVE = 32; // find this
 

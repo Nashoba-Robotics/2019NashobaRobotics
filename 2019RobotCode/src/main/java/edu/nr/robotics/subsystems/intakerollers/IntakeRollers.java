@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.intakerollers;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.nr.lib.commandbased.NRSubsystem;
@@ -19,7 +20,7 @@ public class IntakeRollers extends NRSubsystem {
 
     private static IntakeRollers singleton;
 
-    private VictorSPX intakeRollers;
+    private TalonSRX intakeRollers;
     private PowerDistributionPanel pdp;
 
     private Solenoid deployRollers;
@@ -73,13 +74,18 @@ public class IntakeRollers extends NRSubsystem {
 
         if(EnabledSubsystems.INTAKE_ROLLERS_ENABLED) {
 
-            intakeRollers = CTRECreator.createMasterVictor(RobotMap.INTAKE_ROLLERS);
+            intakeRollers = CTRECreator.createMasterTalon(RobotMap.INTAKE_ROLLERS);
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
             deployRollers = new Solenoid(RobotMap.PCM_ID, RobotMap.INTAKE_ROLLERS_PCM_PORT);
 
             intakeRollers.setNeutralMode(NEUTRAL_MODE_INTAKE_ROLLERS);
             intakeRollers.setInverted(true);
+
+            intakeRollers.enableCurrentLimit(true);
+			intakeRollers.configPeakCurrentLimit(PEAK_CURRENT_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
+			intakeRollers.configPeakCurrentDuration(PEAK_CURRENT_DURATION_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
+			intakeRollers.configContinuousCurrentLimit(CONTINUOUS_CURRENT_LIMIT_INTAKE_ROLLERS, DEFAULT_TIMEOUT);
             
             intakeRollers.enableVoltageCompensation(true);
             intakeRollers.configVoltageCompSaturation(VOLTAGE_COMPENSATION_LEVEL_INTAKE_ROLLERS, DEFAULT_TIMEOUT);         
@@ -119,7 +125,7 @@ public class IntakeRollers extends NRSubsystem {
 
     public double getCurrent() {
         if(intakeRollers != null) {
-            return pdp.getCurrent(RobotMap.INTAKE_ROLLERS_CURRENT);
+            return intakeRollers.getOutputCurrent();
         }
         return 0;
     }
