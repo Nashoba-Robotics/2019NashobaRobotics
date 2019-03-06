@@ -2,6 +2,7 @@ package edu.nr.robotics.subsystems.drive;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.sensors.SensorVoting;
 
 public class LineSensorStrafeCommand extends NRCommand {
 
@@ -31,7 +32,7 @@ public class LineSensorStrafeCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return !EnabledSensors.floorSensorThree.get();
+        return !(new SensorVoting(EnabledSensors.floorSensorTwo, EnabledSensors.floorSensorThree, EnabledSensors.floorSensorFour).isTrue());
     }
 
 }
