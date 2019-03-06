@@ -37,7 +37,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double ENC_TICK_PER_INCH_CARRIAGE = 50000 / 82;
 
-    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(7.03, Distance.Unit.FOOT, Time.Unit.SECOND);// find
+    public static final Speed MAX_SPEED_ELEVATOR_UP = new Speed(5.59, Distance.Unit.FOOT, Time.Unit.SECOND);// find
     public static final Speed MAX_SPEED_ELEVATOR_DOWN = Speed.ZERO;
 
     public static final Acceleration MAX_ACCEL_ELEVATOR_UP = new Acceleration(30, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND);// find
@@ -49,30 +49,36 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Acceleration MAX_CLIMB_ACCEL_UP = Acceleration.ZERO;
     public static final Acceleration MAX_CLIMB_ACCEL_DOWN = Acceleration.ZERO;
 
-    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.1;//0.1
+    public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.07;//0.1
 
     public static final double REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0.;
     
     public static final double HOLD_BOTTOM_PERCENT = 0;
     public static boolean holdingBottom = false;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.128; //find
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.097140; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
     public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = 0;
 
-    public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.124;
+    
+   // public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.124;
+   
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_CLIMB_UP = 0;
     
+
+    public static final double VOLTAGE_PERCENT_VELOCITY_LINEAR_TERM_UP = 0.087513;
+    public static final double VOLTAGE_PERCENT_VELOCITY_SQUARE_TERM_UP = .013238;
+
     public static Time VOLTAGE_RAMP_RATE_ELEVATOR = Time.ZERO;
 
     public static double PROFILE_VEL_PERCENT_ELEVATOR = 0.6;
-    public static final double DROP_PERCENT_ELEVATOR = -0.4;
+    public static final double DROP_PERCENT_ELEVATOR = -0.3;
     public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0.9;
 
-    public static double F_POS_ELEVATOR_UP = 0.3;
+    public static double F_POS_ELEVATOR_UP = 0.25;
 
-    public static double P_POS_ELEVATOR_UP = 0.0;
+    public static double P_POS_ELEVATOR_UP = 0.1;
     public static double I_POS_ELEVATOR_UP = 0;
     public static double D_POS_ELEVATOR_UP = 0.0;
 
@@ -85,9 +91,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 	public static double I_POS_ELEVATOR_DOWN = 0;
 	public static double D_POS_ELEVATOR_DOWN = 10;
 
-    public static double P_VEL_ELEVATOR_UP = 0.2;
+    public static double P_VEL_ELEVATOR_UP = 0.15;
 	public static double I_VEL_ELEVATOR_UP = 0;
-	public static double D_VEL_ELEVATOR_UP = 2;
+	public static double D_VEL_ELEVATOR_UP = 1.5;
 
 	public static double P_VEL_ELEVATOR_DOWN = 0; //  Find elevator velocity PID values for down
 	public static double I_VEL_ELEVATOR_DOWN = 0;
@@ -135,15 +141,15 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static double kP_DOWN = 0;
     public static double kD_DOWN = 0;
 
-    public static final Distance GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT = Distance.ZERO;
+    public static final Distance GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT = new Distance(15.5, Distance.Unit.INCH);
     public static final Distance TOP_HEIGHT_ELEVATOR = new Distance(82, Distance.Unit.INCH);//find these
     public static final Distance HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(19, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
-    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(47, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
-    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(75, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);//find these
-    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(39,Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
-    public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(66.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
-    public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULTOR_NUETRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(21.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(47, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(75, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);//find these
+    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(39,Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(66.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = Distance.ZERO;
@@ -396,8 +402,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public void setMotorSpeedPercent(double percent) {
         if (elevatorTalon != null) {
-            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED){   
-            elevatorTalon.set(ControlMode.PercentOutput, percent);
+            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED) {   
+                elevatorTalon.set(ControlMode.PercentOutput, percent);
+            
             }else if(getCurrentGear() == Gear.elevator)
                 setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(percent));
             else
@@ -425,7 +432,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 elevatorTalon.selectProfileSlot(VEL_ELEV_UP_SLOT, DEFAULT_TIMEOUT);
                 
                 elevatorTalon.config_kF(VEL_ELEV_UP_SLOT,
-                    ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
+                    ((VOLTAGE_PERCENT_VELOCITY_SQUARE_TERM_UP * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND) 
+                    + VOLTAGE_PERCENT_VELOCITY_LINEAR_TERM_UP * velSetpoint.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
                             + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP) * 1023.0)
                             / velSetpoint.abs().get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV,
                                     Time.Unit.HUNDRED_MILLISECOND), DEFAULT_TIMEOUT);
@@ -531,7 +539,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             SmartDashboard.putNumber("Profile Vel Percent Elevator: ", PROFILE_VEL_PERCENT_ELEVATOR);
             SmartDashboard.putNumber("Profile Accel Percent Elevator: ", PROFILE_ACCEL_PERCENT_ELEVATOR);
         
-            SmartDashboard.putNumber("Elevator Percent: ", 0);
+           // SmartDashboard.putNumber("Elevator Percent: ", 0);
         }
     }
 
@@ -576,8 +584,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 
                 SmartDashboard.putNumber("Elevator Encoder Ticks: ", elevatorTalon.getSelectedSensorPosition(PID_TYPE));
                 
-             //   System.out.println(SmartDashboard.getNumber("Elevator Percent: ", 0));
-                setMotorSpeedPercent(SmartDashboard.getNumber("Elevator Percent: ", 0));
+                //PROFILE_VEL_PERCENT_ELEVATOR = SmartDashboard.getNumber("Elevator Percent: ", 0);
+                
+                //System.out.println(SmartDashboard.getNumber("Elevator Percent: ", 0));
+                //setMotorSpeedPercent(SmartDashboard.getNumber("Elevator Percent: ", 0));
             }
         }  
 
@@ -595,7 +605,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             }*/
 
             if (!EnabledSensors.elevatorSensor.get()) {
-                if ((getPosition().lessThan(new Distance(3, Distance.Unit.INCH)) && (!holdingBottom))) {
+                if ((getPosition().lessThan(new Distance(1, Distance.Unit.INCH)) && (!holdingBottom))) {
                     elevatorTalon.setSelectedSensorPosition(0);
                 
                     if (elevatorTalon.getMotorOutputPercent() < 0) {

@@ -34,7 +34,7 @@ public class RobotMap {
 
     public static final int ELEVATOR_TALON = 9; // ok
     public static final int ELEVATOR_FOLLOW_ONE = 5; // works
-    public static final int ELEVATOR_FOLLOW_TWO = 10; 
+    public static final int ELEVATOR_FOLLOW_TWO = 4; 
     public static final int ELEVATOR_FOLLOW_ONE_CURRENT = -1;//-1
     public static final int ELEVATOR_FOLLOW_TWO_CURRENT = -1; // -1;
 

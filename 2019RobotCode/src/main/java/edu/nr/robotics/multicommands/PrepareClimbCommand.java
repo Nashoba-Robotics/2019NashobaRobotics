@@ -8,9 +8,10 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class PrepareClimbCommand extends CommandGroup {
 
     public PrepareClimbCommand(Distance elevHeight) {
-        addSequential(new IntakeRollersDeployCommand());
 
         addSequential(new ElevatorPositionCommand(elevHeight));
+
+        addSequential(new IntakeRollersDeployCommand());
     }
  
 }

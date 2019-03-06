@@ -5,8 +5,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 
 public class EnabledSensors {
     
-    public static boolean limelightEnabled = false;
-    public static boolean lowGoalSensorEnabled = false;
+    public static boolean limelightEnabled = true;
     public static boolean cargoIntakeSensorEnabled = false;
     public static boolean floorSensorEnabled = false;
 
@@ -27,9 +26,9 @@ public class EnabledSensors {
     //public static DigitalInput floorSensorFour = new DigitalInput(RobotMap.FLOOR_SENSOR_PORT_4);
     //public static DigitalInput floorSensorFive = new DigitalInput(RobotMap.FLOOR_SENSOR_PORT_5);
 
-    public static DigitalInput forceSensorOne = new DigitalInput(RobotMap.FORCE_SENSOR_1);
-    public static DigitalInput forceSensorTwo = new DigitalInput(RobotMap.FORCE_SENSOR_2);
-    public static DigitalInput forceSensorThree = new DigitalInput(RobotMap.FORCE_SENSOR_3);
+    public static DigitalInput hatchForceSensorOne = new DigitalInput(RobotMap.FORCE_SENSOR_1);
+    public static DigitalInput hatchForceSensorTwo = new DigitalInput(RobotMap.FORCE_SENSOR_2);
+    //public static DigitalInput hatchForceSensorThree = new DigitalInput(RobotMap.FORCE_SENSOR_3);
 
 }
 

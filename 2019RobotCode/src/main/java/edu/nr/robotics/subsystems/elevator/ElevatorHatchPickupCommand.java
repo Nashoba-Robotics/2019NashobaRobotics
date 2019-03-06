@@ -9,7 +9,7 @@ public class ElevatorHatchPickupCommand extends NRCommand {
     public ElevatorHatchPickupCommand() {
         holdPercent = Elevator.HOLD_BOTTOM_PERCENT;
     }
-
+    /*
     protected void onStart() {
         Elevator.holdingBottom = true;
         Elevator.getInstance().setMotorPercentRaw(holdPercent);
@@ -22,7 +22,7 @@ public class ElevatorHatchPickupCommand extends NRCommand {
 
     protected boolean isFinishedNR() {
         return HatchMechanism.getInstance().hasHatch();
-    }
+    }*/
 
 
 }
