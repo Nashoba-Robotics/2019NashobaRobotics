@@ -30,7 +30,7 @@ public class EnabledSensors {
 
     public static DigitalInput forceSensorOne = new DigitalInput(RobotMap.FORCE_SENSOR_1);
     public static DigitalInput forceSensorTwo = new DigitalInput(RobotMap.FORCE_SENSOR_2);
-    public static DigitalInput forceSensorThree = new DigitalInput(RobotMap.FORCE_SENSOR_3);
+    //public static DigitalInput forceSensorThree = new DigitalInput(RobotMap.FORCE_SENSOR_3);
 
 }
 

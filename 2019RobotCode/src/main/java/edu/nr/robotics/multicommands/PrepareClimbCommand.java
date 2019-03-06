@@ -3,6 +3,7 @@ package edu.nr.robotics.multicommands;
 import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployCommand;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismDeployCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class PrepareClimbCommand extends CommandGroup {
@@ -11,6 +12,8 @@ public class PrepareClimbCommand extends CommandGroup {
         addSequential(new ElevatorPositionCommand(elevHeight));
 
         addSequential(new IntakeRollersDeployCommand());
+
+        addSequential(new LiftLockMechanismDeployCommand());
     }
  
 }

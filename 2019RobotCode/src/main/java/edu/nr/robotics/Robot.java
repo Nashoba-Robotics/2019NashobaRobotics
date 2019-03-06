@@ -42,6 +42,9 @@ import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashbo
 import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.lift.LiftMoveBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.LiftSetPositionSmartDashboardCommand;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismDeployCommand;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismRetractCommand;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismToggleCommand;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
@@ -155,6 +158,12 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new DeployHatchToggleCommand());
         }
 
+        if (EnabledSubsystems.LIFT_LOCK_MECHANISM_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new LiftLockMechanismToggleCommand());
+            SmartDashboard.putData(new LiftLockMechanismDeployCommand());
+            SmartDashboard.putData(new LiftLockMechanismRetractCommand());
+        }
+
     }
 
         @Override
@@ -165,7 +174,7 @@ public class Robot extends TimedRobot {
         }
         @Override
         public void testInit() {
-
+            enabledInit();
         }
 
         public void disabledPeriodic() {
@@ -173,6 +182,7 @@ public class Robot extends TimedRobot {
         }
 
         public void autonomousInit() {
+            enabledInit();
 
             selectedStartPos = AutoChoosers.autoStartPosChooser.getSelected();
             selectedDestination = AutoChoosers.autoDestination1Chooser.getSelected();
@@ -193,6 +203,7 @@ public class Robot extends TimedRobot {
         }
 
         public void teleopInit() {
+            enabledInit();
             //new CancelAllCommand().start(); maybe? depending on gameplay
 
            // LimelightNetworkTable.getInstance().lightLED(true);
@@ -225,6 +236,10 @@ public class Robot extends TimedRobot {
             Periodic.runAll();
             SmartDashboardSource.runAll();
 
+        }
+
+        public void enabledInit() {
+            new LiftLockMechanismRetractCommand().start();
         }
     
         public Command getAutoCommand() {

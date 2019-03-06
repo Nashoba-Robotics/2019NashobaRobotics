@@ -56,6 +56,8 @@ public class RobotMap {
 
     public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = -1;
 
+    public static final int LIFT_LOCK_MECHANISM_PCM_PORT = 7;
+
     public static final int INTAKE_ROLLERS_PCM_PORT = -1;
 
     public static final int PDP_ID = 62;
