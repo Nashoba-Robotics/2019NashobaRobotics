@@ -2,7 +2,7 @@ package edu.nr.robotics.subsystems.sensors;
 
 import edu.wpi.first.wpilibj.AnalogInput;
 
-public class AnalogSensor {
+public class AnalogSensor implements Sensor {
 
     private AnalogInput sensor;
     private int threshold;
