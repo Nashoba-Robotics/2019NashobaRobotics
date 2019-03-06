@@ -68,6 +68,8 @@ public class RobotMap {
 
     public static final int PCM_ID = 0;
 
+    public static final int LIFT_LOCK_MECHANISM_PCM_PORT = -1;
+
     ///sensor ports too
 
 
