@@ -21,7 +21,7 @@ public class LineSensorStrafeLargeCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return !EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get() || !EnabledSensors.floorSensorThree.get();
+        return !EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get() || !EnabledSensors.floorSensorThree.get() || !EnabledSensors.floorSensorFour.get() || !EnabledSensors.floorSensorFive.get();
     }
 
 }

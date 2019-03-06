@@ -1,9 +1,8 @@
 package edu.nr.robotics.subsystems.drive;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.sensors.SensorVoting;
 
 public class LineSensorStrafeCommand extends NRCommand {
 
@@ -17,10 +16,10 @@ public class LineSensorStrafeCommand extends NRCommand {
     }
 
     protected void onStart() {
-        if (!EnabledSensors.floorSensorOne.get()) {
+        if (!EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get()) {
             Drive.getInstance().setMotorSpeedInPercent(0, 0, -Drive.getInstance().SENSOR_STRAFE_PERCENT);
             tracker = 1;
-        } else if (!EnabledSensors.floorSensorThree.get()) {
+        } else if (!EnabledSensors.floorSensorFour.get() || !EnabledSensors.floorSensorFive.get()) {
             Drive.getInstance().setMotorSpeedInPercent(0, 0, Drive.getInstance().SENSOR_STRAFE_PERCENT);
             tracker = 2;
         } else
@@ -33,8 +32,7 @@ public class LineSensorStrafeCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        System.out.println("tracker: " + tracker);
-        return !EnabledSensors.floorSensorTwo.get();
+        return !(new SensorVoting(EnabledSensors.floorSensorTwo, EnabledSensors.floorSensorThree, EnabledSensors.floorSensorFour).isTrue());
     }
 
 }

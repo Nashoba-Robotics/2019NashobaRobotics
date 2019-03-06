@@ -129,6 +129,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final double DRIVE_TO_HATCH_PERCENT = 0;
 		public static final double DRIVE_TO_CARGO_PERCENT = 0;
 
+		public static final int LINE_SENSOR_THRESHOLD = 2000;
 		public static final double SENSOR_STRAFE_PERCENT = 0.225;
 		public static final double KICK_PERCENT = 0.7;
 		public static final Time HKICK_TIME = new Time(0.3, Time.Unit.SECOND);
