@@ -2,7 +2,6 @@ package edu.nr.robotics.subsystems.sensors;
 
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
-import edu.wpi.first.wpilibj.DigitalInput;
 
 public class EnabledSensors {
     
