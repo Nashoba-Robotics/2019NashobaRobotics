@@ -136,7 +136,6 @@ public class IntakeRollers extends NRSubsystem {
     public void setMotorPercent(double percent) {
         if(intakeRollers != null) {
             Vel_Setpoint = percent;
-
             intakeRollers.set(ControlMode.PercentOutput, percent);
 
         }
@@ -154,6 +153,7 @@ public class IntakeRollers extends NRSubsystem {
 		if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_BASIC_ENABLED) {
             SmartDashboard.putString("Intake Rollers Deploy Position: ", currentDeployState().toString());
             SmartDashboard.putNumber("Intake Rollers Current: ", getCurrent());
+            SmartDashboard.putNumber("Intake Rollers Setpoint: ", Vel_Setpoint);
         }
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
             setVel = SmartDashboard.getNumber("Intake Rollers Vel Percent: ", setVel);

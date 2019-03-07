@@ -17,11 +17,11 @@ public class RobotMap {
     //public static final int CARGO_INTAKE_SENSOR_PORT_2 = 12;
     //public static final int CARGO_INTAKE_SENSOR_PORT_3 = 11;
 
-    public static final int FLOOR_SENSOR_PORT_1 = 8;
+    public static final int FLOOR_SENSOR_PORT_1 = 1;
     public static final int FLOOR_SENSOR_PORT_2 = 9;
-    public static final int FLOOR_SENSOR_PORT_3 = 7;
-    public static final int FLOOR_SENSOR_PORT_4 = 11;
-    public static final int FLOOR_SENSOR_PORT_5 = 12;
+    public static final int FLOOR_SENSOR_PORT_3 = 2;
+    public static final int FLOOR_SENSOR_PORT_4 = 8;
+    public static final int FLOOR_SENSOR_PORT_5 = 3;
 
     public static final int FORCE_SENSOR_1 = 4;
     public static final int FORCE_SENSOR_2 = 5;
@@ -40,7 +40,7 @@ public class RobotMap {
 
     public static final int LIFT = -1;
 
-    public static final int INTAKE_ROLLERS = 11; //7
+    public static final int INTAKE_ROLLERS = 8; //7
     public static final int INTAKE_ROLLERS_CURRENT = -1;
 
     public static final int AUX_DRIVE = -1;

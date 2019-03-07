@@ -35,6 +35,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -130,8 +131,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		public static final double DRIVE_TO_CARGO_PERCENT = 0;
 
 		public static final int LINE_SENSOR_THRESHOLD = 2000;
-		public static final double SENSOR_STRAFE_PERCENT = 0.225;
-		public static final double KICK_PERCENT = 0.7;
+		public static final double SENSOR_STRAFE_PERCENT = 0.2;
+		public static final double KICK_LOW_PERCENT = 0.2;
+		public static final double KICK_HIGH_PERCENT = 0.25;
 		public static final Time HKICK_TIME = new Time(0.3, Time.Unit.SECOND);
 
 		public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH);
