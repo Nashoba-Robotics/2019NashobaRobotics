@@ -15,7 +15,7 @@ import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+//.29 0.58 0.47
 public class Lift extends NRSubsystem {
 
     private static Lift singleton;
@@ -24,15 +24,15 @@ public class Lift extends NRSubsystem {
 
     public static final double INCH_PER_REVOLUTION_LIFT = 1 / (4.0928);
 
-    public static final Speed MAX_SPEED_LIFT = Speed.ZERO;
+    public static final Speed MAX_SPEED_LIFT = new Speed(1.93, Distance.Unit.FOOT, Time.Unit.SECOND);
 
     public static final Acceleration MAX_ACCEL_LIFT = Acceleration.ZERO;
 
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_LIFT = 0;
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_LIFT = 0.0593;
     
-    public static final double VOLTAGE_VELOCITY_SLOPE_LIFT = 0;
+    public static final double VOLTAGE_VELOCITY_SLOPE_LIFT = 0.487;
     
-    public static Time VOLTAGE_RAMP_RATE_LIFT = Time.ZERO;
+    public static Time VOLTAGE_RAMP_RATE_LIFT = new Time(0.05, Time.Unit.SECOND);
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
 
     public static double F_POS_LIFT = 0; //Leave F at 0
@@ -40,16 +40,16 @@ public class Lift extends NRSubsystem {
     public static double I_POS_LIFT = 0;
     public static double D_POS_LIFT = 0;
 
-    public static double F_VEL_LIFT = 0;
-    public static double P_VEL_LIFT = 0;
+    public static double F_VEL_LIFT = 0.0002;
+    public static double P_VEL_LIFT = 0.0005;
     public static double I_VEL_LIFT = 0;
-    public static double D_VEL_LIFT = 0;
+    public static double D_VEL_LIFT = 0.005;
 
     public static double P_Angle = 0;
 
-    public static final int PEAK_CURRENT_LIFT = 60;
+    public static final int PEAK_CURRENT_LIFT = 80;
     //public static final int PEAK_CURRENT_DURATION_LIFT = 250;
-    public static final int CONTINUOUS_CURRENT_LIMIT_LIFT = 40;
+    public static final int CONTINUOUS_CURRENT_LIMIT_LIFT = 60;
 
     public static double profilePercent = 0.9;
 
@@ -178,7 +178,10 @@ public class Lift extends NRSubsystem {
 
     public void setMotorSpeedPercent(double percent) {
         if (lift != null)
-            setMotorSpeed(MAX_SPEED_LIFT.mul(percent));
+            if (EnabledSubsystems.LIFT_DUMB_ENABLED)
+                setMotorSpeedRaw(percent);
+            else
+                setMotorSpeed(MAX_SPEED_LIFT.mul(percent));
 
     }
 
@@ -188,7 +191,7 @@ public class Lift extends NRSubsystem {
             velSetpoint = speed;
 
             if(EnabledSubsystems.LIFT_DUMB_ENABLED) {
-                    lift.set(velSetpoint.div(MAX_SPEED_LIFT));
+                lift.set(velSetpoint.div(MAX_SPEED_LIFT));
             } else {
                 lift.getPIDController().setReference(velSetpoint.get(Distance.Unit.ENCODER_REV_LIFT, Time.Unit.MINUTE), ControlType.kVelocity, VEL_SLOT);
             }
@@ -198,6 +201,7 @@ public class Lift extends NRSubsystem {
 
     public void setVoltageRamp(Time time) {
         lift.setClosedLoopRampRate(time.get(Time.Unit.SECOND));
+        lift.setOpenLoopRampRate(time.get(Time.Unit.SECOND));
     }
 
     private void smartDashboardInit() {
@@ -235,6 +239,7 @@ public class Lift extends NRSubsystem {
             deltaPos = new Distance(SmartDashboard.getNumber("Lift Delta Pos: ", 0), Distance.Unit.INCH);
 			VOLTAGE_RAMP_RATE_LIFT = new Time(SmartDashboard.getNumber("Voltage Ramp Rate Lift Seconds: ",
                     VOLTAGE_RAMP_RATE_LIFT.get(Time.Unit.SECOND)), Time.Unit.SECOND);
+            setVoltageRamp(VOLTAGE_RAMP_RATE_LIFT);
             
             F_POS_LIFT = SmartDashboard.getNumber("F Pos Lift: ", F_POS_LIFT);
             lift.getPIDController().setFF(F_POS_LIFT, POS_SLOT);
@@ -264,6 +269,12 @@ public class Lift extends NRSubsystem {
 
         }
 
+    }
+
+
+    public void setLiftOutputRange(double low, double high) {
+        lift.getPIDController().setOutputRange(-1, 1, VEL_SLOT);
+        lift.getPIDController().setOutputRange(-1, 1, POS_SLOT);
     }
 
     public void periodic() {

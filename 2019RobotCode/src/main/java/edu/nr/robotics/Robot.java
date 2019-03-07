@@ -30,6 +30,7 @@ import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashb
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
+import edu.nr.robotics.subsystems.elevator.ElevatorBottomSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionSmartDashboardCommand;
@@ -151,6 +152,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putData(new ElevatorMoveBasicSmartDashboardCommand());	
             SmartDashboard.putData(new ElevatorProfileSmartDashboardCommandGroup());
             SmartDashboard.putData(new ElevatorPositionSmartDashboardCommand());
+            SmartDashboard.putData(new ElevatorBottomSmartDashboardCommand());
         }
 
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {

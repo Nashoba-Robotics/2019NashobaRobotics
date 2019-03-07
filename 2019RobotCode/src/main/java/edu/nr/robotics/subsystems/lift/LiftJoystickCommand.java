@@ -21,9 +21,9 @@ public class LiftJoystickCommand extends JoystickCommand{
 
     protected void onExecute() {
         if (OI.getInstance().isKidModeOn()) {
-			MAX_LIFT_JOYSTICK_PERCENT = 0;
+			MAX_LIFT_JOYSTICK_PERCENT = 0.1;
 		} else {
-			MAX_LIFT_JOYSTICK_PERCENT = 0;
+			MAX_LIFT_JOYSTICK_PERCENT = 0.4;
         }
 
         if(!OI.getInstance().isLiftNonZero()){

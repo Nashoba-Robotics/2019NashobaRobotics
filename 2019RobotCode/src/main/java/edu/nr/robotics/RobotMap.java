@@ -38,7 +38,7 @@ public class RobotMap {
     public static final int ELEVATOR_FOLLOW_ONE_CURRENT = -1;//-1
     public static final int ELEVATOR_FOLLOW_TWO_CURRENT = -1; // -1;
 
-    public static final int LIFT = -1;
+    public static final int LIFT = 3;
 
     public static final int INTAKE_ROLLERS = 8; //7
     public static final int INTAKE_ROLLERS_CURRENT = -1;
@@ -46,7 +46,7 @@ public class RobotMap {
     public static final int AUX_DRIVE = -1;
     public static final int AUX_DRIVE_CURRENT = -1;
 
-    public static final int PIGEON_ID = 8;
+    public static final int PIGEON_ID = 5;
 
     public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = 7;
     //`public static final int HATCH_MECHANISM_DEPLOY_FORWARD = 7;

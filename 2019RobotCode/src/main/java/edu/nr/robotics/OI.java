@@ -116,8 +116,8 @@ public class OI implements SmartDashboardSource {
         operatorLeft = new Joystick(STICK_OPERATOR_LEFT);
         operatorRight = new Joystick(STICK_OPERATOR_RIGHT);
 
-        elevatorStick = operatorRight;
-        liftStick = operatorLeft;
+        elevatorStick = operatorLeft;
+        liftStick = operatorRight;
 
        initDriveLeft();
        initDriveRight();

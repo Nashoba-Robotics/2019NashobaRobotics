@@ -33,7 +33,7 @@ public class ElevatorJoystickCommand extends JoystickCommand {
 
             if (Elevator.getInstance().getPosition().lessThan(new Distance(3, Distance.Unit.INCH))) {
 				Elevator.getInstance().setMotorPercentRaw(0);
-            } else { //if (!EnabledSensors.elevatorSensor.get())
+            } else if (Elevator.getInstance().getCurrentGear() == Elevator.Gear.elevator) { //if (!EnabledSensors.elevatorSensor.get())
                 Elevator.getInstance().setMotorPercentRaw(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP);
         //    } else {
         //        Elevator.getInstance().setMotorPercentRaw(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN);

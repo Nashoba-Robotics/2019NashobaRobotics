@@ -56,8 +56,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.097140; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = 0;
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = -0.05;
 
+    public static final double CLIMB_PERCENT = 0.3;
     
    // public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.124;
    
@@ -172,8 +173,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 		elevator, climb;
 
 		// TODO: Drive: Find which gear directions are forward/reverse
-		private static boolean ELEVATOR_VALUE = false;
-		private static boolean CLIMB_VALUE = true;
+		private static boolean ELEVATOR_VALUE = true;
+		private static boolean CLIMB_VALUE = false;
 
 		private static int ELEVATOR_PROFILE = 0;
 		private static int CLIMB_PROFILE = 1;

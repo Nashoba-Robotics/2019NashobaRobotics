@@ -17,11 +17,23 @@ public class LiftSetPositionCommand extends NRCommand {
     }
 
     protected void onStart() {
+        Lift.getInstance().setLiftOutputRange(-0.5, 0.5);
+
         Lift.getInstance().setPosition(posSetPoint);
+
+        if(!posSetPoint.equals(Distance.ZERO)) {
+            Lift.getInstance().deployed = true;
+        } else {
+            Lift.getInstance().deployed = false;
+        }
+    }
+
+    protected void onEnd() {
+        Lift.getInstance().setLiftOutputRange(-1, 1);
     }
 
     protected boolean isFinishedNR() {
-        return true;
+        return false;
     }
 
 }
