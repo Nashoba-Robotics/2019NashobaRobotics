@@ -56,7 +56,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.097140; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = -0.05;
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = -0.2;
 
     public static final double CLIMB_PERCENT = 0.3;
     

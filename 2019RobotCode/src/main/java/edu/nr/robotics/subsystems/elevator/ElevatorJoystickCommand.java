@@ -11,8 +11,8 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 public class ElevatorJoystickCommand extends JoystickCommand {
 	
 	private static final double MIN_ELEV_JOYSTICK_PERCENT = 0;
-	private static double MAX_ELEV_JOYSTICK_PERCENT_UP = 0;
-    private static double MAX_ELEV_JOYSTICK_PERCENT_DOWN = 0;
+	private static double MAX_ELEV_JOYSTICK_PERCENT_UP = 0.42;
+    private static double MAX_ELEV_JOYSTICK_PERCENT_DOWN = 0.42;
     private static double motorPercent = 0;
     
     public ElevatorJoystickCommand() {

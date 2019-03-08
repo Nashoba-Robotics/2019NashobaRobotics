@@ -36,7 +36,7 @@ public class Lift extends NRSubsystem {
     public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
 
     public static double F_POS_LIFT = 0; //Leave F at 0
-    public static double P_POS_LIFT = 0;
+    public static double P_POS_LIFT = 0.042;
     public static double I_POS_LIFT = 0;
     public static double D_POS_LIFT = 0;
 
@@ -71,6 +71,8 @@ public class Lift extends NRSubsystem {
     
     public static final int VEL_SLOT = 0;
     public static final int POS_SLOT = 1;
+
+    public static final Distance LIFT_LEAD_DISTANCE = new Distance(1, Distance.Unit.INCH); 
 
     public static final Distance TOP_POSITION = Distance.ZERO;
     public static final Distance LEVEL1_POS = Distance.ZERO;
