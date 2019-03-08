@@ -21,11 +21,11 @@ public class EnabledSensors {
     //public static DigitalInput cargoIntakeSensorTwo = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_2);
     //public static DigitalInput cargoIntakeSensorThree = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_3);
 
-    public static AnalogSensor floorSensorOne = new AnalogSensor(RobotMap.FLOOR_SENSOR_PORT_1, Drive.FLOOR_SENSOR_THRESHOLD);
+    public static AnalogSensor floorSensorOne = new AnalogSensor(RobotMap.FLOOR_SENSOR_PORT_1, Drive.LINE_SENSOR_THRESHOLD);
     public static DigitalSensor floorSensorTwo = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_2);
-    public static AnalogSensor floorSensorThree = new AnalogSensor(RobotMap.FLOOR_SENSOR_PORT_3, Drive.FLOOR_SENSOR_THRESHOLD);
+    public static AnalogSensor floorSensorThree = new AnalogSensor(RobotMap.FLOOR_SENSOR_PORT_3, Drive.LINE_SENSOR_THRESHOLD);
     public static DigitalSensor floorSensorFour = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_4);
-    public static AnalogSensor floorSensorFive = new AnalogSensor(RobotMap.FLOOR_SENSOR_PORT_5, Drive.FLOOR_SENSOR_THRESHOLD);
+    public static AnalogSensor floorSensorFive = new AnalogSensor(RobotMap.FLOOR_SENSOR_PORT_5, Drive.LINE_SENSOR_THRESHOLD);
 
     public static DigitalSensor forceSensorOne = new DigitalSensor(RobotMap.FORCE_SENSOR_1);
     public static DigitalSensor forceSensorTwo = new DigitalSensor(RobotMap.FORCE_SENSOR_2);

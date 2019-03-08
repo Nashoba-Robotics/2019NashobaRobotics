@@ -133,10 +133,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final double DRIVE_TO_HATCH_PERCENT = 0;
 	public static final double DRIVE_TO_CARGO_PERCENT = 0;
 
-	public static final double SENSOR_STRAFE_PERCENT = 0;
-	
-	public static final double KICK_PERCENT = 0;
-	public static final Time HKICK_TIME = Time.ZERO;
+	public static final int LINE_SENSOR_THRESHOLD = 2000;
+	public static final double SENSOR_STRAFE_PERCENT = 0.2;
+	public static final double KICK_LOW_PERCENT = 0.2;
+	public static final double KICK_HIGH_PERCENT = 0.25;
+	public static final Time HKICK_TIME = new Time(0.3, Time.Unit.SECOND);
 
 	public static final Distance END_THRESHOLD = new Distance(3, Distance.Unit.INCH);
 	public static final Speed PROFILE_END_TURN_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(MIN_PROFILE_TURN_PERCENT + 0.01);
@@ -154,8 +155,6 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final int VELOCITY_MEASUREMENT_WINDOW_DRIVE = 32; // find this
 
 	public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
-
-	public static final int FLOOR_SENSOR_THRESHOLD = 2000;
 
 	public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
 

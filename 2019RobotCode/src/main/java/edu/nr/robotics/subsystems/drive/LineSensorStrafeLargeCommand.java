@@ -6,6 +6,7 @@ import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 public class LineSensorStrafeLargeCommand extends NRCommand {
 
     private double percent;
+    public static boolean sensorStart;
 
     public LineSensorStrafeLargeCommand(double percent) {
         super(Drive.getInstance());
@@ -13,7 +14,10 @@ public class LineSensorStrafeLargeCommand extends NRCommand {
     }
 
     protected void onStart() {
-        Drive.getInstance().setMotorSpeedInPercent(0, 0, percent);
+        sensorStart = !EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get() || !EnabledSensors.floorSensorThree.get() || !EnabledSensors.floorSensorFour.get() || !EnabledSensors.floorSensorFive.get();
+        
+        if(!sensorStart)
+            Drive.getInstance().setMotorSpeedInPercent(0, 0, percent);
     }
 
     protected void onEnd() {
