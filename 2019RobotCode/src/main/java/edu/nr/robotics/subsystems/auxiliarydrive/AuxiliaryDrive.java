@@ -141,8 +141,15 @@ public class AuxiliaryDrive extends NRSubsystem {
 		return 0;
 	}
 
+	public void setMotorSpeedRaw(double percent) {
+		auxDrive.set(ControlMode.PercentOutput, percent);
+	}
+
 	public void setMotorSpeedInPercent(double percent) {
-		setMotorSpeed(MAX_SPEED_AUX_DRIVE.mul(percent));	
+		if (EnabledSubsystems.AUX_DRIVE_DUMB_ENABLED)
+			setMotorSpeedRaw(percent);
+		else
+			setMotorSpeed(MAX_SPEED_AUX_DRIVE.mul(percent));	
 	}
 
 	public void setMotorSpeed(Speed speed) {
