@@ -175,8 +175,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 		elevator, climb;
 
 		// TODO: Drive: Find which gear directions are forward/reverse
-		private static boolean ELEVATOR_VALUE = true;
-		private static boolean CLIMB_VALUE = false;
+		private static boolean ELEVATOR_VALUE = false;
+		private static boolean CLIMB_VALUE = true;
 
 		private static int ELEVATOR_PROFILE = 0;
 		private static int CLIMB_PROFILE = 1;
@@ -404,10 +404,13 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         if (elevatorTalon != null) {
             if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED)
                 elevatorTalon.set(ControlMode.PercentOutput, percent);
-            else if(getCurrentGear() == Gear.elevator)
+            else if(getCurrentGear() == Gear.elevator) {
                 setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(percent));
-            else
+                System.out.println("409");
+            } else {
                 setMotorSpeed(MAX_CLIMB_SPEED_UP.mul(percent));
+                System.out.println("412");
+            }
         }
     }
 

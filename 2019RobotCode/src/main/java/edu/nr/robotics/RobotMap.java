@@ -17,15 +17,15 @@ public class RobotMap {
     //public static final int CARGO_INTAKE_SENSOR_PORT_2 = 12;
     //public static final int CARGO_INTAKE_SENSOR_PORT_3 = 11;
 
-    public static final int FLOOR_SENSOR_PORT_1 = 10;
-    public static final int FLOOR_SENSOR_PORT_2 = 0;
-    public static final int FLOOR_SENSOR_PORT_3 = 1;
-    public static final int FLOOR_SENSOR_PORT_4 = 13;
-    public static final int FLOOR_SENSOR_PORT_5 = 12;
+    public static final int FLOOR_SENSOR_PORT_1 = 1;
+    public static final int FLOOR_SENSOR_PORT_2 = 6;
+    public static final int FLOOR_SENSOR_PORT_3 = 2;
+    public static final int FLOOR_SENSOR_PORT_4 = 7;
+    public static final int FLOOR_SENSOR_PORT_5 = 3;
 
     public static final int FORCE_SENSOR_1 = 4;
     public static final int FORCE_SENSOR_2 = 5;
-    public static final int FORCE_SENSOR_3 = 2;
+    //public static final int FORCE_SENSOR_3 = 2;
 
     public static final int ELEVATOR_SENSOR_PORT = 9;
     //public static final int ELEVATOR_SENSOR_PORT_2 = 8;
@@ -50,15 +50,15 @@ public class RobotMap {
 
     public static final int PCM_ID = 0;
 
-    public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = -1;
+    public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = 4;
 
-    public static final int HATCH_MECHANISM_HATCH_PCM_PORT = -1;
+    public static final int HATCH_MECHANISM_HATCH_PCM_PORT = 5;
 
-    public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = -1;
+    public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = 6;
 
     public static final int LIFT_LOCK_MECHANISM_PCM_PORT = 7;
 
-    public static final int INTAKE_ROLLERS_PCM_PORT = -1;
+    public static final int INTAKE_ROLLERS_PCM_PORT = 8;
 
     public static final int PDP_ID = 62;
 

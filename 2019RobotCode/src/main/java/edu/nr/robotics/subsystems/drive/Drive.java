@@ -63,7 +63,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.5);
 
 	public static final Speed MAX_SPEED_DRIVE = new Speed(13.98, Distance.Unit.FOOT, Time.Unit.SECOND);
-	public static final Speed MAX_SPEED_DRIVE_H = new Speed(10.5, Distance.Unit.FOOT, Time.Unit.SECOND);
+	public static final Speed MAX_SPEED_DRIVE_H = new Speed(8.4, Distance.Unit.FOOT, Time.Unit.SECOND);
 
 	public static final Acceleration MAX_ACCEL_DRIVE = new Acceleration(25, Distance.Unit.FOOT, Time.Unit.SECOND,
 			Time.Unit.SECOND);
@@ -76,12 +76,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.0907;
 	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.089;
 
-	public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
+	//public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
 
 	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_LEFT = 0.065;
 	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_RIGHT = 0.0645;
 
-	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
+	//public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_H = 0;
 
 	public static Time DRIVE_RAMP_RATE = new Time(0.0, Time.Unit.SECOND);
 	public static Time H_DRIVE_RAMP_RATE = Time.ZERO;
@@ -94,10 +94,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static double I_RIGHT = 0;
 	public static double D_RIGHT = 3;
 
-	public static double FF_H = 0;
-	public static double P_H = 0;
+	public static double FF_H = 0.0002;
+	public static double P_H = 0.0002;
 	public static double I_H = 0;
-	public static double D_H = 0;
+	public static double D_H = 0.002;
 
 	public static double kVOneD = 1
 			/ MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);

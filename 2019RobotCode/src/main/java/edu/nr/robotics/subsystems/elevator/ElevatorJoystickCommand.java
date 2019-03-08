@@ -31,10 +31,11 @@ public class ElevatorJoystickCommand extends JoystickCommand {
         
         if(!OI.getInstance().isElevatorNonZero()) {
 
-            if (Elevator.getInstance().getPosition().lessThan(new Distance(3, Distance.Unit.INCH))) {
+            if (Elevator.getInstance().getPosition().lessThan(new Distance(1, Distance.Unit.INCH))) {
 				Elevator.getInstance().setMotorPercentRaw(0);
             } else { //if (!EnabledSensors.elevatorSensor.get())
                 Elevator.getInstance().setMotorPercentRaw(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP);
+                //System.out.println("38");
         //    } else {
         //        Elevator.getInstance().setMotorPercentRaw(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN);
             }
@@ -46,10 +47,12 @@ public class ElevatorJoystickCommand extends JoystickCommand {
         } else if (OI.getInstance().getElevatorJoystickValue() > 0) {
 			motorPercent = OI.getInstance().getElevatorJoystickValue() * (MAX_ELEV_JOYSTICK_PERCENT_UP - MIN_ELEV_JOYSTICK_PERCENT) + MIN_ELEV_JOYSTICK_PERCENT;
             Elevator.getInstance().setMotorSpeedPercent(motorPercent);
+           // System.out.println("50" + motorPercent);
             
 		} else if (OI.getInstance().getElevatorJoystickValue() < 0) {
 			motorPercent = OI.getInstance().getElevatorJoystickValue() * (MAX_ELEV_JOYSTICK_PERCENT_DOWN - MIN_ELEV_JOYSTICK_PERCENT) - MIN_ELEV_JOYSTICK_PERCENT;
-			Elevator.getInstance().setMotorSpeedPercent(motorPercent);
+            Elevator.getInstance().setMotorSpeedPercent(motorPercent);
+            //System.out.println("55");
         }
     }
 
