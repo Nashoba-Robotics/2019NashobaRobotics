@@ -17,11 +17,16 @@ public class LiftSetPositionCommand extends NRCommand {
     }
 
     protected void onStart() {
+        Lift.getInstance().setLiftOutputRange(-Lift.profilePercent, Lift.profilePercent);
         Lift.getInstance().setPosition(posSetPoint);
     }
 
+    protected void onEnd() {
+        Lift.getInstance().setLiftOutputRange(-1, 1);
+    }
+
     protected boolean isFinishedNR() {
-        return true;
+        return false;
     }
 
 }
