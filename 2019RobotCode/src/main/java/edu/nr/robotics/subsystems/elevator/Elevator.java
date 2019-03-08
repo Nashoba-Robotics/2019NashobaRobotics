@@ -142,7 +142,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static double kP_DOWN = 0;
     public static double kD_DOWN = 0;
 
-    public static final Distance GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT = new Distance(15.5, Distance.Unit.INCH);
+    public static final Distance GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT = new Distance(14.5, Distance.Unit.INCH);
     public static final Distance TOP_HEIGHT_ELEVATOR = new Distance(82, Distance.Unit.INCH);//find these
     public static final Distance HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(21.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
@@ -151,7 +151,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(39, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(66.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = Distance.ZERO;
+    public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = HATCH_PLACE_LOW_HEIGHT_ELEVATOR;
     public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
