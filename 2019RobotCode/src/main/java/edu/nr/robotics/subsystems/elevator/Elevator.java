@@ -73,6 +73,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final double DROP_PERCENT_ELEVATOR = -0.4;
     public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0.9;
 
+    public static final double CLIMB_PERCENT = -0.3;
+
     public static final int MOTION_MAGIC_MULTIPLIER = 2;
 
     public static double F_POS_ELEVATOR_UP = 0.3;

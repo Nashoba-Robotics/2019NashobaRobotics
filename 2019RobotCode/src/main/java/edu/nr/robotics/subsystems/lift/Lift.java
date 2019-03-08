@@ -72,6 +72,8 @@ public class Lift extends NRSubsystem {
     public static final int VEL_SLOT = 0;
     public static final int POS_SLOT = 1;
 
+    public static final Distance LIFT_LEAD_DISTANCE = new Distance(1, Distance.Unit.INCH);
+
     public static final Distance TOP_POSITION = Distance.ZERO;
     public static final Distance LEVEL1_POS = Distance.ZERO;
     public static final Distance LEVEL2_POS = Distance.ZERO;
