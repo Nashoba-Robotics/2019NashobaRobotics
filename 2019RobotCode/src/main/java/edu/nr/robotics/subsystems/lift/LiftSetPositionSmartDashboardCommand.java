@@ -20,6 +20,12 @@ public class LiftSetPositionSmartDashboardCommand extends NRCommand {
 
     protected void onEnd() {
         Lift.getInstance().setLiftOutputRange(-1, 1);
+
+        if(!setPoint.equals(Distance.ZERO)) {
+            Lift.getInstance().deployed = true;
+        } else {
+            Lift.getInstance().deployed = false;
+        }
     }
 
     protected boolean isFinishedNR() {
