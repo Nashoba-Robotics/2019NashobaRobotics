@@ -48,17 +48,17 @@ public class RobotMap {
 
     public static final int PIGEON_ID = 10;
 
-    public static final int PCM_ID = 0;
+    public static final int PCM_ID = 1;
 
-    public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = 4;
+    public static final int HATCH_MECHANISM_DEPLOY_PCM_PORT = 7;
 
-    public static final int HATCH_MECHANISM_HATCH_PCM_PORT = 5;
+    public static final int HATCH_MECHANISM_HATCH_PCM_PORT = 4;
 
-    public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = 6;
+    public static final int ELEVATOR_GEAR_SWITCHER_PCM_PORT = 3;
 
-    public static final int LIFT_LOCK_MECHANISM_PCM_PORT = 7;
+    public static final int LIFT_LOCK_MECHANISM_PCM_PORT = 6;
 
-    public static final int INTAKE_ROLLERS_PCM_PORT = 8;
+    public static final int INTAKE_ROLLERS_PCM_PORT = 5;
 
     public static final int PDP_ID = 62;
 

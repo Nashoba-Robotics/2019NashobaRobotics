@@ -40,7 +40,7 @@ public class HatchMechanism extends NRSubsystem {
 		}
 
 		private static State getHatchState(boolean val) {
-			if(val == State.DEPLOYED_VALUE) {
+			if(val == State.DEPLOYED_VALUE_HATCH) {
 				return State.DEPLOYED;
 			} else {
 				return State.RETRACTED;
@@ -99,12 +99,14 @@ public class HatchMechanism extends NRSubsystem {
     
     void grabHatch() {
         if (hatchSolenoid != null) {
+			System.out.println("102");
             hatchSolenoid.set(State.DEPLOYED_VALUE_HATCH);
         }
     }
 
     void releaseHatch() {
         if (hatchSolenoid != null) {
+			System.out.println("109");
             hatchSolenoid.set(State.RETRACTED_VALUE_HATCH);
         }
     }

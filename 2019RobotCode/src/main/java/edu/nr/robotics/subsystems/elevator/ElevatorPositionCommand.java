@@ -2,10 +2,13 @@ package edu.nr.robotics.subsystems.elevator;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.units.Distance;
+import edu.nr.lib.units.Distance.Unit;
 
 public class ElevatorPositionCommand extends NRCommand {
 
 	private Distance height;
+	boolean finished = false;
+
 	
 	public ElevatorPositionCommand(Distance height) {
 		super(Elevator.getInstance());
@@ -19,10 +22,15 @@ public class ElevatorPositionCommand extends NRCommand {
 	
 	@Override
 	protected boolean isFinishedNR() {
+		if (height.lessThan(new Distance(10, Distance.Unit.INCH))) {
+			finished = Elevator.getInstance().getVelocity().lessThan(Elevator.PROFILE_STOP_SPEED_THRESHOLD);
+		} else {
+			finished = Elevator.getInstance().getVelocity().lessThan(Elevator.PROFILE_STOP_SPEED_THRESHOLD)  
+			&& (Elevator.getInstance().getPosition().sub(height)).abs().lessThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR);
+		}
 		
-		boolean finished = Elevator.getInstance().getVelocity().lessThan(Elevator.PROFILE_STOP_SPEED_THRESHOLD)
-		&& (Elevator.getInstance().getPosition().sub(height)).abs().lessThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR);
 		
+
 		return finished;
 	}
 }

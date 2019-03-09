@@ -10,7 +10,7 @@ public class DeployHatchToggleCommand extends NRCommand {
 	}
 	
 	public void onStart() {
-        if (HatchMechanism.getInstance().currentDeployState() == State.DEPLOYED)
+		if (HatchMechanism.getInstance().currentHatchState() == State.DEPLOYED)
             HatchMechanism.getInstance().retractHatchMechanism();
         else
             HatchMechanism.getInstance().deployHatchMechanism();

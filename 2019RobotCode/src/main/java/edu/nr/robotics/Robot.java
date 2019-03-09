@@ -34,6 +34,7 @@ import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCo
 import edu.nr.robotics.subsystems.elevator.ElevatorMoveBasicSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorProfileSmartDashboardCommandGroup;
+import edu.nr.robotics.subsystems.elevator.ElevatorSwitchGearCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
@@ -141,6 +142,7 @@ public class Robot extends TimedRobot {
 			SmartDashboard.putData(new ElevatorMoveBasicSmartDashboardCommand());	
             SmartDashboard.putData(new ElevatorProfileSmartDashboardCommandGroup());
             SmartDashboard.putData(new ElevatorPositionSmartDashboardCommand());
+            SmartDashboard.putData(new ElevatorSwitchGearCommand());
         }
 
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {

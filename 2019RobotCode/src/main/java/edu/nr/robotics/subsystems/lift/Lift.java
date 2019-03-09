@@ -168,6 +168,12 @@ public class Lift extends NRSubsystem {
             posSetpoint = pos;
             velSetpoint = Speed.ZERO;
 
+            if(!pos.equals(Distance.ZERO)) {
+                Lift.getInstance().deployed = true;
+            } else {
+                Lift.getInstance().deployed = false;
+            }
+
             lift.getPIDController().setReference(pos.get(Distance.Unit.ENCODER_REV_LIFT), ControlType.kPosition, POS_SLOT);
         }
 
