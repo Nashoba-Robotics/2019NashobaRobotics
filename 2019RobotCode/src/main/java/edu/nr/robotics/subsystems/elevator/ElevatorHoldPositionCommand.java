@@ -12,4 +12,8 @@ public class ElevatorHoldPositionCommand extends NRCommand {
         Elevator.getInstance().positionPID(Elevator.getInstance().getPosition());
     }
 
+    protected boolean isFinishedNR() {
+        return false;
+    }
+
 }
