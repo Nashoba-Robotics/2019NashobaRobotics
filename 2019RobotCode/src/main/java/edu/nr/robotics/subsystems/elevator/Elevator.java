@@ -77,9 +77,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static double F_POS_ELEVATOR_UP = 0.3;
 
-    public static double P_POS_ELEVATOR_UP = 1.0;
+    public static double P_POS_ELEVATOR_UP = 0.1;
     public static double I_POS_ELEVATOR_UP = 0;
-    public static double D_POS_ELEVATOR_UP = 10.0;
+    public static double D_POS_ELEVATOR_UP = 0;
 
     public static double F_POS_ELEVATOR_DOWN = ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN * MAX_SPEED_ELEVATOR_DOWN.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
     + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN) * 1023.0)
