@@ -5,6 +5,7 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.lift.Lift;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanism;
 
 public class ClimbCommand extends NRCommand {
 
@@ -16,6 +17,7 @@ public class ClimbCommand extends NRCommand {
 
     protected void onStart() {
         initElevPos = Elevator.getInstance().getPosition();
+        LiftLockMechanism.getInstance().deployLiftLockMechanism();
         Elevator.getInstance().switchToClimbGear();
         Elevator.getInstance().setMotorPercentRaw(-Math.abs(Elevator.CLIMB_PERCENT));
     }

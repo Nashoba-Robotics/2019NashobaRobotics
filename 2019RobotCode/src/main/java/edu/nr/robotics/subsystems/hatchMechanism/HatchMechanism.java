@@ -21,7 +21,7 @@ public class HatchMechanism extends NRSubsystem {
 	public boolean forceSensors = false;
 	public boolean prevForceSensors = false;
 
-	public static final Time ACTUATION_TIME = new Time(0.2, Time.Unit.SECOND);
+	public static final Time ACTUATION_TIME = new Time(0.35, Time.Unit.SECOND);
 
 	public enum State {
 		DEPLOYED, RETRACTED;

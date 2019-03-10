@@ -14,7 +14,9 @@ public class AuxiliaryDriveJoystickCommand extends JoystickCommand {
     protected void onExecute() {
         double moveValue = OI.getInstance().getArcadeMoveValue();
 
-        AuxiliaryDrive.getInstance().setMotorSpeedInPercent(moveValue);
+        if (Lift.getInstance().deployed) {
+            AuxiliaryDrive.getInstance().setMotorSpeedInPercent(moveValue);
+        }
         
     }
 

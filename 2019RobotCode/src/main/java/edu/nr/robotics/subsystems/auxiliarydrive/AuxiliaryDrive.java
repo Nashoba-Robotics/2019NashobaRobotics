@@ -34,8 +34,8 @@ public class AuxiliaryDrive extends NRSubsystem {
 
 	public static final double EFFECTIVE_ENC_TICK_PER_INCH_AUX_DRIVE = 0;
 
-	public static final Distance WHEEL_DIAMETER = new Distance(0, Distance.Unit.INCH);
-	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(0, Distance.Unit.INCH);
+	public static final Distance WHEEL_DIAMETER = new Distance(1, Distance.Unit.INCH);
+	public static final Distance WHEEL_DIAMETER_EFFECTIVE = WHEEL_DIAMETER;
 	
 	public static Time auxDriveRampRate = Time.ZERO;
 
@@ -80,7 +80,7 @@ public class AuxiliaryDrive extends NRSubsystem {
 				auxDrive.set(ControlMode.Velocity, 0);
 			}
 
-			auxDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+			//auxDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
 
 			auxDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
 			auxDrive.config_kP(VEL_SLOT, P, DEFAULT_TIMEOUT);

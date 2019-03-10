@@ -145,16 +145,16 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT = new Distance(14.5, Distance.Unit.INCH);
     public static final Distance TOP_HEIGHT_ELEVATOR = new Distance(82, Distance.Unit.INCH);//find these
     public static final Distance HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(21.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(47, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(21, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(44, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(75, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(39, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(36, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(66.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance CARGO_SHIP_HEIGHT = new Distance(30, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = HATCH_PLACE_LOW_HEIGHT_ELEVATOR;
-    public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = Distance.ZERO;
+    public static final Distance CARGO_SHIP_HEIGHT = new Distance(45, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = new Distance(19.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = new Distance(19, Distance.Unit.INCH);
+    public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = new Distance(6, Distance.Unit.INCH);
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
 
    /*public static final Distance[] Counter_Heights = { HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR, REST_HEIGHT_ELEVATOR,
@@ -288,7 +288,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 	public void switchToClimbGear() {
 		setProfile(Gear.CLIMB_PROFILE);
 		if (gearShifter != null) {
-			gearShifter.set(Gear.ELEVATOR_VALUE);
+			gearShifter.set(Gear.CLIMB_VALUE);
 		}
 	}
 
@@ -403,14 +403,14 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public void setMotorSpeedPercent(double percent) {
         if (elevatorTalon != null) {
-            if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED)
+            if ((EnabledSubsystems.ELEVATOR_DUMB_ENABLED) || (getCurrentGear() == Gear.climb))
                 elevatorTalon.set(ControlMode.PercentOutput, percent);
             else if(getCurrentGear() == Gear.elevator) {
                 setMotorSpeed(MAX_SPEED_ELEVATOR_UP.mul(percent));
-                System.out.println("409");
+                //System.out.println("409");
             } else {
                 setMotorSpeed(MAX_CLIMB_SPEED_UP.mul(percent));
-                System.out.println("412");
+                //System.out.println("412");
             }
         }
     }
@@ -545,12 +545,13 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
         @Override
         public void smartDashboardInfo() {
-            SmartDashboard.putBoolean("Hall Effect Value", EnabledSensors.elevatorSensor.get());
+            SmartDashboard.putNumber("Elevator Position: ", getPosition().get(Distance.Unit.INCH));
 
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_BASIC_ENABLED) {
                 SmartDashboard.putNumberArray("ElevatorCurrent: ", new double[] {getMasterCurrent(), getFollowOneCurrent(), getFollowTwoCurrent()});
                 SmartDashboard.putNumberArray("Elevator Velocity vs. Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
                 SmartDashboard.putNumberArray("Elevator Position vs. Set Position: ", new double[] {getPosition().get(Distance.Unit.INCH), posSetpoint.get(Distance.Unit.INCH)});
+                SmartDashboard.putBoolean("Hall Effect Value", EnabledSensors.elevatorSensor.get());
             }             
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_DEBUG_ENABLED) {
                 profilePos = new Distance(SmartDashboard.getNumber("Elevator Profile Delta Inches: ", 0), Distance.Unit.INCH);

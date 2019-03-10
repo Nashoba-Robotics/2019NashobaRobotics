@@ -1,5 +1,6 @@
 package edu.nr.robotics;
 
+import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
@@ -20,6 +21,7 @@ import edu.nr.robotics.auton.automap.StartPosRightCargoShipSideCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDrive;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -38,7 +40,9 @@ import edu.nr.robotics.subsystems.elevator.ElevatorSwitchGearCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
+import edu.nr.robotics.subsystems.intakerollers.IntakeRollersIntakeCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersVelocitySmartDashboardCommand;
 import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.lift.LiftMoveBasicSmartDashboardCommand;
@@ -86,6 +90,7 @@ public class Robot extends TimedRobot {
         Elevator.getInstance();
         IntakeRollers.getInstance();
         Lift.getInstance();
+        AuxiliaryDrive.getInstance();
 
         robotCompressor = new Compressor(RobotMap.PCM_ID);
         robotCompressor.start();
@@ -148,6 +153,8 @@ public class Robot extends TimedRobot {
         if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new IntakeRollersVelocitySmartDashboardCommand());
             SmartDashboard.putData(new IntakeRollersDeployToggleCommand());
+            SmartDashboard.putData(new IntakeRollersDeployCommand());
+            SmartDashboard.putData(new IntakeRollersIntakeCommand());
         }
 
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_DEBUG_ENABLED) {
@@ -193,7 +200,7 @@ public class Robot extends TimedRobot {
             selectedGamePiece2 = AutoChoosers.autoGamePiece2Chooser.getSelected();
             selectedPlatform = AutoChoosers.autoPlatformChooser.getSelected();
 
-            autonomousCommand = getAutoCommand();
+            autonomousCommand = new DoNothingCommand(); //getAutoCommand();
 
             if(autonomousCommand != null)
                 autonomousCommand.start();

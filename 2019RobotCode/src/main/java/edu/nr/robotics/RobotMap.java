@@ -40,7 +40,7 @@ public class RobotMap {
 
     public static final int LIFT = 13;
 
-    public static final int INTAKE_ROLLERS = 12;
+    public static final int INTAKE_ROLLERS = 10;
     public static final int INTAKE_ROLLERS_CURRENT = 11;
 
     public static final int AUX_DRIVE = 11;

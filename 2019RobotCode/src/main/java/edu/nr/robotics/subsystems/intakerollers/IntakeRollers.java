@@ -27,8 +27,8 @@ public class IntakeRollers extends NRSubsystem {
 
     public static Time  VOLTAGE_RAMP_RATE_INTAKE_ROLLERS = new Time(0.05, Time.Unit.SECOND);
 
-    public static double INTAKE_PERCENT = 0; //find all
-    public static double OUTTAKE_PERCENT = 0; 
+    public static double INTAKE_PERCENT = 0.7; //find all
+    public static double OUTTAKE_PERCENT = -0.9; 
 
     public static final int PEAK_CURRENT_INTAKE_ROLLERS = 80;
     public static final int PEAK_CURRENT_DURATION_INTAKE_ROLLERS = 250;
@@ -38,11 +38,13 @@ public class IntakeRollers extends NRSubsystem {
 
     public static final NeutralMode NEUTRAL_MODE_INTAKE_ROLLERS = NeutralMode.Brake;
 
-    public static final double CURRENT_PEAK_INTAKE_ROLLERS = 0; //TODO: find
+    public static final double CURRENT_PEAK_INTAKE_ROLLERS = 40; //TODO: find
 
     public static final int DEFAULT_TIMEOUT = 0;
     
-    public static Time SCORE_TIME = Time.ZERO; // find
+    public static Time SCORE_TIME = new Time(0.5, Time.Unit.SECOND); // find
+
+    public static Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
 
     //setpoint of subsystem motor velocity
     public double Vel_Setpoint = 0; 

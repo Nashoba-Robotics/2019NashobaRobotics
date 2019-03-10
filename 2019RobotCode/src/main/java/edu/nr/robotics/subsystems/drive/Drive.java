@@ -35,6 +35,8 @@ import edu.nr.lib.units.Time;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.nr.robotics.subsystems.sensors.SensorVoting;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -671,6 +673,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public void smartDashboardInfo() {
 		if (leftDrive != null && rightDrive != null) {
+			SmartDashboard.putBoolean("Line Sensors", !(new SensorVoting(EnabledSensors.floorSensorTwo, EnabledSensors.floorSensorThree, EnabledSensors.floorSensorFour).isTrue()));
+
 			if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 
 				SmartDashboard.putNumberArray("Drive Left Current",
@@ -762,13 +766,13 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public void periodic() {
 		if (OI.getInstance().isKidModeOn()) {
-			MOVE_JOYSTICK_MULTIPLIER = 0.6;
 			if (!sniperModeEnabled) {
+				MOVE_JOYSTICK_MULTIPLIER = 0.6;
 				TURN_JOYSTICK_MULTIPLIER = 0.6;
 			}
 		} else {
-			MOVE_JOYSTICK_MULTIPLIER = 1;
 			if (!sniperModeEnabled) {
+				MOVE_JOYSTICK_MULTIPLIER = 1;
 				TURN_JOYSTICK_MULTIPLIER = 1;
 			}
 
