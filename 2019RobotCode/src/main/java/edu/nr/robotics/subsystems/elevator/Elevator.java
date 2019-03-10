@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.VelocityMeasPeriod;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.nr.lib.commandbased.CancelCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motionprofiling.OneDimensionalMotionProfilerBasic;
 import edu.nr.lib.motionprofiling.OneDimensionalTrajectoryRamped;
@@ -16,15 +15,14 @@ import edu.nr.lib.units.Acceleration;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
-import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
@@ -79,9 +77,9 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static double F_POS_ELEVATOR_UP = 0.3;
 
-    public static double P_POS_ELEVATOR_UP = 0.0;
+    public static double P_POS_ELEVATOR_UP = 1.0;
     public static double I_POS_ELEVATOR_UP = 0;
-    public static double D_POS_ELEVATOR_UP = 0.0;
+    public static double D_POS_ELEVATOR_UP = 10.0;
 
     public static double F_POS_ELEVATOR_DOWN = ((VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN * MAX_SPEED_ELEVATOR_DOWN.abs().get(Distance.Unit.FOOT, Time.Unit.SECOND)
     + MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN) * 1023.0)
@@ -100,10 +98,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 	public static double I_VEL_ELEVATOR_DOWN = 0;
     public static double D_VEL_ELEVATOR_DOWN = 0;
     
-    public static double F_POS_CLIMB_UP = 0;
-    public static double P_POS_CLIMB_UP = 0;
-	public static double I_POS_CLIMB_UP = 0;
-	public static double D_POS_CLIMB_UP = 0;
+    public static double F_POS_HOLD = 0;
+    public static double P_POS_HOLD = 0;
+	public static double I_POS_HOLD = 0;
+	public static double D_POS_HOLD = 0;
 
 
     public static final Distance PROFILE_END_POS_THRESHOLD_ELEVATOR = new Distance(2, Distance.Unit.INCH);
@@ -129,7 +127,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final int VEL_ELEV_UP_SLOT = 0;
     public static final int MOTION_MAGIC_ELEV_UP_SLOT = 1;//figure out for real
-    public static final int MOTION_MAGIC_CLIMB_UP_SLOT = 2;
+    public static final int POS_SLOT = 2;
     public static final int VEL_CLIMB_UP_SLOT = 3;
 
     public static final double kV_UP = 1 / MAX_SPEED_ELEVATOR_UP.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND);
@@ -156,6 +154,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = new Distance(19, Distance.Unit.INCH);
     public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = new Distance(6, Distance.Unit.INCH);
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
+
+    public static final Distance CLIMB_END_DISTANCE = new Distance(-1,  Distance.Unit.INCH);
 
    /*public static final Distance[] Counter_Heights = { HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR, REST_HEIGHT_ELEVATOR,
             CARGO_PLACE_LOW_HEIGHT_ELEVATOR, HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR, CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR,
@@ -219,10 +219,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             elevatorTalon.config_kI(MOTION_MAGIC_ELEV_UP_SLOT, I_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
             elevatorTalon.config_kD(MOTION_MAGIC_ELEV_UP_SLOT, D_POS_ELEVATOR_UP, DEFAULT_TIMEOUT);
 
-            elevatorTalon.config_kF(MOTION_MAGIC_CLIMB_UP_SLOT, F_POS_CLIMB_UP, DEFAULT_TIMEOUT);
-            elevatorTalon.config_kP(MOTION_MAGIC_CLIMB_UP_SLOT, P_POS_CLIMB_UP, DEFAULT_TIMEOUT);
-            elevatorTalon.config_kI(MOTION_MAGIC_CLIMB_UP_SLOT, I_POS_CLIMB_UP, DEFAULT_TIMEOUT);
-            elevatorTalon.config_kD(MOTION_MAGIC_CLIMB_UP_SLOT, D_POS_CLIMB_UP, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kF(POS_SLOT, F_POS_HOLD, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kP(POS_SLOT, P_POS_HOLD, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kI(POS_SLOT, I_POS_HOLD, DEFAULT_TIMEOUT);
+            elevatorTalon.config_kD(POS_SLOT, D_POS_HOLD, DEFAULT_TIMEOUT);
 
             elevatorTalon.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
             elevatorVictorFollowOne.setNeutralMode(NEUTRAL_MODE_ELEVATOR);
@@ -360,38 +360,42 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     }
 
     public void setPosition(Distance position) {
-            posSetpoint = position;
-			velSetpoint = Speed.ZERO;
+        posSetpoint = position;
+        velSetpoint = Speed.ZERO;
+        
+        if (getCurrentGear() == Gear.elevator) {     
+            elevatorTalon.selectProfileSlot(MOTION_MAGIC_ELEV_UP_SLOT, DEFAULT_TIMEOUT);
             
-            if (getCurrentGear() == Gear.elevator) {     
-                elevatorTalon.selectProfileSlot(MOTION_MAGIC_ELEV_UP_SLOT, DEFAULT_TIMEOUT);
-                
-                elevatorTalon.configMotionCruiseVelocity(MOTION_MAGIC_MULTIPLIER*(int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
-                                DEFAULT_TIMEOUT);
-                elevatorTalon.configMotionAcceleration(MOTION_MAGIC_MULTIPLIER*(int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
-                        DEFAULT_TIMEOUT);
-                
-                elevatorTalon.set(ControlMode.MotionMagic, position.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
-                
-            }
-            else if (getCurrentGear() == Gear.climb) { 
-                elevatorTalon.selectProfileSlot(MOTION_MAGIC_CLIMB_UP_SLOT, DEFAULT_TIMEOUT);
-                
-                elevatorTalon.configMotionCruiseVelocity((int) MAX_CLIMB_SPEED_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
-                                DEFAULT_TIMEOUT);
-                elevatorTalon.configMotionAcceleration((int) MAX_CLIMB_ACCEL_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
-                        Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
-                        DEFAULT_TIMEOUT);
-                
-                elevatorTalon.set(ControlMode.MotionMagic, position.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
-                    
-            }
+            elevatorTalon.configMotionCruiseVelocity(MOTION_MAGIC_MULTIPLIER*(int) MAX_SPEED_ELEVATOR_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+                    Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+                            DEFAULT_TIMEOUT);
+            elevatorTalon.configMotionAcceleration(MOTION_MAGIC_MULTIPLIER*(int) MAX_ACCEL_ELEVATOR_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+                    Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
+                    DEFAULT_TIMEOUT);
+            
+            elevatorTalon.set(ControlMode.MotionMagic, position.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
+            
         }
-    
+        /*else if (getCurrentGear() == Gear.climb) { 
+            elevatorTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+            
+            elevatorTalon.configMotionCruiseVelocity((int) MAX_CLIMB_SPEED_UP.mul(PROFILE_VEL_PERCENT_ELEVATOR).get(
+                    Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND),
+                            DEFAULT_TIMEOUT);
+            elevatorTalon.configMotionAcceleration((int) MAX_CLIMB_ACCEL_UP.mul(PROFILE_ACCEL_PERCENT_ELEVATOR).get(
+                    Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV, Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
+                    DEFAULT_TIMEOUT);
+            
+            elevatorTalon.set(ControlMode.MotionMagic, position.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
+                
+        }*/
+    }
 
+    public void positionPID(Distance pos) {
+        elevatorTalon.selectProfileSlot(POS_SLOT, DEFAULT_TIMEOUT);
+
+        elevatorTalon.set(ControlMode.Position, pos.get(Distance.Unit.MAGNETIC_ENCODER_TICK_ELEV));
+    }
 
     public void setMotorPercentRaw(double percent) {
         if (elevatorTalon != null) {

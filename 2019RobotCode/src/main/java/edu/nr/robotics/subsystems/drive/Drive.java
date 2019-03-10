@@ -35,6 +35,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.robotics.OI;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.nr.robotics.subsystems.sensors.SensorVoting;
 import edu.wpi.first.wpilibj.PIDSourceType;
@@ -421,7 +422,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	public void setMotorSpeedInPercent(double left, double right, double strafe) {
-		if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
+		if (EnabledSubsystems.DRIVE_DUMB_ENABLED || Lift.getInstance().deployed) {
 			leftDrive.set(ControlMode.PercentOutput, left);
 			rightDrive.set(ControlMode.PercentOutput, right);
 			hDrive.set(strafe);
