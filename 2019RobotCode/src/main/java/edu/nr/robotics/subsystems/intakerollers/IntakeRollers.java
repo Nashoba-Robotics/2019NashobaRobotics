@@ -44,7 +44,8 @@ public class IntakeRollers extends NRSubsystem {
 
     public static final int DEFAULT_TIMEOUT = 0;
     
-    public static Time SCORE_TIME = new Time(0.5, Time.Unit.SECOND); // find
+    public static final Time SCORE_TIME = new Time(0.5, Time.Unit.SECOND); // find
+    public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
 
     //setpoint of subsystem motor velocity
     public double Vel_Setpoint = 0;

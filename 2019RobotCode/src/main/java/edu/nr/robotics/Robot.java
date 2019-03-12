@@ -21,6 +21,7 @@ import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
 import edu.nr.robotics.multicommands.ClimbCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDrive;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -100,10 +101,11 @@ public class Robot extends TimedRobot {
         IntakeRollers.getInstance();
         Lift.getInstance();
         HatchMechanism.getInstance();
+        AuxiliaryDrive.getInstance();
         // CameraInit();
 
         LimelightNetworkTable.getInstance().lightLED(false);
-        System.out.println("end of robot init");
+        //System.out.println("end of robot init");
 
     }
 

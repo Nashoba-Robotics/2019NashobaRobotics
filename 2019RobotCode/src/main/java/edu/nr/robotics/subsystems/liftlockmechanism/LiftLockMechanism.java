@@ -57,13 +57,13 @@ public class LiftLockMechanism extends NRSubsystem {
 		}
 	}
 
-    void deployLiftLockMechanism() {
+    public void deployLiftLockMechanism() {
 		if (lockSolenoid != null) {
 			lockSolenoid.set(State.DEPLOYED_VALUE);
 		}
 	}
 
-	void retractLiftLockMechanism() {
+	public void retractLiftLockMechanism() {
 		if (lockSolenoid != null) {
 			lockSolenoid.set(State.RETRACTED_VALUE);
 		}

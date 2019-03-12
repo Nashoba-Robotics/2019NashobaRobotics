@@ -7,9 +7,11 @@ import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
 import edu.nr.robotics.multicommands.ClimbCommand;
+import edu.nr.robotics.multicommands.GetCargoCommand;
 import edu.nr.robotics.multicommands.GetHatchStationCommand;
 import edu.nr.robotics.multicommands.IntakeToggleCommand;
 import edu.nr.robotics.multicommands.PrepareClimbCommand;
+import edu.nr.robotics.multicommands.ReturnToNeutralPositionCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
@@ -17,9 +19,7 @@ import edu.nr.robotics.subsystems.drive.DriveToTargetCommand;
 import edu.nr.robotics.subsystems.drive.DumbDriveToggleCommand;
 import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
-import edu.nr.robotics.subsystems.drive.LineSensorStrafeCommand;
 import edu.nr.robotics.subsystems.drive.LineSensorStrafeCommandGroup;
-import edu.nr.robotics.subsystems.drive.LineSensorStrafeLargeCommand;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
 import edu.nr.robotics.subsystems.drive.TurnToAngleCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
@@ -44,34 +44,39 @@ public class OI implements SmartDashboardSource {
 
     public static final double JOYSTICK_DEAD_ZONE = 0.2;
 
-    public static final double SPEED_MULTIPLIER = 1;
+    public static final double SPEED_MULTIPLIER = 1.0;
 
-    private static final int CANCEL_ALL_BUTTON_NUMBER = 0; //find all of these and make them too
-    private static final int KID_MODE_SWITCH = 1;
-    private static final int CARGO_TOP_BUTTON_NUMBER = 2;
-    private static final int CARGO_MIDDLE_BUTTON_NUMBER = 3;
-    private static final int CARGO_BOTTOM_BUTTON_NUMBER = 4;
-    private static final int CARGO_PICKUP_BUTTON_NUMBER = 34;
-    private static final int HATCH_TOP_BUTTON_NUMBER = 5;
-    private static final int HATCH_MIDDLE_BUTTON_NUMBER = 6;
-    private static final int HATCH_BOTTOM_BUTTON_NUMBER = 7;
-    private static final int ELEVATOR_BOTTOM_BUTTON_NUMBER = 8;
-    private static final int GROUND_PICKUP_HATCH_BUTTON_NUMBER = 9;
-    private static final int CLIMB_HEIGHT_HIGH_BUTTON_NUMBER = 10;
-    private static final int CLIMB_HEIGHT_LOW_BUTTON_NUMBER = 11;
-    private static final int CLIMB_BUTTON_NUMBER = 12;
-    private static final int HATCH_DEPLOY_TOGGLE_NUMBER = 13;
-    private static final int HATCH_GRAB_TOGGLE_NUMBER = 14;
-    private static final int HATCH_SCORE_NUMBER = 10;
-    private static final int TOGGLE_INTAKE_NUMBER = 36;
-    private static final int INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER = 37;
-    private static final int LIFT_RETRACT_NUMBER = 38;
-    private static final int SWITCH_ELEVATOR_GEAR_NUMBER = 16;
+    //Make rteurn to neutral position button
+    private static final int CANCEL_ALL_BUTTON_NUMBER = 11; //find all of these and make them too
+    //private static final int KID_MODE_SWITCH = 1;
+    private static final int CARGO_TOP_BUTTON_NUMBER = 10;
+    private static final int CARGO_MIDDLE_BUTTON_NUMBER = 7;
+    private static final int CARGO_BOTTOM_BUTTON_NUMBER = 1;
+    private static final int CARGO_SHIP_HEIGHT_BUTTON_NUMBER = 4;
+    private static final int CARGO_PICKUP_BUTTON_NUMBER = 8;
+    private static final int HATCH_TOP_BUTTON_NUMBER = 9;
+    private static final int HATCH_MIDDLE_BUTTON_NUMBER = 12;
+    private static final int HATCH_BOTTOM_BUTTON_NUMBER = 10;
+    //private static final int ELEVATOR_BOTTOM_BUTTON_NUMBER = 8;
+    //private static final int GROUND_PICKUP_HATCH_BUTTON_NUMBER = 9;
+    private static final int CLIMB_HEIGHT_HIGH_BUTTON_NUMBER = 1;
+    private static final int CLIMB_HEIGHT_LOW_BUTTON_NUMBER = 6;
+    private static final int CLIMB_BUTTON_NUMBER = 3;
+    private static final int HATCH_DEPLOY_TOGGLE_NUMBER = 5;
+    private static final int HATCH_GRAB_TOGGLE_NUMBER = 4;
+    private static final int HATCH_SCORE_NUMBER = 9;
+    private static final int HATCH_GRAB_NUMBER = 8;
+    private static final int TOGGLE_INTAKE_NUMBER = 2;
+    private static final int TOGGLE_INTAKE_DEPLOY_NUMBER = 5;
+    //private static final int INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER = 37;
+    private static final int LIFT_RETRACT_NUMBER = 2;
+    private static final int SWITCH_ELEVATOR_GEAR_NUMBER = 12;
     //private static final int INTAKE_ROLLERS_RUN_NUMBER = 17;
-    private static final int INTAKE_ROLLERS_PUKE_NUMBER = 18;
+    private static final int INTAKE_ROLLERS_PUKE_NUMBER = 11;
     private static final int GET_HATCH_STATION_NUMBER = 7;
     //private static final int GET_HATCH_GROUND_NUMBER = 20;
     //private static final int GET_CARGO_NUMBER = 21;
+    private  static final int RETURN_TO_NEUTRAL_POSITION_NUMBER = 6;
 
     private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 13;
     private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
@@ -85,8 +90,12 @@ public class OI implements SmartDashboardSource {
     private static final int SNIPER_MODE_FORWARD = 1;
     private static final int SNIPER_MODE_TURN = 1;
     private static final int DUMB_DRIVE_NUMBER = 14;
-    private static final int LINE_SENSOR_STRAFE_RIGHT_NUMBER = 16;
-    private static final int LINE_SENSOR_STRAFE_LEFT_NUMBER = 15;
+    private static final int LINE_SENSOR_LEFT_1_NUMBER = 12;
+    private static final int LINE_SENSOR_LEFT_2_NUMBER = 15;
+    private static final int LINE_SENSOR_RIGHT_1_NUMBER = 11;
+    private static final int LINE_SENSOR_RIGHT_2_NUMBER = 16;
+
+    private double driveSpeedMultiplier = 1;
 
     private static OI singleton;
 
@@ -116,14 +125,14 @@ public class OI implements SmartDashboardSource {
         operatorLeft = new Joystick(STICK_OPERATOR_LEFT);
         operatorRight = new Joystick(STICK_OPERATOR_RIGHT);
 
-        elevatorStick = operatorRight;
-        liftStick = operatorLeft;
+        elevatorStick = operatorLeft;
+        liftStick = operatorRight;
 
        initDriveLeft();
        initDriveRight();
 
        initOperatorLeft();
-       //initOperatorRight();
+       initOperatorRight();
 
         SmartDashboardSource.sources.add(this);
 
@@ -152,9 +161,10 @@ public class OI implements SmartDashboardSource {
         //dumb drive
         new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
         
-        //for strafing to center on a line
-        new JoystickButton(driveLeft, LINE_SENSOR_STRAFE_RIGHT_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.getInstance().SENSOR_STRAFE_PERCENT));
-        new JoystickButton(driveLeft, LINE_SENSOR_STRAFE_LEFT_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.getInstance().SENSOR_STRAFE_PERCENT));
+        new JoystickButton(driveLeft, LINE_SENSOR_LEFT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
+        new JoystickButton(driveLeft, LINE_SENSOR_LEFT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
+        new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
+        new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
 
     }
 
@@ -178,58 +188,55 @@ public class OI implements SmartDashboardSource {
     }
 
     public void initOperatorLeft() {
-       // new JoystickButton(operatorLeft, CANCEL_ALL_BUTTON_NUMBER).whenPressed(new CancelAllCommand());
-
         //kid mode boi
-        kidModeSwitch = new JoystickButton(operatorLeft, KID_MODE_SWITCH);
-
-        //lifty retracty boi
-        //new JoystickButton(operatorLeft, LIFT_RETRACT_NUMBER).whenPressed(new LiftSetPositionCommand(Lift.TOP_POSITION));
+        //kidModeSwitch = new JoystickButton(operatorLeft, KID_MODE_SWITCH);
         
-        /*
-        //elev gear boi
-        elevGearSwitcherSwitch = new JoystickButton(operatorLeft, SWITCH_ELEVATOR_GEAR_NUMBER);
-        elevGearSwitcherSwitch.whenPressed(new ElevatorSwitchToClimbGearCommand());
-        elevGearSwitcherSwitch.whenReleased(new ElevatorSwitchToElevatorGearCommand());
-
         //cargo heights
         new JoystickButton(operatorLeft, CARGO_TOP_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PLACE_TOP_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, CARGO_MIDDLE_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, CARGO_BOTTOM_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PLACE_LOW_HEIGHT_ELEVATOR));
-        new JoystickButton(operatorLeft, CARGO_PICKUP_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_PICKUP_HEIGHT_ELEVATOR));
+        new JoystickButton(operatorLeft, CARGO_SHIP_HEIGHT_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.CARGO_SHIP_HEIGHT));
+        new JoystickButton(operatorLeft, CARGO_PICKUP_BUTTON_NUMBER).whenPressed(new GetCargoCommand());
 
         //hatch heights
         new JoystickButton(operatorLeft, HATCH_TOP_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_TOP_HEIGHT_ELEVATOR));
         new JoystickButton(operatorLeft, HATCH_MIDDLE_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR));
-        new JoystickButton(operatorLeft, HATCH_BOTTOM_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_LOW_HEIGHT_ELEVATOR));
-        new JoystickButton(operatorLeft, GROUND_PICKUP_HATCH_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR));
+        //new JoystickButton(operatorLeft, GROUND_PICKUP_HATCH_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR));
 
-        //climb heights
-        new JoystickButton(operatorLeft, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
-        new JoystickButton(operatorLeft, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
-
-
-        //GEARSHIFT COMMAND GONE?
-       // new JoyStickButton(operatorLeft, CLIMB_BUTTON_NUMBER).whenPressed(new Gear);
-    
-       //hatch
-        new JoystickButton(operatorLeft, HATCH_DEPLOY_TOGGLE_NUMBER).whenPressed(new DeployHatchToggleCommand());
-        new JoystickButton(operatorLeft, HATCH_GRAB_TOGGLE_NUMBER).whenPressed(new GrabHatchToggleCommand());*/
-    
-        new JoystickButton(operatorLeft, HATCH_SCORE_NUMBER).whenPressed(new ScoreHatchCommand());
-        new JoystickButton(operatorLeft, GET_HATCH_STATION_NUMBER).whenPressed(new GrabHatchFromStationCommand());
-        /*
         //intake
         new JoystickButton(operatorLeft, TOGGLE_INTAKE_NUMBER).whenPressed(new IntakeRollersToggleCommand());
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_DEPLOY_NUMBER).whenPressed(new IntakeRollersDeployToggleCommand());
         new JoystickButton(operatorLeft, INTAKE_ROLLERS_PUKE_NUMBER).whenPressed(new IntakeRollersScoreCommand());
-        new JoystickButton(operatorLeft, INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER).whenPressed(new IntakeToggleCommand());
+        //new JoystickButton(operatorLeft, INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER).whenPressed(new IntakeToggleCommand());
 
-        //climb
-        new JoystickButton(operatorLeft, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommand());
-*/
+        new JoystickButton(operatorLeft, RETURN_TO_NEUTRAL_POSITION_NUMBER).whenPressed(new ReturnToNeutralPositionCommand());
+
     }
 
     public void initOperatorRight() {
+        new JoystickButton(operatorRight, CANCEL_ALL_BUTTON_NUMBER).whenPressed(new CancelAllCommand());
+
+        new JoystickButton(operatorRight, HATCH_BOTTOM_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_LOW_HEIGHT_ELEVATOR));
+
+        //climb heights
+        new JoystickButton(operatorRight, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
+        new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
+
+        //climb
+        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommand());
+        new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new LiftSetPositionCommand(Lift.TOP_POSITION));
+
+        //hatch
+        new JoystickButton(operatorRight, HATCH_DEPLOY_TOGGLE_NUMBER).whenPressed(new DeployHatchToggleCommand());
+        new JoystickButton(operatorRight, HATCH_GRAB_TOGGLE_NUMBER).whenPressed(new GrabHatchToggleCommand());
+        new JoystickButton(operatorRight, HATCH_GRAB_NUMBER).whenPressed(new GrabHatchFromStationCommand());
+        new JoystickButton(operatorRight, HATCH_SCORE_NUMBER).whenPressed(new ScoreHatchCommand());
+        new JoystickButton(operatorRight, GET_HATCH_STATION_NUMBER).whenPressed(new GetHatchStationCommand());
+
+        //elev gear boi
+        elevGearSwitcherSwitch = new JoystickButton(operatorRight, SWITCH_ELEVATOR_GEAR_NUMBER);
+        elevGearSwitcherSwitch.whenPressed(new ElevatorSwitchToClimbGearCommand());
+        elevGearSwitcherSwitch.whenReleased(new ElevatorSwitchToElevatorGearCommand());
         
     }
 
@@ -286,11 +293,15 @@ public class OI implements SmartDashboardSource {
     }
 
     public double getElevatorJoystickValue() {
-		return snapDriveJoysticks(-elevatorStick.getX());
+		return -snapDriveJoysticks(-elevatorStick.getX());
     }
     
     public double getLiftJoystickValue() {
         return snapDriveJoysticks(-liftStick.getX());
+    }
+
+    public double getDriveSpeedMultiplier(){
+        return driveSpeedMultiplier;
     }
 
     private static double snapDriveJoysticks(double value) {
@@ -349,6 +360,6 @@ public class OI implements SmartDashboardSource {
 
     public boolean isKidModeOn(){
         //do later if needed
-        return kidModeSwitch.get();
+        return false; //kidModeSwitch.get();
     }
 }

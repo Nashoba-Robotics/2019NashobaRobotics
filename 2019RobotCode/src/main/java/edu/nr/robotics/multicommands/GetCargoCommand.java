@@ -1,6 +1,8 @@
 package edu.nr.robotics.multicommands;
 
 import edu.nr.lib.units.Distance;
+import edu.nr.robotics.subsystems.elevator.Elevator;
+import edu.nr.robotics.subsystems.elevator.ElevatorPercentRawCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersIntakeCommand;
@@ -12,6 +14,8 @@ public class GetCargoCommand extends CommandGroup {
         addSequential(new ElevatorPositionCommand(Distance.ZERO));
 
         addSequential(new IntakeRollersDeployCommand());
+
+        addParallel(new ElevatorPercentRawCommand(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP));
 
         addSequential(new IntakeRollersIntakeCommand());
     }

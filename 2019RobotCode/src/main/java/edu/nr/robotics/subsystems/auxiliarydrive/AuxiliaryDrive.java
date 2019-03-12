@@ -80,7 +80,7 @@ public class AuxiliaryDrive extends NRSubsystem {
 				auxDrive.set(ControlMode.Velocity, 0);
 			}
 
-			auxDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
+			//auxDrive.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, PID_TYPE, DEFAULT_TIMEOUT);
 
 			auxDrive.config_kF(VEL_SLOT, 0, DEFAULT_TIMEOUT);
 			auxDrive.config_kP(VEL_SLOT, P, DEFAULT_TIMEOUT);

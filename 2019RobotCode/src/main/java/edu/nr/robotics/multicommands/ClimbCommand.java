@@ -5,17 +5,19 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.lift.Lift;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanism;
 
 public class ClimbCommand extends NRCommand {
 
     Distance initElevPos;
 
     public ClimbCommand() {
-        super(new NRSubsystem[] {Elevator.getInstance(), Lift.getInstance()});
+        super(new NRSubsystem[] {Elevator.getInstance(), Lift.getInstance(), LiftLockMechanism.getInstance()});
     }
 
     protected void onStart() {
         initElevPos = Elevator.getInstance().getPosition();
+        LiftLockMechanism.getInstance().deployLiftLockMechanism();
         Elevator.getInstance().switchToClimbGear();
         Elevator.getInstance().setMotorPercentRaw(-Math.abs(Elevator.CLIMB_PERCENT));
     }
@@ -32,7 +34,7 @@ public class ClimbCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return Elevator.getInstance().getPosition().lessThan(new Distance(1, Distance.Unit.INCH));
+        return Elevator.getInstance().getPosition().lessThan(Elevator.CLIMB_END_DISTANCE);
         //Lift.getInstance().getPosition().sub(initElevPos).abs().lessThan(Lift.getInstance().PROFILE_END_THRESHOLD_LIFT)
         // && Lift.getInstance().getVelocity().lessThan(Lift.getInstance().PROFILE_STOP_SPEED_THRESHOLD);
     }
