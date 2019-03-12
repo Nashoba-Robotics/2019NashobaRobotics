@@ -1,4 +1,5 @@
 
+
 package edu.nr.robotics.subsystems.elevator;
 
 
@@ -33,10 +34,11 @@ public class ElevatorJoystickCommand extends JoystickCommand {
         if(!OI.getInstance().isElevatorNonZero()) {
 
             if (Elevator.getInstance().getPosition().lessThan(new Distance(1, Distance.Unit.INCH))) {
-				Elevator.getInstance().setMotorPercentRaw(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP);
+				Elevator.getInstance().setMotorPercentRaw(0);
             } else if (Elevator.getInstance().getCurrentGear() == Elevator.Gear.elevator) { //if (!EnabledSensors.elevatorSensor.get())
+                //new ElevatorHoldPositionCommand().start();
                 Elevator.getInstance().setMotorPercentRaw(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP);
-                System.out.println("38");
+                //System.out.println("38");
         //    } else {
         //        Elevator.getInstance().setMotorPercentRaw(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN);
             }

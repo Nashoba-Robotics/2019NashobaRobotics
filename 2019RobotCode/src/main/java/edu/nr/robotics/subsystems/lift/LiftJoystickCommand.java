@@ -8,8 +8,8 @@ import edu.nr.robotics.subsystems.EnabledSubsystems;
 
 public class LiftJoystickCommand extends JoystickCommand{
 
-    private static final double MIN_LIFT_JOYSTICK_PERCENT = 0;
-	private static double MAX_LIFT_JOYSTICK_PERCENT = 0;
+    private static final double MIN_LIFT_JOYSTICK_PERCENT = -0.1;
+	private static double MAX_LIFT_JOYSTICK_PERCENT = 0.2;
 
     private static double motorPercent = 0;
     
@@ -20,11 +20,11 @@ public class LiftJoystickCommand extends JoystickCommand{
     }
 
     protected void onExecute() {
-        if (OI.getInstance().isKidModeOn()) {
+        /*if (OI.getInstance().isKidModeOn()) {
 			MAX_LIFT_JOYSTICK_PERCENT = 0;
 		} else {
 			MAX_LIFT_JOYSTICK_PERCENT = 0;
-        }
+        }*/
 
         if(!OI.getInstance().isLiftNonZero()){
             if (Lift.getInstance().getPosition().lessThan(new Distance(3, Distance.Unit.INCH))) {

@@ -24,6 +24,11 @@ public class ElevatorPositionCommand extends NRCommand {
 		initialHeight = Elevator.getInstance().getPosition();
 		Elevator.getInstance().setPosition(height);
 	}
+
+	protected void onEnd() {
+		if (!height.equals(Distance.ZERO)) {}
+			//new ElevatorHoldPositionCommand().start();
+	}
 	
 	@Override
 	protected boolean isFinishedNR() {

@@ -16,6 +16,11 @@ public class ElevatorPositionSmartDashboardCommand extends NRCommand {
 		this.height = Elevator.profilePos;
 		Elevator.getInstance().setPosition(height);
 	}
+
+	protected void onEnd() {
+		if (!height.equals(Distance.ZERO)) {}
+			//new ElevatorHoldPositionCommand().start();
+	}
 	
 	@Override
 	protected boolean isFinishedNR() {

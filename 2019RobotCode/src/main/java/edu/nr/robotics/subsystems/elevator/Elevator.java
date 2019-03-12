@@ -59,7 +59,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.128; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = 0;
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = -0.2;
 
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.124;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
@@ -99,7 +99,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static double D_VEL_ELEVATOR_DOWN = 0;
     
     public static double F_POS_HOLD = 0;
-    public static double P_POS_HOLD = 0;
+    public static double P_POS_HOLD = 0.1;
 	public static double I_POS_HOLD = 0;
 	public static double D_POS_HOLD = 0;
 
@@ -140,17 +140,18 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static double kP_DOWN = 0;
     public static double kD_DOWN = 0;
 
-    public static final Distance GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT = new Distance(14.5, Distance.Unit.INCH);
+    public static final Distance GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT = new Distance(17, Distance.Unit.INCH); //14.5
     public static final Distance TOP_HEIGHT_ELEVATOR = new Distance(82, Distance.Unit.INCH);//find these
     public static final Distance HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR = Distance.ZERO;
-    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(21, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(44, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(75, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(36, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(17, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);//20.5
+    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(46, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(74.5
+    , Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(38.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(66.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_SHIP_HEIGHT = new Distance(45, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = new Distance(19.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = new Distance(17, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);//18
     public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = new Distance(19, Distance.Unit.INCH);
     public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = new Distance(6, Distance.Unit.INCH);
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
@@ -604,7 +605,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                 heightCounter += 1 * getVelocity().signum();
             }*/
 
-            if (!EnabledSensors.elevatorSensor.get()) {
+            /*if (!EnabledSensors.elevatorSensor.get()) {
                 if ((getPosition().lessThan(new Distance(3, Distance.Unit.INCH)) && (!holdingBottom))) {
                     elevatorTalon.setSelectedSensorPosition(0);
                 
@@ -618,7 +619,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
                     }
                     }
                 }
-            }
+            }*/
 
         }
     }
