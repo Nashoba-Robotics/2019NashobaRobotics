@@ -26,8 +26,9 @@ public class IntakeRollers extends NRSubsystem {
 
     public static Time  VOLTAGE_RAMP_RATE_INTAKE_ROLLERS = new Time(0.05, Time.Unit.SECOND);
 
-    public static double INTAKE_PERCENT = 0; //find all
-    public static double OUTTAKE_PERCENT = 0; 
+    public static double INTAKE_PERCENT = 0.7; //find all
+    public static double OUTTAKE_PERCENT = 0.9; 
+    public static double HOLD_PERCENT = 0.06;
 
     public static final int PEAK_CURRENT_INTAKE_ROLLERS = 80;
     public static final int PEAK_CURRENT_DURATION_INTAKE_ROLLERS = 250;

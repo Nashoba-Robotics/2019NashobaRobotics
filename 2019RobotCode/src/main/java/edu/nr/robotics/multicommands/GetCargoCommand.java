@@ -15,7 +15,7 @@ public class GetCargoCommand extends CommandGroup {
 
         addSequential(new IntakeRollersDeployCommand());
 
-        addParallel(new ElevatorPercentRawCommand(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP));
+        //addParallel(new ElevatorPercentRawCommand(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP));
 
         addSequential(new IntakeRollersIntakeCommand());
     }
