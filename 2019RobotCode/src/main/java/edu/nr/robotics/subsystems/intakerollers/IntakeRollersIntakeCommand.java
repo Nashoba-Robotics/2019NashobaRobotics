@@ -24,8 +24,8 @@ public class IntakeRollersIntakeCommand extends NRCommand {
 	@Override
 	public void onEnd() {
 		System.out.println("ends");
-		IntakeRollers.getInstance().disable();
-		
+		//IntakeRollers.getInstance().disable();
+		IntakeRollers.getInstance().setMotorPercent(IntakeRollers.HOLD_PERCENT);
 	}
 	
 	@Override
