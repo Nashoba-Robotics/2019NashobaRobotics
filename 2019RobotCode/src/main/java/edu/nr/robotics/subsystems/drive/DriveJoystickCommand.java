@@ -67,11 +67,11 @@ public class DriveJoystickCommand extends JoystickCommand {
                     double cheesyMoveValue = OI.getInstance().getArcadeMoveValue();
                     double cheesyRotateValue = OI.getInstance().getArcadeTurnValue();
                     double cheesyHValue = OI.getInstance().getArcadeHValue();    
-
-                    cheesyMoveValue = NRMath.powWithSign(cheesyMoveValue, 3);
-                    cheesyRotateValue = NRMath.powWithSign(cheesyRotateValue, 5);
-                    cheesyHValue = NRMath.powWithSign(cheesyHValue, 3);
-
+                    
+                    cheesyMoveValue = NRMath.powWithSign(cheesyMoveValue, 2);
+                    cheesyRotateValue = NRMath.powWithSign(cheesyRotateValue, 2);
+                    cheesyHValue = NRMath.powWithSign(cheesyHValue, 2);
+                    
                     Drive.getInstance().cheesyDrive(cheesyMoveValue, cheesyRotateValue, cheesyHValue);
 
                     break;

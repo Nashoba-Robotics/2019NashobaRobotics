@@ -42,7 +42,7 @@ import edu.wpi.first.wpilibj.command.PrintCommand;
 
 public class OI implements SmartDashboardSource {
 
-    public static final double JOYSTICK_DEAD_ZONE = 0.2;
+    public static final double JOYSTICK_DEAD_ZONE = 0.1;
 
     public static final double SPEED_MULTIPLIER = 1.0;
 

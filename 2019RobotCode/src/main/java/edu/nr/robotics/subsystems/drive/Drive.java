@@ -646,6 +646,11 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public void smartDashboardInfo() {
 		if(leftDrive != null && rightDrive != null) {
 			SmartDashboard.putBoolean("Line Sensors", !(new SensorVoting(EnabledSensors.floorSensorTwo, EnabledSensors.floorSensorThree, EnabledSensors.floorSensorFour).isTrue()));
+			SmartDashboard.putBoolean("Line Sensor 1", !(EnabledSensors.floorSensorOne.get()));
+			SmartDashboard.putBoolean("Line Sensor 2", !(EnabledSensors.floorSensorTwo.get()));
+			SmartDashboard.putBoolean("Line Sensor 3", !(EnabledSensors.floorSensorThree.get()));
+			SmartDashboard.putBoolean("Line Sensor 4", !(EnabledSensors.floorSensorFour.get()));
+			SmartDashboard.putBoolean("Line Sensor 5", !(EnabledSensors.floorSensorFive.get()));
 
 			if(EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 
