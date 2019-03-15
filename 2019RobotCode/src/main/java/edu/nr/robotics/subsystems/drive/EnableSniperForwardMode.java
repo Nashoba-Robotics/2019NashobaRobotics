@@ -20,5 +20,7 @@ public class EnableSniperForwardMode extends NRCommand {
 		} else {
 			Drive.MOVE_JOYSTICK_MULTIPLIER = MOVE_JOYSTICK_MULTIPLIER_HIGH;
 		}
+
+		Drive.sniperModeEnabled = bool;
 	}
 }

@@ -1,5 +1,6 @@
 package edu.nr.robotics.subsystems.drive;
 
+import edu.nr.lib.NRMath;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
@@ -25,7 +26,7 @@ public class DriveToSomethingJoystickCommand extends NRCommand {
     //make sure limelight tracking cargo
 
     protected void onExecute() {
-        double moveValue = Math.pow(OI.getInstance().getArcadeMoveValue(), 3);
+        double moveValue = NRMath.powWithSign(OI.getInstance().getArcadeMoveValue(), 2);
 
         double headingAdjustment;
 
