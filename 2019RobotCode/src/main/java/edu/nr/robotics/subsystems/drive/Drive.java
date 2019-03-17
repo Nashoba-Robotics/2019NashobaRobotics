@@ -63,7 +63,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
-	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH).mul(1.5);
+	public static double wheelBaseMultiplier = 1.5;
+	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
 
 	public static final Speed MAX_SPEED_DRIVE = new Speed(13.98, Distance.Unit.FOOT, Time.Unit.SECOND);
 	public static final Speed MAX_SPEED_DRIVE_H = new Speed(8.4, Distance.Unit.FOOT, Time.Unit.SECOND);
@@ -555,7 +556,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 						Time.Unit.HUNDRED_MILLISECOND, Time.Unit.HUNDRED_MILLISECOND),
 				(int) (Math.PI * WHEEL_DIAMETER_EFFECTIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)),
 				WHEEL_DIAMETER.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE),
-				WHEEL_BASE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), false, profileFile);
+				WHEEL_BASE.mul(wheelBaseMultiplier).get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), false, profileFile);
 
 		System.out.println(profileFile.getName());
 
@@ -629,6 +630,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putData(new ResetGyroCommand());
 		}
 		if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+			SmartDashboard.putNumber("Wheel Base Multiplier: ", wheelBaseMultiplier);
 
 			SmartDashboard.putNumber("Left P Value: ", P_LEFT);
 			SmartDashboard.putNumber("Left I Value: ", I_LEFT);
@@ -737,6 +739,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				kPTwoD = SmartDashboard.getNumber("kPTwoD Value: ", kPTwoD);
 				kITwoD = SmartDashboard.getNumber("kITwoD Value: ", kITwoD);
 				kDTwoD = SmartDashboard.getNumber("kDTwoD Value: ", kDTwoD);
+
+				wheelBaseMultiplier = SmartDashboard.getNumber("Wheel Base Multiplier: ", wheelBaseMultiplier);
 
 				DRIVE_RAMP_RATE = new Time(
 						SmartDashboard.getNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND)),

@@ -12,7 +12,7 @@ public class IntakeRollersToggleCommand extends NRCommand {
 
         if(IntakeRollers.getInstance().isRunning()) {
             IntakeRollers.getInstance().disable();
-        } else {
+        } else if (IntakeRollers.getInstance().isIntakeRollersDeployed()) {
             new IntakeRollersIntakeCommand().start();
             //IntakeRollers.getInstance().setMotorPercent(IntakeRollers.INTAKE_PERCENT);
         }
