@@ -16,7 +16,7 @@ public class CargoShipRightSideToHatchProfilingCommand extends CommandGroup{
     public CargoShipRightSideToHatchProfilingCommand() {
        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "CargoShipRightSideToHatch"));
     
-       addSequential(new ConditionalCommand(new ElevatorPositionCommand(Elevator.getInstance().HATCH_PLACE_LOW_HEIGHT_ELEVATOR)){
+       addSequential(new ConditionalCommand(new ElevatorPositionCommand(Elevator.getInstance().HATCH_PLACE_LOW_HEIGHT_ELEVATOR)) {
 
             protected boolean condition() {
                 return Robot.getInstance().selectedGamePiece2 == GamePiece.hatch;

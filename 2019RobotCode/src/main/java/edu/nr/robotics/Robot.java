@@ -66,9 +66,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
-    private double prevTime = 0;
-
     private static Robot singleton;
+
+    private static double period = 0.01;
+
+    private double prevTime = 0;
 
     private Command autonomousCommand;
     public AutoChoosers.StartPos selectedStartPos;
@@ -87,7 +89,7 @@ public class Robot extends TimedRobot {
 
     public void robotInit() {
         singleton = this;
-        m_period = 0.02; // period that code runs at, should be .01
+        m_period = period; // period that code runs at, should be .01
         //changed to avoid loop error bois
 
         robotCompressor = new Compressor(0);
@@ -283,6 +285,9 @@ public class Robot extends TimedRobot {
             return new DriveOverBaselineAutoCommand();
         }
 
+        public double getPeriod() {
+            return period;
+        }
 
     }
 

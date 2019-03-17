@@ -8,6 +8,7 @@ import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfile;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
+import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollers;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersReverseCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -18,7 +19,7 @@ public class StartPosMiddleToCargoShipFrontLeftProfilingCommand extends CommandG
     public StartPosMiddleToCargoShipFrontLeftProfilingCommand(){
         addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "StartPosMiddleToCargoShipFrontLeft"));
     
-        addSequential(new ConditionalCommand(new ElevatorPositionCommand(Elevator.getInstance().CARGO_PLACE_LOW_HEIGHT_ELEVATOR), new ElevatorPositionCommand(Elevator.getInstance().HATCH_PLACE_LOW_HEIGHT_ELEVATOR)){
+        addSequential(new ConditionalCommand(new ElevatorPositionCommand(Elevator.getInstance().CARGO_PLACE_LOW_HEIGHT_ELEVATOR), new ElevatorPositionCommand(Elevator.getInstance().HATCH_PLACE_LOW_HEIGHT_ELEVATOR)) {
 
             protected boolean condition() {
                 return Robot.getInstance().selectedGamePiece2 == GamePiece.cargo;
@@ -26,7 +27,7 @@ public class StartPosMiddleToCargoShipFrontLeftProfilingCommand extends CommandG
 
         });
 
-        addSequential(new ConditionalCommand(new IntakeRollersReverseCommand(IntakeRollers.getInstance().OUTTAKE_PERCENT)){
+        addSequential(new ConditionalCommand(new IntakeRollersReverseCommand(IntakeRollers.getInstance().OUTTAKE_PERCENT), new ScoreHatchCommand()) {
 
             protected boolean condition() {
                 return Robot.getInstance().selectedGamePiece2 == GamePiece.cargo;

@@ -6,6 +6,7 @@ import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
+import edu.nr.robotics.Robot;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -42,7 +43,7 @@ public class EnableReverseTwoDMotionProfileSmartDashboardCommand extends NRComma
 			profileStartTime = Timer.getFPGATimestamp();
 			profileStartTimeMs = (profileStartTime * 1000);
 		} else if (TwoDimensionalMotionProfilerPathfinder.twoDEnabled) {
-			index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / 20.0);
+			index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / (1000 * Robot.getInstance().getPeriod()));
 
 			if (index < TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length()) {
 				Drive.getInstance().setPIDSourceType(PIDSourceType.kRate);
