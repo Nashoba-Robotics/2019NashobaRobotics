@@ -21,7 +21,7 @@ public class StartPosMiddleToCargoShipFrontLeftProfilingCommand extends CommandG
     public StartPosMiddleToCargoShipFrontLeftProfilingCommand(){
         //addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "StartPosMiddleToCargoShipFrontLeft"));
     
-        addSequential(new EnableMotionProfile(new Distance(11.5, Distance.Unit.FOOT), Distance.ZERO, Drive.ONE_D_PROFILE_DRIVE_PERCENT, Drive.ONE_D_PROFILE_ACCEL_PERCENT));
+        addSequential(new EnableMotionProfile(new Distance(11.93, Distance.Unit.FOOT), Distance.ZERO, Drive.ONE_D_PROFILE_DRIVE_PERCENT, Drive.ONE_D_PROFILE_ACCEL_PERCENT));
 
         addSequential(new LineSensorStrafeCommandGroup(0));
 

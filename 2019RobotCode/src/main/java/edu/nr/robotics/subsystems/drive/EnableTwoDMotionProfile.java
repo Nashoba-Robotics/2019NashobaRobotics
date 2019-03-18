@@ -122,7 +122,7 @@ public class EnableTwoDMotionProfile extends NRCommand {
 		@Override
 		public boolean isFinishedNR() {
 
-			boolean finished;
+			/*boolean finished;
 
 			finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
 				TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
@@ -137,7 +137,9 @@ public class EnableTwoDMotionProfile extends NRCommand {
 				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 
-			return finished;
+			return finished;*/
+
+			return Drive.getInstance().twoDProfiler.isFinished();
 			
 		}
 

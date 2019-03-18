@@ -102,7 +102,7 @@ public class EnableReverseTwoDMotionProfileSmartDashboardCommand extends NRComma
 	@Override
 	public boolean isFinishedNR() {
 
-		boolean finished;
+		/*boolean finished;
 
 		finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
 				TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
@@ -117,7 +117,9 @@ public class EnableReverseTwoDMotionProfileSmartDashboardCommand extends NRComma
 				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 
-		return finished;
+		return finished;*/
+
+		return Drive.getInstance().twoDProfiler.isFinished();
 	}
 
 }

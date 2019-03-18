@@ -5,11 +5,14 @@ import edu.nr.lib.network.LimelightNetworkTable;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
 import edu.nr.robotics.subsystems.sensors.EnableLimelightCommand;
+import edu.wpi.first.wpilibj.Timer;
 
 public class TurnToSomethingCommand extends NRCommand {
 
     private boolean reachedSetVel = false;
     private Pipeline pipeline;
+
+    private double initTime;
 
     public TurnToSomethingCommand(Pipeline pipeline) {
         super(Drive.getInstance());
@@ -17,9 +20,12 @@ public class TurnToSomethingCommand extends NRCommand {
     }
 
     protected void onStart() {
-        new EnableLimelightCommand(true).start();
+        if (pipeline == Pipeline.Target)
+            new EnableLimelightCommand(true).start();
         LimelightNetworkTable.getInstance().setPipeline(pipeline);
         reachedSetVel = false;
+
+        initTime = Timer.getFPGATimestamp();
     }
 
     protected void onExecute() {
@@ -50,14 +56,15 @@ public class TurnToSomethingCommand extends NRCommand {
     }
     
     protected void onEnd() {
-            new EnableLimelightCommand(false).start();
-            LimelightNetworkTable.getInstance().setPipeline(Pipeline.DriverCam);
+        new EnableLimelightCommand(false).start();
+        LimelightNetworkTable.getInstance().setPipeline(Pipeline.DriverCam);
     }
 
     protected boolean isFinishedNR(){
         boolean finished = Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_TURN_SPEED_THRESHOLD)
         && Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_TURN_SPEED_THRESHOLD) && 
-        LimelightNetworkTable.getInstance().getHorizOffset().lessThan(Drive.DRIVE_ANGLE_THRESHOLD);
+        LimelightNetworkTable.getInstance().getHorizOffset().lessThan(Drive.DRIVE_ANGLE_THRESHOLD)
+        && (Timer.getFPGATimestamp() - initTime > 0.5);
     
         return finished;
     }

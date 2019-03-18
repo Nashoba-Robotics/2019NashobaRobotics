@@ -4,6 +4,7 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.interfaces.Periodic;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable;
+import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.robotics.auton.AutoChoosers;
 import edu.nr.robotics.auton.AutoChoosers.Destination;
 import edu.nr.robotics.auton.AutoChoosers.Destination2;
@@ -33,6 +34,7 @@ import edu.nr.robotics.subsystems.drive.EnableMotionProfileSmartDashboardCommand
 import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.EnableTwoDMotionProfileSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.TurnSmartDashboardCommand;
+import edu.nr.robotics.subsystems.drive.TurnToSomethingCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorBottomSmartDashboardCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorDeltaPositionSmartDashboardCommand;
@@ -146,6 +148,7 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putData(new StartPosMiddleToCargoShipFrontLeftProfilingCommand());
         SmartDashboard.putData(new CargoShipFrontRightToHatchProfilingCommand());
+        SmartDashboard.putData(new TurnToSomethingCommand(Pipeline.Target));
 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
