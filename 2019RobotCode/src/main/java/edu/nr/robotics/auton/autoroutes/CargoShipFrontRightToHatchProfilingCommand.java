@@ -15,17 +15,17 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class CargoShipFrontRightToHatchProfilingCommand extends CommandGroup {
 
     public CargoShipFrontRightToHatchProfilingCommand() {
-        addSequential(new GetHatchStationCommand());
+        //addSequential(new GetHatchStationCommand());
 
-        addSequential(new EnableMotionProfile(new Distance(-6, Distance.Unit.INCH), Distance.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT));
+        addSequential(new EnableMotionProfile(new Distance(-24, Distance.Unit.INCH), Distance.ZERO, Drive.ONE_D_PROFILE_DRIVE_PERCENT, Drive.ONE_D_PROFILE_ACCEL_PERCENT));
 
         addSequential(new TurnCommand(Drive.getInstance(), new Angle(90, Angle.Unit.DEGREE), Drive.MAX_PROFILE_TURN_PERCENT));
 
-        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "CargoShipFrontRightToHatch"));
+        addSequential(new EnableTwoDMotionProfile(new Distance(9, Distance.Unit.FOOT), new Distance(-11, Distance.Unit.FOOT), new Angle(90, Angle.Unit.DEGREE), Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "CargoShipFrontRightToHatch"));
 
         addSequential(new TurnToSomethingCommand(Pipeline.Target));
 
-        addSequential(new EnableMotionProfile(new Distance(36, Distance.Unit.INCH), Distance.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT));
+        addSequential(new EnableMotionProfile(new Distance(36, Distance.Unit.INCH), Distance.ZERO, Drive.ONE_D_PROFILE_DRIVE_PERCENT, Drive.ONE_D_PROFILE_ACCEL_PERCENT));
 
         addSequential(new HatchMechanismGrabCommand());
         

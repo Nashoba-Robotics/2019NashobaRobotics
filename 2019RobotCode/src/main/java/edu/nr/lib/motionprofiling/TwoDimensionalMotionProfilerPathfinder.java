@@ -72,7 +72,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 	public static double velocityGoalRight = 0;
 	public static double accelGoalRight = 0;
 	
-	public static int index = 0;
+	//public static int index = 0;
 	public static double currentHeading = 0;
 	public static double desiredHeading = 0;
 		
@@ -101,6 +101,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 		this.kd = kd;
 		this.kv = kv;
 		this.kp_theta = kp_theta;
+
 		this.encoderTicksPerRevolution = encoderTicksPerRevolution;
 		this.initialPositionLeft = source.pidGetLeft();
 		this.initialPositionRight = source.pidGetRight();
@@ -132,7 +133,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 				
 				lastTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
 				System.out.println(deltaT*1000);*/
-			
+
 				if (!this.negate) {
 					prelimOutputLeft = left.calculate((source.pidGetLeft() - initialPositionLeft));
 					prelimOutputRight = right.calculate((source.pidGetRight() - initialPositionRight));
@@ -154,13 +155,13 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 				double headingAdjustment = -kp_theta * angleDifference;
 				
 				outputLeft = prelimOutputLeft + headingAdjustment;
-				outputRight = prelimOutputRight + headingAdjustment;
+				outputRight = prelimOutputRight - headingAdjustment;
 								
 				out.pidWrite(outputLeft, outputRight);
 				
-				int place = (int)((edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - timeSinceStart) * 1000 / this.period);
+				//int place = (int)((edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - timeSinceStart) * 1000 / this.period);
 				
-				index = Math.min(place, modifier.getLeftTrajectory().length() - 1);
+				//index = Math.min(place, modifier.getLeftTrajectory().length() - 1);
 			}
 	}
 		
@@ -267,6 +268,10 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 
 	public void setKP_theta(double kp_theta) {
 		this.kp_theta = kp_theta;
+	}
+
+	public boolean isFinished() {
+		return left.isFinished() && right.isFinished();
 	}
 	
 	//SmartDashboard.putNumber("Output Left", outputLeft);

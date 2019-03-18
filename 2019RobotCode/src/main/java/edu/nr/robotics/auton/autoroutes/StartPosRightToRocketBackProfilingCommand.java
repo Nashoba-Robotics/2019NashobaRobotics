@@ -18,9 +18,9 @@ public class StartPosRightToRocketBackProfilingCommand extends CommandGroup{
     public StartPosRightToRocketBackProfilingCommand(){
         addSequential(new ConditionalCommand(
                 new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO,
-                        Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "StartPosRightToRocketBack"),
+                        Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "StartPosRightToRocketBack"),
                 new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO,
-                        Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT,
+                        Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT,
                         "StartPosRightPlatformToRocketBack")) {
 
             @Override

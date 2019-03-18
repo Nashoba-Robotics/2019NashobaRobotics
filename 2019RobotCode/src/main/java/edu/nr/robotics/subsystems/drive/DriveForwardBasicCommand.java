@@ -13,7 +13,7 @@ public class DriveForwardBasicCommand extends NRCommand {
     GyroCorrection gyro;
 
     public DriveForwardBasicCommand(Distance distance) {
-            this(distance, Drive.PROFILE_DRIVE_PERCENT);
+            this(distance, Drive.ONE_D_PROFILE_DRIVE_PERCENT);
     }
 
     public DriveForwardBasicCommand(Distance distance, double percent) {

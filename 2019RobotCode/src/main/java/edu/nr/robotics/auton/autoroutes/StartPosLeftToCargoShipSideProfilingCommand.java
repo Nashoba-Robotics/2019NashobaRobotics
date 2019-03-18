@@ -19,8 +19,9 @@ public class StartPosLeftToCargoShipSideProfilingCommand extends CommandGroup {
     public StartPosLeftToCargoShipSideProfilingCommand() {
         addSequential(new ConditionalCommand(
                 new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO,
-                        Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "StartPosLeftToCargoShipSide"), new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO,
-                        Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "StartPosLeftPlatformToCargoShipSide")) {
+                        Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "StartPosLeftToCargoShipSide"),
+                         new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO,
+                        Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "StartPosLeftPlatformToCargoShipSide")) {
 
             @Override
             protected boolean condition() {

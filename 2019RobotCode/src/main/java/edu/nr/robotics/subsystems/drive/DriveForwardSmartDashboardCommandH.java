@@ -17,7 +17,7 @@ public class DriveForwardSmartDashboardCommandH extends NRCommand {
     }
 
     public void onStart() {
-        Drive.getInstance().setMotorSpeedInPercent(0, 0, Drive.getInstance().drivePercent);
+        Drive.getInstance().setMotorSpeedInPercent(0, 0, Drive.getInstance().oneDDrivePercent);
         initialPosition = Drive.getInstance().getHPosition();
         gyro.reset();
     }

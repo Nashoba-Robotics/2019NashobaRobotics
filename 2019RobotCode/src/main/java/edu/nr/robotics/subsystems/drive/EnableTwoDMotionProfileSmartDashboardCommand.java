@@ -27,8 +27,8 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 	@Override
 	public void onStart() {
-		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.drivePercent,
-				Drive.accelPercent, Drive.profileName);
+		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.twoDDrivePercent,
+				Drive.twoDAccelPercent, Drive.profileName);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
 		profileStartTime = 0;
@@ -91,7 +91,7 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 	@Override
 	public boolean isFinishedNR() {
 
-		boolean finished;
+		/*boolean finished;
 
 		System.out.println("left error: " + (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
 			TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
@@ -116,7 +116,9 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
 				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
 				
-		return finished;
+		return finished;*/
+
+		return Drive.getInstance().twoDProfiler.isFinished();
 	}
 
 }

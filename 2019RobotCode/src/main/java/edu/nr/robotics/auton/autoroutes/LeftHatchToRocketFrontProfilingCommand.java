@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.command.ConditionalCommand;
 public class LeftHatchToRocketFrontProfilingCommand extends CommandGroup {
 
     public LeftHatchToRocketFrontProfilingCommand() {
-       addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "LeftHatchToRocketFront"));
+       addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "LeftHatchToRocketFront"));
     
         addSequential(new ConditionalCommand(new ElevatorPositionCommand(Elevator.getInstance().HATCH_PLACE_LOW_HEIGHT_ELEVATOR)) {
 

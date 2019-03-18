@@ -19,6 +19,8 @@ import edu.nr.robotics.auton.automap.StartPosMiddleCargoShipFrontRightCommand;
 import edu.nr.robotics.auton.automap.StartPosRightCargoShipSideCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
+import edu.nr.robotics.auton.autoroutes.CargoShipFrontRightToHatchProfilingCommand;
+import edu.nr.robotics.auton.autoroutes.StartPosMiddleToCargoShipFrontLeftProfilingCommand;
 import edu.nr.robotics.multicommands.ClimbCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDrive;
@@ -141,6 +143,9 @@ public class Robot extends TimedRobot {
         SmartDashboard.putData(new CSVSaverEnable());
         SmartDashboard.putData(new CSVSaverDisable());
         SmartDashboard.putNumber("Auto Wait Time", 0);
+
+        SmartDashboard.putData(new StartPosMiddleToCargoShipFrontLeftProfilingCommand());
+        SmartDashboard.putData(new CargoShipFrontRightToHatchProfilingCommand());
 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());
