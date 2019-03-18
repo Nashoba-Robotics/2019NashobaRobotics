@@ -123,10 +123,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static double kPTwoD = 0.000000002;
 	public static double kITwoD = 0;
 	public static double kDTwoD = 0.0000000002;
-	public static double kP_thetaTwoD = 0;
+	public static double kP_thetaTwoD = 0.00005;
 
 	public static final double ONE_D_PROFILE_DRIVE_PERCENT = 0.6;	
-	public static final double TWO_D_PROFILE_DRIVE_PERCENT = 0.25;
+	public static final double TWO_D_PROFILE_DRIVE_PERCENT = 0.4;
 	public static final double ONE_D_ACCEL_PERCENT = 0.8;
 	public static final double TWO_D_ACCEL_PERCENT = 0.6;
 
@@ -197,7 +197,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static Angle angleToTurn;
 
 	public OneDimensionalMotionProfilerTwoMotor diagonalProfiler;
-	private TwoDimensionalMotionProfilerPathfinder twoDProfiler;
+	public TwoDimensionalMotionProfilerPathfinder twoDProfiler;
 	private Waypoint[] points;
 
 	public static enum DriveMode {
@@ -660,6 +660,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putNumber("kPTwoD Value: ", kPTwoD);
 			SmartDashboard.putNumber("kITwoD Value: ", kITwoD);
 			SmartDashboard.putNumber("kDTwoD Value: ", kDTwoD);
+			SmartDashboard.putNumber("kP_thetaTwoD Value: ", kP_thetaTwoD);
 
 			SmartDashboard.putNumber("Drive Ramp Rate: ", DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
 			SmartDashboard.putNumber("H Drive Ramp Rate: ", H_DRIVE_RAMP_RATE.get(Time.Unit.SECOND));
@@ -745,6 +746,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 				kPTwoD = SmartDashboard.getNumber("kPTwoD Value: ", kPTwoD);
 				kITwoD = SmartDashboard.getNumber("kITwoD Value: ", kITwoD);
 				kDTwoD = SmartDashboard.getNumber("kDTwoD Value: ", kDTwoD);
+				kP_thetaTwoD = SmartDashboard.getNumber("kP_thetaTwoD Value: ", kP_thetaTwoD);
 
 				wheelBaseMultiplier = SmartDashboard.getNumber("Wheel Base Multiplier: ", wheelBaseMultiplier);
 

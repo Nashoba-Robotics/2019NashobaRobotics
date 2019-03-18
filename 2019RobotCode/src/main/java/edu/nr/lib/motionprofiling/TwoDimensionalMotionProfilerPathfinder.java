@@ -156,7 +156,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 				double headingAdjustment = -kp_theta * angleDifference;
 				
 				outputLeft = prelimOutputLeft + headingAdjustment;
-				outputRight = prelimOutputRight + headingAdjustment;
+				outputRight = prelimOutputRight - headingAdjustment;
 								
 				out.pidWrite(outputLeft, outputRight);
 				
@@ -269,6 +269,10 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 
 	public void setKP_theta(double kp_theta) {
 		this.kp_theta = kp_theta;
+	}
+
+	public boolean isFinished() {
+		return left.isFinished() && right.isFinished();
 	}
 	
 	//SmartDashboard.putNumber("Output Left", outputLeft);

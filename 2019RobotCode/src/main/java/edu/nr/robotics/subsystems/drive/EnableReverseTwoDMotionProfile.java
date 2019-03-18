@@ -122,23 +122,7 @@ public class EnableReverseTwoDMotionProfile extends NRCommand {
 
 		@Override
 		public boolean isFinishedNR() {
-
-			boolean finished;
-
-			finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
-				TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
-					.get(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length() - 1).position,
-				Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
-			
-				&& (Drive.getInstance().getRightPosition().sub(initialRightPosition)).sub(new Distance(
-				TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
-					.get(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory().length() - 1).position,
-				Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
-			
-				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
-
-			return finished;
+			return Drive.getInstance().twoDProfiler.isFinished();
 			
 		}
 
