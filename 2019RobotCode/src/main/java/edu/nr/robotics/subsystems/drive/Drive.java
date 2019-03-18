@@ -55,7 +55,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	// TODO: fix all of these
 	public static final double REAL_ENC_TICK_PER_INCH_DRIVE = 8192 / (6 * Math.PI);
-	public static final double REAL_ENC_REV_PER_INCH_H_DRIVE = 10.2*1 / (4 * Math.PI);
+	public static final double REAL_ENC_REV_PER_INCH_H_DRIVE = 10.2 * 1 / (4 * Math.PI);
 
 	public static final double EFFECTIVE_ENC_TICK_PER_INCH_DRIVE = REAL_ENC_TICK_PER_INCH_DRIVE * 1.01; // * 1.02;
 	public static final double EFFECTIVE_ENC_REV_PER_INCH_H_DRIVE = REAL_ENC_REV_PER_INCH_H_DRIVE;
@@ -63,7 +63,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Distance WHEEL_DIAMETER = new Distance(6, Distance.Unit.INCH);
 	public static final Distance WHEEL_DIAMETER_EFFECTIVE = new Distance(6, Distance.Unit.INCH);
 
-	public static double wheelBaseMultiplier = 1.5;
+	public static double wheelBaseMultiplier = 1.3;
 	public static final Distance WHEEL_BASE = new Distance(24, Distance.Unit.INCH);
 
 	public static final Speed MAX_SPEED_DRIVE = new Speed(13.98, Distance.Unit.FOOT, Time.Unit.SECOND);
@@ -119,14 +119,14 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public static double kVTwoD = 1
 			/ MAX_SPEED_DRIVE.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND);
-	public static double kATwoD = 0;
-	public static double kPTwoD = 0.0000000;
+	public static double kATwoD = 0.0002;
+	public static double kPTwoD = 0.000000002;
 	public static double kITwoD = 0;
-	public static double kDTwoD = 0;
+	public static double kDTwoD = 0.0000000002;
 	public static double kP_thetaTwoD = 0;
 
-	public static final double PROFILE_DRIVE_PERCENT = 0;
-	public static final double ACCEL_PERCENT = 0;
+	public static final double PROFILE_DRIVE_PERCENT = 0.25;
+	public static final double ACCEL_PERCENT = 0.6;
 
 	public static double TURN_JOYSTICK_MULTIPLIER = 0;
 	public static double MOVE_JOYSTICK_MULTIPLIER = 0;
