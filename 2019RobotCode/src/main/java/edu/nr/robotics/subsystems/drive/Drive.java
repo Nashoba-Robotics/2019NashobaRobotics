@@ -150,7 +150,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Speed PROFILE_END_SPEED_THRESHOLD = MAX_SPEED_DRIVE.mul(0.10);
 
 	public static final Angle DRIVE_ANGLE_THRESHOLD = new Angle(2, Angle.Unit.DEGREE); // change?
-	public static final Angle DRIVE_STOP_ANGLE = new Angle(55, Angle.Unit.DEGREE); // find angle that robot stops at
+	public static final Angle DRIVE_STOP_ANGLE = new Angle(45, Angle.Unit.DEGREE); // find angle that robot stops at
 																					// when turning goes from 1 to 0
 
 	private static final int PEAK_DRIVE_CURRENT = 80;// amps
@@ -548,7 +548,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public void enableTwoDMotionProfiler(Distance endX, Distance endY, Angle endAngle, Distance x1Point,
 			Distance y1Point, Angle angle1Point, double maxVelPercent, double maxAccelPercent, String profileName) {
-		File profileFile = new File("home/lvuser/" + profileName + ".csv");
+		File profileFile = new File("home/lvuser/" + profileName + ".traj");
 
 		twoDProfiler = new TwoDimensionalMotionProfilerPathfinder(this, this, kVTwoD, kATwoD, kPTwoD, kITwoD, kDTwoD,
 				kP_thetaTwoD,

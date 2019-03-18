@@ -216,9 +216,9 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 	public void setTrajectory(Waypoint[] points) {
         if (profileFile.exists()) {
 			try {
-				trajectory = Pathfinder.readFromCSV(profileFile);
+				trajectory = Pathfinder.readFromFile(profileFile);
 			} catch (IOException e) {
-				System.out.println("error reading from csv");
+				System.out.println("error reading from binary file");
 			}
         } else {
         	this.points = points;
@@ -230,7 +230,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 		this.right = new DistanceFollower(modifier.getRightTrajectory());
 		
 		if (!profileFile.exists()) {
-			Pathfinder.writeToCSV(profileFile, trajectory);	
+			Pathfinder.writeToFile(profileFile, trajectory);	
 		}
 		
 		/*for(int i = 0; i < modifier.getLeftTrajectory().segments.length; i += 25) {
