@@ -28,8 +28,8 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 	@Override
 	public void onStart() {
-		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.drivePercent,
-				Drive.accelPercent, Drive.profileName);
+		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.twoDDrivePercent,
+				Drive.twoDAccelPercent, Drive.profileName);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
 		profileStartTime = 0;

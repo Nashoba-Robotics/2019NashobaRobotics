@@ -125,8 +125,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static double kDTwoD = 0.0000000002;
 	public static double kP_thetaTwoD = 0;
 
-	public static final double PROFILE_DRIVE_PERCENT = 0.25;
-	public static final double ACCEL_PERCENT = 0.6;
+	public static final double ONE_D_PROFILE_DRIVE_PERCENT = 0.6;	
+	public static final double TWO_D_PROFILE_DRIVE_PERCENT = 0.25;
+	public static final double ONE_D_ACCEL_PERCENT = 0.8;
+	public static final double TWO_D_ACCEL_PERCENT = 0.6;
 
 	public static double TURN_JOYSTICK_MULTIPLIER = 0;
 	public static double MOVE_JOYSTICK_MULTIPLIER = 0;
@@ -188,8 +190,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static Distance yPoint1 = Distance.ZERO;
 	public static Angle anglePoint1 = Angle.ZERO;
 	public static String profileName = "ProfileName";
-	public static double drivePercent;
-	public static double accelPercent;
+	public static double oneDDrivePercent;
+	public static double oneDAccelPercent;
+	public static double twoDDrivePercent;
+	public static double twoDAccelPercent;
 	public static Angle angleToTurn;
 
 	public OneDimensionalMotionProfilerTwoMotor diagonalProfiler;
@@ -592,7 +596,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			minVel = Math.min(
 					(NRMath.hypot(distX, distY).div(distX)) * MAX_SPEED_DRIVE.mul(maxVelPercent)
 							.get(Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE, Time.Unit.HUNDRED_MILLISECOND),
-					(NRMath.hypot(distX, distY).div(distY)) * MAX_SPEED_DRIVE_H.mul(drivePercent)
+					(NRMath.hypot(distX, distY).div(distY)) * MAX_SPEED_DRIVE_H.mul(oneDDrivePercent)
 							.get(Distance.Unit.ENCODER_REV_H, Time.Unit.HUNDRED_MILLISECOND));
 			minAccel = Math.min(
 					(NRMath.hypot(distX, distY).div(distX))
@@ -667,8 +671,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putNumber("Point 1 Y: ", yPoint1.get(Distance.Unit.FOOT));
 			SmartDashboard.putNumber("Point 1 Angle: ", anglePoint1.get(Angle.Unit.DEGREE));
 			SmartDashboard.putString("Profile Name: ", profileName);
-			SmartDashboard.putNumber("Drive Percent: ", PROFILE_DRIVE_PERCENT);
-			SmartDashboard.putNumber("Drive Accel Percent: ", ACCEL_PERCENT);
+			SmartDashboard.putNumber("One D Drive Percent: ", ONE_D_PROFILE_DRIVE_PERCENT);
+			SmartDashboard.putNumber("One D Drive Accel Percent: ", ONE_D_ACCEL_PERCENT);
+			SmartDashboard.putNumber("Two D Drive Percent: ", TWO_D_PROFILE_DRIVE_PERCENT);
+			SmartDashboard.putNumber("Two D Drive Accel Percent: ", TWO_D_ACCEL_PERCENT);
 			SmartDashboard.putNumber("Angle To Turn: ", 0);
 		}
 
@@ -759,8 +765,10 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 						Distance.Unit.FOOT);
 				anglePoint1 = new Angle(SmartDashboard.getNumber("Point 1 Angle: ", anglePoint1.get(Angle.Unit.DEGREE)),
 						Angle.Unit.DEGREE);
-				drivePercent = SmartDashboard.getNumber("Drive Percent: ", 0);
-				accelPercent = SmartDashboard.getNumber("Drive Accel Percent: ", 0);
+				oneDDrivePercent = SmartDashboard.getNumber("One D Drive Percent: ", 0);
+				oneDAccelPercent = SmartDashboard.getNumber("One D Drive Accel Percent: ", 0);
+				twoDDrivePercent = SmartDashboard.getNumber("Two D Drive Percent: ", 0);
+				twoDAccelPercent = SmartDashboard.getNumber("Two D Drive Accel Percent: ", 0);
 				angleToTurn = new Angle(SmartDashboard.getNumber("Angle To Turn: ", 0), Angle.Unit.DEGREE);
 
 				profileName = SmartDashboard.getString("Profile Name: ", profileName);

@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.command.ConditionalCommand;
 public class CargoShipFrontLeftToCargoProfilingCommand extends CommandGroup{
 
     public CargoShipFrontLeftToCargoProfilingCommand() {
-        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "CargoShipFrontLeftToCargo"));
+        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "CargoShipFrontLeftToCargo"));
     
         addSequential(new ConditionalCommand(new ElevatorPositionCommand(Elevator.getInstance().CARGO_PICKUP_HEIGHT_ELEVATOR)){
 
