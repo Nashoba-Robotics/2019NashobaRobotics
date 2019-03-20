@@ -223,7 +223,7 @@ public class Robot extends TimedRobot {
         }
         @Override
         public void testInit() {
-            new LiftLockMechanismRetractCommand().start();
+            //new LiftLockMechanismRetractCommand().start();
         }
 
         public void disabledPeriodic() {
@@ -231,7 +231,7 @@ public class Robot extends TimedRobot {
         }
 
         public void autonomousInit() {
-            new LiftLockMechanismRetractCommand().start();
+            //new LiftLockMechanismRetractCommand().start();
 
             selectedSandstormType = AutoChoosers.sandstormTypeChooser.getSelected();
             selectedStartPos = AutoChoosers.autoStartPosChooser.getSelected();
@@ -254,7 +254,7 @@ public class Robot extends TimedRobot {
 
         public void teleopInit() {
             //new CancelAllCommand().start(); maybe? depending on gameplay
-            new LiftLockMechanismRetractCommand().start();
+            //new LiftLockMechanismRetractCommand().start();
 
            // LimelightNetworkTable.getInstance().lightLED(true);
            // LimelightNetworkTable.getInstance().lightLED(false);
