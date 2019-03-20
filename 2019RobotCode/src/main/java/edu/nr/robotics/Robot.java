@@ -164,7 +164,7 @@ public class Robot extends TimedRobot {
         //SmartDashboard.putData(new StartPosMiddleToCargoShipFrontLeftProfilingCommand());
         //SmartDashboard.putData(new CargoShipFrontRightToHatchProfilingCommand());
         //SmartDashboard.putData(new TurnToSomethingCommand(Pipeline.Target));
-        //SmartDashboard.putData(new RightHatchToCargoShipProfilingCommand());
+        SmartDashboard.putData(new RightHatchToCargoShipProfilingCommand());
 
         if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
             SmartDashboard.putData(new DriveForwardBasicSmartDashboardCommand());

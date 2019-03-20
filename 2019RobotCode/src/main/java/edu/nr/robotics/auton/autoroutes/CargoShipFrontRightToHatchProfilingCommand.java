@@ -25,7 +25,7 @@ public class CargoShipFrontRightToHatchProfilingCommand extends CommandGroup {
 
         addSequential(new TurnToSomethingCommand(Pipeline.Target));
 
-        addSequential(new EnableMotionProfile(new Distance(58, Distance.Unit.INCH), Distance.ZERO, Drive.ONE_D_PROFILE_DRIVE_PERCENT, Drive.ONE_D_PROFILE_ACCEL_PERCENT));
+        addSequential(new EnableMotionProfile(new Distance(46, Distance.Unit.INCH), Distance.ZERO, Drive.ONE_D_PROFILE_DRIVE_PERCENT, Drive.ONE_D_PROFILE_ACCEL_PERCENT));
 
         addSequential(new HatchMechanismGrabCommand());
         
