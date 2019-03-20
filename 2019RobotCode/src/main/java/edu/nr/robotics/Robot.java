@@ -264,7 +264,7 @@ public class Robot extends TimedRobot {
         }
 
         public void enabledInit() {
-            new LiftLockMechanismRetractCommand().start();
+            //new LiftLockMechanismRetractCommand().start();
         }
     
         public Command getAutoCommand() {
