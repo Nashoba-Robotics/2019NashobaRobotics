@@ -12,13 +12,13 @@ public class ReturnToNeutralPositionCommand extends CommandGroup {
 
     public ReturnToNeutralPositionCommand() {
 
+        addSequential(new HatchMechanismRetractCommand());
+
         addSequential(new IntakeRollersStopCommand());
 
         addSequential(new IntakeRollersRetractCommand());
 
         addSequential(new HatchMechanismGrabCommand());
-
-        addSequential(new HatchMechanismRetractCommand());
 
         addSequential(new ElevatorPositionCommand(Distance.ZERO));
 
