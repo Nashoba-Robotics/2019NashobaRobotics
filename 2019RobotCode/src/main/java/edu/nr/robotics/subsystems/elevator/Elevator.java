@@ -59,7 +59,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
 
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP = 0.128; //find
     public static final double MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_DOWN = 0;
-    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = -0.2;
+    public static final double MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP = -0.05;
 
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_UP = 0.124;
     public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE_ELEVATOR_DOWN = 0;
@@ -71,7 +71,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final double DROP_PERCENT_ELEVATOR = -0.4;
     public static double PROFILE_ACCEL_PERCENT_ELEVATOR = 0.9;
 
-    public static final double CLIMB_PERCENT = -0.3;
+    public static final double CLIMB_PERCENT = -0.5;
 
     public static final int MOTION_MAGIC_MULTIPLIER = 2;
 
@@ -151,8 +151,8 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_SHIP_HEIGHT = new Distance(45, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = new Distance(17, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);//18
-    public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = new Distance(19, Distance.Unit.INCH);
-    public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = new Distance(6, Distance.Unit.INCH);
+    public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = new Distance(15, Distance.Unit.INCH);
+    public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = new Distance(28, Distance.Unit.INCH);
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
 
     public static final Distance CLIMB_END_DISTANCE = new Distance(-1,  Distance.Unit.INCH);

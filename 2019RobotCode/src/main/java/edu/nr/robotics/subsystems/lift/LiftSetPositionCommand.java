@@ -9,15 +9,17 @@ import edu.nr.lib.units.Distance;
 public class LiftSetPositionCommand extends NRCommand {
 
     Distance posSetPoint;
+    double percent;
 
-    public LiftSetPositionCommand(Distance posSetPoint) {
+    public LiftSetPositionCommand(Distance posSetPoint, double percent) {
         super(Lift.getInstance());
         this.posSetPoint = posSetPoint;
+        this.percent = percent;
 
     }
 
     protected void onStart() {
-        Lift.getInstance().setLiftOutputRange(-Lift.profilePercent, Lift.profilePercent);
+        Lift.getInstance().setLiftOutputRange(-percent, percent);
         Lift.getInstance().setPosition(posSetPoint);
     }
 

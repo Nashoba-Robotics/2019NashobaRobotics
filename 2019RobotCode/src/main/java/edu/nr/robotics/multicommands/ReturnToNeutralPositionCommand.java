@@ -6,7 +6,6 @@ import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismGrabCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismRetractCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersRetractCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersStopCommand;
-import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismRetractCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class ReturnToNeutralPositionCommand extends CommandGroup {
@@ -14,8 +13,6 @@ public class ReturnToNeutralPositionCommand extends CommandGroup {
     public ReturnToNeutralPositionCommand() {
 
         addSequential(new IntakeRollersStopCommand());
-
-        addSequential(new LiftLockMechanismRetractCommand());
 
         addSequential(new IntakeRollersRetractCommand());
 
