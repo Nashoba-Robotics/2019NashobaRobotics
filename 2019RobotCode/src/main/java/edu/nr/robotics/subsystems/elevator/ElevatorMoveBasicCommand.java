@@ -24,12 +24,12 @@ public class ElevatorMoveBasicCommand extends NRCommand {
 
 	@Override
 	protected void onEnd() {
-		
+		Elevator.getInstance().disable();
 	}
 	
 	@Override
 	protected boolean isFinishedNR() {
-		return (Elevator.getInstance().getPosition().sub(initialPos.add(height))).abs()
-				.lessThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR);
+		return (Elevator.getInstance().getPosition().sub(initialPos).abs()
+				.greaterThan(height.abs()));
 	}
 }

@@ -11,6 +11,7 @@ import edu.nr.robotics.multicommands.GetCargoCommand;
 import edu.nr.robotics.multicommands.GetHatchStationCommand;
 import edu.nr.robotics.multicommands.IntakeToggleCommand;
 import edu.nr.robotics.multicommands.PrepareClimbCommand;
+import edu.nr.robotics.multicommands.RetractLiftCommand;
 import edu.nr.robotics.multicommands.ReturnToNeutralPositionCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
@@ -35,6 +36,7 @@ import edu.nr.robotics.subsystems.intakerollers.IntakeRollersScoreCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersToggleCommand;
 import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.lift.LiftSetPositionCommand;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismToggleCommand;
 import edu.nr.robotics.subsystems.sensors.ToggleLimelightCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -77,6 +79,7 @@ public class OI implements SmartDashboardSource {
     //private static final int GET_HATCH_GROUND_NUMBER = 20;
     //private static final int GET_CARGO_NUMBER = 21;
     private  static final int RETURN_TO_NEUTRAL_POSITION_NUMBER = 6;
+    private static final int TOGGLE_LIFT_LOCK_NUMBER = 11;
 
     private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 13;
     private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
@@ -185,6 +188,8 @@ public class OI implements SmartDashboardSource {
         //sniper mode
         new JoystickButton(driveRight, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(true));
         new JoystickButton(driveRight, SNIPER_MODE_TURN).whenReleased(new EnableSniperTurnMode(false));
+
+        new JoystickButton(driveRight, TOGGLE_LIFT_LOCK_NUMBER).whenPressed(new LiftLockMechanismToggleCommand());
     }
 
     public void initOperatorLeft() {
@@ -224,7 +229,7 @@ public class OI implements SmartDashboardSource {
 
         //climb
         new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommand());
-        new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new LiftSetPositionCommand(Lift.TOP_POSITION));
+        new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new RetractLiftCommand());
 
         //hatch
         new JoystickButton(operatorRight, HATCH_DEPLOY_TOGGLE_NUMBER).whenPressed(new DeployHatchToggleCommand());

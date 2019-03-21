@@ -9,15 +9,17 @@ import edu.nr.lib.units.Distance;
 public class LiftSetPositionCommand extends NRCommand {
 
     Distance posSetPoint;
+    double outputRange;
 
-    public LiftSetPositionCommand(Distance posSetPoint) {
+    public LiftSetPositionCommand(Distance posSetPoint, double outputRange) {
         super(Lift.getInstance());
         this.posSetPoint = posSetPoint;
+        this.outputRange = outputRange;
 
     }
 
     protected void onStart() {
-        Lift.getInstance().setLiftOutputRange(-0.5, 0.5);
+        Lift.getInstance().setLiftOutputRange(-outputRange, outputRange);
 
         Lift.getInstance().setPosition(posSetPoint);
 

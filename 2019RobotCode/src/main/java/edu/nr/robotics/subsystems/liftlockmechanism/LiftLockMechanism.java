@@ -12,7 +12,7 @@ public class LiftLockMechanism extends NRSubsystem {
 
     private Solenoid lockSolenoid;
 
-    public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
+    public static final Time ACTUATION_TIME = new Time(0.75, Time.Unit.SECOND);
 
     public enum State {
         DEPLOYED, RETRACTED;
