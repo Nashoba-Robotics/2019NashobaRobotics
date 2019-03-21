@@ -27,6 +27,8 @@ public class EnabledSensors {
     public static DigitalSensor floorSensorFour = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_4);
     public static AnalogSensor floorSensorFive = new AnalogSensor(RobotMap.FLOOR_SENSOR_PORT_5, Drive.LINE_SENSOR_THRESHOLD);
 
+    public static DigitalSensor platformSensor = new DigitalSensor(RobotMap.PLATFORM_SENSOR);
+
     public static DigitalSensor forceSensorOne = new DigitalSensor(RobotMap.FORCE_SENSOR_1);
     public static DigitalSensor forceSensorTwo = new DigitalSensor(RobotMap.FORCE_SENSOR_2);
     //public static DigitalSensor forceSensorThree = new DigitalSensor(RobotMap.FORCE_SENSOR_3);

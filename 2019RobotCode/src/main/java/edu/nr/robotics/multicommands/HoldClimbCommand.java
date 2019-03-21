@@ -5,6 +5,7 @@ import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Distance;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.lift.Lift;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 
 public class HoldClimbCommand extends NRCommand {
 
@@ -20,8 +21,13 @@ public class HoldClimbCommand extends NRCommand {
         Elevator.getInstance().setMotorPercentRaw(Elevator.MIN_MOVE_VOLTAGE_PERCENT_CLIMB_UP);
     }
 
+
+    protected void onEnd() {
+        new RetractLiftCommand().start();
+    }
+
     protected boolean isFinishedNR() {
-        return false;
+        return EnabledSensors.platformSensor.get();
     }
 
 }
