@@ -3,6 +3,7 @@ package edu.nr.robotics.multicommands;
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Distance;
+import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDrive;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.lift.Lift;
 import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanism;
@@ -12,7 +13,7 @@ public class ClimbCommand extends NRCommand {
     Distance initElevPos;
 
     public ClimbCommand() {
-        super(new NRSubsystem[] {Elevator.getInstance(), Lift.getInstance(), LiftLockMechanism.getInstance()});
+        super(new NRSubsystem[] {Elevator.getInstance(), Lift.getInstance(), LiftLockMechanism.getInstance(), AuxiliaryDrive.getInstance()});
     }
 
     protected void onStart() {
@@ -20,6 +21,7 @@ public class ClimbCommand extends NRCommand {
         LiftLockMechanism.getInstance().deployLiftLockMechanism();
         Elevator.getInstance().switchToClimbGear();
         Elevator.getInstance().setMotorPercentRaw(-Math.abs(Elevator.CLIMB_PERCENT));
+        AuxiliaryDrive.getInstance().setMotorSpeedRaw(AuxiliaryDrive.CLIMB_HOLD_VOLTAGE);
     }
 
     protected void onExecute() {
@@ -31,6 +33,7 @@ public class ClimbCommand extends NRCommand {
 
     protected void onEnd() {
         new HoldClimbCommand((Elevator.getInstance().getPosition().sub(initElevPos)).mul(-1).add(Lift.LIFT_LEAD_DISTANCE)).start();
+        AuxiliaryDrive.getInstance().disable();
     }
 
     protected boolean isFinishedNR() {

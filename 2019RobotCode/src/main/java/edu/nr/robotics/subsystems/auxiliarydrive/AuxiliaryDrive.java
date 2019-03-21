@@ -64,6 +64,8 @@ public class AuxiliaryDrive extends NRSubsystem {
 	public static final double MIN_MOVE_VOLTAGE_PERCENT = 0;
 	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE = 0;
 
+	public static final double CLIMB_HOLD_VOLTAGE = 0.01;
+
 	private Speed motorSetpoint = Speed.ZERO;
 
 	private PIDSourceType type = PIDSourceType.kRate;

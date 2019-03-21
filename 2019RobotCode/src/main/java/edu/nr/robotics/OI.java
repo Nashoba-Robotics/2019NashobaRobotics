@@ -9,10 +9,10 @@ import edu.nr.lib.units.Angle;
 import edu.nr.robotics.multicommands.ClimbCommand;
 import edu.nr.robotics.multicommands.GetCargoCommand;
 import edu.nr.robotics.multicommands.GetHatchStationCommand;
-import edu.nr.robotics.multicommands.IntakeToggleCommand;
 import edu.nr.robotics.multicommands.PrepareClimbCommand;
 import edu.nr.robotics.multicommands.RetractLiftCommand;
 import edu.nr.robotics.multicommands.ReturnToNeutralPositionCommand;
+import edu.nr.robotics.multicommands.ToggleIntakeCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
@@ -22,7 +22,6 @@ import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.LineSensorStrafeCommandGroup;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
-import edu.nr.robotics.subsystems.drive.TurnToAngleCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToClimbGearCommand;
@@ -31,20 +30,17 @@ import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchFromStationCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
-import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersScoreCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersToggleCommand;
-import edu.nr.robotics.subsystems.lift.Lift;
-import edu.nr.robotics.subsystems.lift.LiftSetPositionCommand;
 import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismToggleCommand;
 import edu.nr.robotics.subsystems.sensors.ToggleLimelightCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.PrintCommand;
 
 public class OI implements SmartDashboardSource {
 
-    public static final double JOYSTICK_DEAD_ZONE = 0.1;
+    public static final double DRIVE_JOYSTICK_DEAD_ZONE = 0.1;
+    public static final double JOYSTICK_DEAD_ZONE = 0.2;
 
     public static final double SPEED_MULTIPLIER = 1.0;
 
@@ -210,7 +206,7 @@ public class OI implements SmartDashboardSource {
 
         //intake
         new JoystickButton(operatorLeft, TOGGLE_INTAKE_NUMBER).whenPressed(new IntakeRollersToggleCommand());
-        new JoystickButton(operatorLeft, TOGGLE_INTAKE_DEPLOY_NUMBER).whenPressed(new IntakeRollersDeployToggleCommand());
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_DEPLOY_NUMBER).whenPressed(new ToggleIntakeCommand());
         new JoystickButton(operatorLeft, INTAKE_ROLLERS_PUKE_NUMBER).whenPressed(new IntakeRollersScoreCommand());
         //new JoystickButton(operatorLeft, INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER).whenPressed(new IntakeToggleCommand());
 
@@ -257,67 +253,67 @@ public class OI implements SmartDashboardSource {
     }
 
     public double getArcadeMoveValue() {
-        return -snapDriveJoysticks(driveLeft.getY()) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
+        return -snapDriveJoysticks(driveLeft.getY(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
     }
 
     public double getArcadeTurnValue() {
-        return -snapDriveJoysticks(driveRight.getX()) * Drive.TURN_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
+        return -snapDriveJoysticks(driveRight.getX(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.TURN_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
     }
 
 
     public double getArcadeHValue() {
-        return snapDriveJoysticks(driveLeft.getX()) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
     }
 
     public double getTankLeftValue() {
-        return snapDriveJoysticks(driveLeft.getY());
+        return snapDriveJoysticks(driveLeft.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getTankRightValue() {
-        return snapDriveJoysticks(driveRight.getY());
+        return snapDriveJoysticks(driveRight.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getTankHValue() {
-        return snapDriveJoysticks(driveLeft.getX());
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveLeftXValue() {
-        return snapDriveJoysticks(driveLeft.getX());
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveRightXValue() {
-        return snapDriveJoysticks(driveRight.getX());
+        return snapDriveJoysticks(driveRight.getX(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveLeftYValue() {
-        return snapDriveJoysticks(driveLeft.getY());
+        return snapDriveJoysticks(driveLeft.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveRightYValue() {
-        return snapDriveJoysticks(driveRight.getY());
+        return snapDriveJoysticks(driveRight.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getElevatorJoystickValue() {
-		return -snapDriveJoysticks(-elevatorStick.getX());
+		return -snapDriveJoysticks(-elevatorStick.getX(), JOYSTICK_DEAD_ZONE);
     }
     
     public double getLiftJoystickValue() {
-        return snapDriveJoysticks(-liftStick.getX());
+        return snapDriveJoysticks(-liftStick.getX(), JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveSpeedMultiplier(){
         return driveSpeedMultiplier;
     }
 
-    private static double snapDriveJoysticks(double value) {
-        if(Math.abs(value) < JOYSTICK_DEAD_ZONE) {
+    private static double snapDriveJoysticks(double value, double deadZone) {
+        if(Math.abs(value) < deadZone) {
             value = 0;
         }else if (value > 0) {
-            value -= JOYSTICK_DEAD_ZONE;
+            value -= deadZone;
         } else {
-            value += JOYSTICK_DEAD_ZONE;
+            value += deadZone;
         }
-        value /= 1 - JOYSTICK_DEAD_ZONE;
+        value /= 1 - deadZone;
         return value;
     }
 
@@ -360,7 +356,7 @@ public class OI implements SmartDashboardSource {
     }
     
     public boolean isHDriveZero() {
-        return snapDriveJoysticks(driveLeft.getX()) == 0;
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE) == 0;
     }
 
     public boolean isKidModeOn(){

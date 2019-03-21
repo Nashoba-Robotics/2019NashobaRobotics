@@ -12,12 +12,12 @@ public class GetHatchStationCommand extends CommandGroup {
 
     public GetHatchStationCommand() {
         addSequential(new ElevatorPositionCommand(Distance.ZERO));
-      
-        addSequential(new IntakeRollersRetractCommand());
 
         addSequential(new HatchMechanismRetractCommand());
 
         addSequential(new HatchMechanismReleaseCommand());
+      
+        addSequential(new IntakeRollersRetractCommand());
 
         addSequential(new WaitForHatchCommand());
     }
