@@ -15,6 +15,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -211,6 +212,8 @@ public class AuxiliaryDrive extends NRSubsystem {
 	@Override
 	public void smartDashboardInfo() {
 		if(auxDrive != null){
+			SmartDashboard.putBoolean("Platform Sensor", !EnabledSensors.platformSensor.get());
+
 			if(EnabledSubsystems.AUX_DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 				SmartDashboard.putNumber("Aux Drive Current", getCurrent());
 

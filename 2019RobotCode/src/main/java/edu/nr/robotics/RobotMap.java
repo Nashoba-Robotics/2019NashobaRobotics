@@ -23,13 +23,13 @@ public class RobotMap {
     public static final int FLOOR_SENSOR_PORT_4 = 7;
     public static final int FLOOR_SENSOR_PORT_5 = 3;
 
-    public static final int PLATFORM_SENSOR = 1;
+    public static final int PLATFORM_SENSOR = 9;
 
     public static final int FORCE_SENSOR_1 = 4;
     public static final int FORCE_SENSOR_2 = 5;
     //public static final int FORCE_SENSOR_3 = 2;
 
-    public static final int ELEVATOR_SENSOR_PORT = 9;
+    public static final int ELEVATOR_SENSOR_PORT = 1;
     //public static final int ELEVATOR_SENSOR_PORT_2 = 8;
     //public static final int ELEVATOR_SENSOR_PORT_3 = 7;
     //public static final int ELEVATOR_SENSOR_PORT_4 = 6;

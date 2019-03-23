@@ -427,7 +427,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	public void setMotorSpeedInPercent(double left, double right, double strafe) {
-		if (EnabledSubsystems.DRIVE_DUMB_ENABLED || Lift.getInstance().deployed) {
+		if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 			leftDrive.set(ControlMode.PercentOutput, left);
 			rightDrive.set(ControlMode.PercentOutput, right);
 			hDrive.set(strafe);
@@ -548,7 +548,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public void enableTwoDMotionProfiler(Distance endX, Distance endY, Angle endAngle, Distance x1Point,
 			Distance y1Point, Angle angle1Point, double maxVelPercent, double maxAccelPercent, String profileName) {
-		File profileFile = new File("home/lvuser/" + profileName + ".traj");
+		File profileFile = new File("home/lvuser/profiles/" + profileName + ".traj");
 
 		twoDProfiler = new TwoDimensionalMotionProfilerPathfinder(this, this, kVTwoD, kATwoD, kPTwoD, kITwoD, kDTwoD,
 				kP_thetaTwoD,

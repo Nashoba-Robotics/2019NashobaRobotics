@@ -284,6 +284,7 @@ public class Lift extends NRSubsystem {
     }
 
     public void periodic() {
+        //System.out.println("lift deployed: " + deployed);
 
     }
 

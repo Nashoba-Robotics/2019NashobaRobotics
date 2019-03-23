@@ -27,7 +27,7 @@ public class HoldClimbCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return false;//EnabledSensors.platformSensor.get();
+        return false;//!EnabledSensors.platformSensor.get();
     }
 
 }
