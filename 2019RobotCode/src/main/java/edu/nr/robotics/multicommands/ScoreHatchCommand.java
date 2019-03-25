@@ -11,13 +11,23 @@ import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismDeployCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismReleaseCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismRetractCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.ConditionalCommand;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class ScoreHatchCommand extends CommandGroup {
     
     public ScoreHatchCommand() {
 
-        addParallel(new ElevatorPercentRawCommand(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP));
+        //addParallel(new ElevatorPercentRawCommand(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP));
+
+        addParallel(new ConditionalCommand(new ElevatorPercentRawCommand(Elevator.REAL_MIN_MOVE_VOLTAGE_PERCENT_ELEVATOR_UP)) {
+
+            @Override
+            protected boolean condition() {
+                return !(Elevator.getInstance().getPosition().lessThan(new Distance(3, Distance.Unit.INCH)));
+            }
+
+        });
 
         addSequential(new AnonymousCommandGroup(){
         

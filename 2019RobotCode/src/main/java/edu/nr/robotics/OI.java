@@ -28,6 +28,7 @@ import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToClimbGearCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToElevatorGearCommand;
+import edu.nr.robotics.subsystems.elevator.ElevatorZeroCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchFromStationCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
@@ -94,6 +95,7 @@ public class OI implements SmartDashboardSource {
     private static final int LINE_SENSOR_LEFT_2_NUMBER = 15;
     private static final int LINE_SENSOR_RIGHT_1_NUMBER = 11;
     private static final int LINE_SENSOR_RIGHT_2_NUMBER = 16;
+    private static final int ELEV_ZERO_NUMBER = 14;
 
     private double driveSpeedMultiplier = 1;
 
@@ -187,6 +189,8 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(driveRight, SNIPER_MODE_TURN).whenReleased(new EnableSniperTurnMode(false));
 
         new JoystickButton(driveRight, TOGGLE_LIFT_LOCK_NUMBER).whenPressed(new LiftLockMechanismToggleCommand());
+
+        new JoystickButton(driveRight, ELEV_ZERO_NUMBER).whenPressed(new ElevatorZeroCommand());
     }
 
     public void initOperatorLeft() {

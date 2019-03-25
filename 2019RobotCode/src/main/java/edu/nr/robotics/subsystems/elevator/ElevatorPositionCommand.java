@@ -2,7 +2,6 @@ package edu.nr.robotics.subsystems.elevator;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.units.Distance;
-import edu.nr.lib.units.Distance.Unit;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ElevatorPositionCommand extends NRCommand {
