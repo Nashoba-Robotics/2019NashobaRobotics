@@ -24,7 +24,7 @@ public class ScoreHatchCommand extends CommandGroup {
 
             @Override
             protected boolean condition() {
-                return !(Elevator.getInstance().getPosition().lessThan(new Distance(3, Distance.Unit.INCH)));
+                return !(Elevator.getInstance().getPosition().lessThan(new Distance(4, Distance.Unit.INCH)));
             }
 
         });

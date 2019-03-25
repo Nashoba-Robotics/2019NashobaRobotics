@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class LeftHatchToCargoShipProfilingCommand extends CommandGroup {
 
     public LeftHatchToCargoShipProfilingCommand() {
-        addSequential(new EnableReverseTwoDMotionProfile(new Distance(21, Distance.Unit.FOOT), new Distance(6, Distance.Unit.FOOT), Angle.ZERO, new Distance(1, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "RightHatchToCargoShip"));
+        addSequential(new EnableReverseTwoDMotionProfile(new Distance(21, Distance.Unit.FOOT), new Distance(6, Distance.Unit.FOOT), Angle.ZERO, new Distance(1, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "LeftHatchToCargoShip"));
 
         addSequential(new TurnCommand(Drive.getInstance(), new Angle(-90, Angle.Unit.DEGREE), Drive.MAX_PROFILE_TURN_PERCENT));
 

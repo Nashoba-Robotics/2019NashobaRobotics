@@ -21,7 +21,7 @@ public class CargoShipFrontLeftToHatchProfilingCommand extends CommandGroup {
 
         addSequential(new TurnCommand(Drive.getInstance(), new Angle(-90, Angle.Unit.DEGREE), Drive.MAX_PROFILE_TURN_PERCENT));
 
-        addSequential(new EnableTwoDMotionProfile(new Distance(9, Distance.Unit.FOOT), new Distance(11, Distance.Unit.FOOT), new Angle(-90, Angle.Unit.DEGREE), new Distance(1, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "CargoShipFrontRightToHatch"));
+        addSequential(new EnableTwoDMotionProfile(new Distance(9, Distance.Unit.FOOT), new Distance(11, Distance.Unit.FOOT), new Angle(-90, Angle.Unit.DEGREE), new Distance(1, Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE), Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "CargoShipFrontLeftToHatch"));
 
         addSequential(new TurnToSomethingCommand(Pipeline.Target));
 
