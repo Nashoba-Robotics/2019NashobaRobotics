@@ -1,10 +1,10 @@
 package edu.nr.robotics.auton.autoroutes;
 
 import edu.nr.lib.units.Distance;
+import edu.nr.robotics.multicommands.ScoreHatchCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfile;
 import edu.nr.robotics.subsystems.drive.LineSensorStrafeCommandGroup;
-import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class StartPosMiddleToCargoShipFrontRightProfilingCommand extends CommandGroup {

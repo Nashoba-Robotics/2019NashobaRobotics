@@ -624,6 +624,10 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
         setMotorSpeedPercent(0);
     }
 
+    protected void zeroElevEncoder() {
+        elevatorTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
+    }
+
     /*public Distance getApproxHeight() {
         if ((heightCounter < Counter_Heights.length) && (heightCounter >= 0))
             return Counter_Heights[heightCounter];

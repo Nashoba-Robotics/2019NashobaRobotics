@@ -4,6 +4,7 @@ import edu.nr.lib.commandbased.DoNothingJoystickCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
+import edu.nr.robotics.multicommands.ScoreHatchCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

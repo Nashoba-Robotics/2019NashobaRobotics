@@ -30,5 +30,7 @@ public class EnabledSensors {
     public static DigitalSensor hatchForceSensorTwo = new DigitalSensor(RobotMap.FORCE_SENSOR_2);
     //public static DigitalInput hatchForceSensorThree = new DigitalInput(RobotMap.FORCE_SENSOR_3);
 
+    public static DigitalSensor platformSensor = new DigitalSensor(RobotMap.PLATFORM_SENSOR);
+
 }
 

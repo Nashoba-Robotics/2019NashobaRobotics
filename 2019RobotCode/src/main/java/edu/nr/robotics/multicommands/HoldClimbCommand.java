@@ -22,10 +22,11 @@ public class HoldClimbCommand extends NRCommand {
     }
 
     protected void onEnd() {
+        //new RetractLiftCommand().start();
     }
 
     protected boolean isFinishedNR() {
-        return false;
+        return false; //!EnabledSensors.platformSensor.get();
     }
 
 }

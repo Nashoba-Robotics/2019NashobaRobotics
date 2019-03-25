@@ -3,6 +3,7 @@ package edu.nr.robotics.auton.autoroutes;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
+import edu.nr.robotics.multicommands.ScoreHatchCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.EnableMotionProfile;
 import edu.nr.robotics.subsystems.drive.EnableReverseTwoDMotionProfile;
@@ -11,7 +12,6 @@ import edu.nr.robotics.subsystems.drive.TurnCommand;
 import edu.nr.robotics.subsystems.drive.TurnToSomethingCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
-import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class RightHatchToCargoShipProfilingCommand extends CommandGroup {

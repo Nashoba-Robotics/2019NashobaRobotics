@@ -427,7 +427,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 		}
 
 		public void setMotorSpeedInPercent(double left, double right, double strafe) {
-			if (EnabledSubsystems.DRIVE_DUMB_ENABLED || Lift.deployed) {
+			if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 				leftDrive.set(ControlMode.PercentOutput, left);
 				rightDrive.set(ControlMode.PercentOutput, right);
 				hDrive.set(strafe);

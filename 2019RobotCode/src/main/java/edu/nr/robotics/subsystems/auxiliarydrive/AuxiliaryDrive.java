@@ -15,6 +15,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -220,6 +221,8 @@ public class AuxiliaryDrive extends NRSubsystem {
 				SmartDashboard.putNumber("Aux Drive Current", getCurrent());
 
 				SmartDashboard.putNumber("Aux Drive Velocity", getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND));
+
+				SmartDashboard.putBoolean("Platform Sensor", !EnabledSensors.platformSensor.get());
 			}
 			if(EnabledSubsystems.AUX_DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
 				SmartDashboard.putNumber("Aux Drive Percent", motorSetpoint.div(MAX_SPEED_AUX_DRIVE));
