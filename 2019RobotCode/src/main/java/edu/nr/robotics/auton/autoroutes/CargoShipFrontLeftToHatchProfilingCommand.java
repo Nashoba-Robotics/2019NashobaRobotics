@@ -26,9 +26,6 @@ public class CargoShipFrontLeftToHatchProfilingCommand extends CommandGroup {
 
         addSequential(new HatchMechanismGrabCommand());
 
-
-        });
-
         //get hatch
     }
 

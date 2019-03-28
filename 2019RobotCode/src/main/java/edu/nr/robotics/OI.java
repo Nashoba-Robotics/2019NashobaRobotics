@@ -79,7 +79,7 @@ public class OI implements SmartDashboardSource {
     private static final int TOGGLE_LIFT_LOCK_NUMBER = 11;
 
     private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 13;
-    private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
+    //private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
     private static final int DRIVE_TO_TARGET_AUTO_NUMBER = 7;
     private static final int DRIVE_TO_TARGET_HYBRID_NUMBER = 2;
     private static final int TURN_90_LEFT_NUMBER = 3;
@@ -90,10 +90,8 @@ public class OI implements SmartDashboardSource {
     private static final int SNIPER_MODE_FORWARD = 1;
     private static final int SNIPER_MODE_TURN = 1;
     private static final int DUMB_DRIVE_NUMBER = 14;
-    private static final int LINE_SENSOR_LEFT_1_NUMBER = 12;
-    private static final int LINE_SENSOR_LEFT_2_NUMBER = 15;
-    private static final int LINE_SENSOR_RIGHT_1_NUMBER = 11;
-    private static final int LINE_SENSOR_RIGHT_2_NUMBER = 16;
+    private static final int LINE_SENSOR_LEFT_1_NUMBER = 3;
+    private static final int LINE_SENSOR_RIGHT_1_NUMBER = 4;
     private static final int ELEV_ENCODER_RESET_BUTTON_NUMBER = 14;
 
     private double driveSpeedMultiplier = 1;
@@ -141,8 +139,8 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         // hybrid track
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Cargo));
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
+        //new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Cargo));
+        //new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
 
         new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Target));
         new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
@@ -163,9 +161,7 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
         
         new JoystickButton(driveLeft, LINE_SENSOR_LEFT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
-        new JoystickButton(driveLeft, LINE_SENSOR_LEFT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
         new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
-        new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
 
     }
 

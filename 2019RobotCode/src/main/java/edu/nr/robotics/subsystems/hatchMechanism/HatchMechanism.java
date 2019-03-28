@@ -6,6 +6,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.multicommands.ScoreHatchCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -124,7 +125,8 @@ public class HatchMechanism extends NRSubsystem {
 
 	@Override
 	public void periodic() {
-
+		//System.out.println("Hatch Sensor: " + EnabledSensors.hatchSensor.getSensor().getValue());
+		//System.out.println("Hatch Sensor: " + EnabledSensors.hatchSensor.get());
 	}
 
 	@Override

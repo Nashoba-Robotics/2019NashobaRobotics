@@ -2,8 +2,12 @@ package edu.nr.robotics.subsystems.hatchmechanism;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.robotics.subsystems.sensors.EnabledSensors;
+import edu.wpi.first.wpilibj.Timer;
 
 public class WaitForHatchCommand extends NRCommand {
+
+    private double seenTime;
+    private double time;
 
     public WaitForHatchCommand() {
         super(HatchMechanism.getInstance());
@@ -14,7 +18,18 @@ public class WaitForHatchCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return (!EnabledSensors.hatchForceSensorOne.get() && !EnabledSensors.hatchForceSensorOne.get());
+        boolean finished = false;
+
+		if (!EnabledSensors.hatchSensor.get()) {
+			seenTime = Timer.getFPGATimestamp();
+			if ((seenTime - time) > 0.05) 
+				finished = true;
+		}
+		else {
+			time = Timer.getFPGATimestamp();
+		}
+
+		return finished;
     }
 
 }

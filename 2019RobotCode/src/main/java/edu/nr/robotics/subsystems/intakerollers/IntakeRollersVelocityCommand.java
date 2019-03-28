@@ -23,7 +23,7 @@ public class IntakeRollersVelocityCommand extends NRCommand {
 	
 	@Override
 	protected boolean isFinishedNR() {
-		boolean finished = false;
+		/*boolean finished = false;
 
 		if (IntakeRollers.getInstance().getCurrent() > 40) {
 			spiketime = Timer.getFPGATimestamp();
@@ -34,6 +34,7 @@ public class IntakeRollersVelocityCommand extends NRCommand {
 			time = Timer.getFPGATimestamp();
 		}
 
-		return finished;
+		return finished;*/
+		return true;
 	}
 }
