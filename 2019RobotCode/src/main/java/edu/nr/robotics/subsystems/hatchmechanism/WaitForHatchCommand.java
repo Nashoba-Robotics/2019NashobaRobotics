@@ -20,7 +20,7 @@ public class WaitForHatchCommand extends NRCommand {
     protected boolean isFinishedNR() {
         boolean finished = false;
 
-		if (!EnabledSensors.hatchSensor.get()) {
+		if (!EnabledSensors.hatchSensor1.get() && !EnabledSensors.hatchSensor2.get()) {
 			seenTime = Timer.getFPGATimestamp();
 			if ((seenTime - time) > 0.05) 
 				finished = true;

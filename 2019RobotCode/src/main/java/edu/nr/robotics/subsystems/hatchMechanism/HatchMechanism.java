@@ -21,6 +21,10 @@ public class HatchMechanism extends NRSubsystem {
 
 	public static final Time ACTUATION_TIME = new Time(0.35, Time.Unit.SECOND);
 
+	public static final int HATCH_SENSOR_THRESHOLD = 900;
+
+	int i = 1;
+
 	public enum State {
 		DEPLOYED, RETRACTED;
 		
@@ -125,8 +129,15 @@ public class HatchMechanism extends NRSubsystem {
 
 	@Override
 	public void periodic() {
-		//System.out.println("Hatch Sensor: " + EnabledSensors.hatchSensor.getSensor().getValue());
-		//System.out.println("Hatch Sensor: " + EnabledSensors.hatchSensor.get());
+		if (i % 25 == 0) {
+			i = 1;
+			System.out.println("Hatch Sensor 1: " + EnabledSensors.hatchSensor1.getSensor().getValue());
+			System.out.println("Hatch Sensor 2: " + EnabledSensors.hatchSensor2.getSensor().getValue());
+			//System.out.println("Hatch Sensor 2: " + EnabledSensors.hatchSensor1.get());
+			//System.out.println("Hatch Sensor 1: " + EnabledSensors.hatchSensor2.get());
+		}
+
+		i++;
 	}
 
 	@Override

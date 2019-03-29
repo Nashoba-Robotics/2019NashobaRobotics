@@ -396,7 +396,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 		public double getRightFollow2Current() {
 			if (rightDriveFollow2 != null && pdp != null)
-			return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_1_CURRENT);
+			return pdp.getCurrent(RobotMap.RIGHT_DRIVE_FOLLOW_2_CURRENT);
 			return 0;
 		}
 
