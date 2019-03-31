@@ -14,6 +14,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //.29 0.58 0.47
 public class Lift extends NRSubsystem {
@@ -72,7 +73,7 @@ public class Lift extends NRSubsystem {
     public static final int VEL_SLOT = 0;
     public static final int POS_SLOT = 1;
 
-    public static final Distance LIFT_LEAD_DISTANCE = new Distance(0, Distance.Unit.INCH); 
+    public static final Distance LIFT_LEAD_DISTANCE = new Distance(2, Distance.Unit.INCH); 
 
     public static final Distance TOP_POSITION = Distance.ZERO;
     public static final Distance LEVEL1_POS = Distance.ZERO;
@@ -234,6 +235,8 @@ public class Lift extends NRSubsystem {
 
     public void smartDashboardInfo() {
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_BASIC_ENABLED) {
+            SmartDashboard.putBoolean("Platform Sensor", EnabledSensors.platformSensor.get());
+
             SmartDashboard.putNumber("Lift Current: ", getCurrent());
 
             SmartDashboard.putNumberArray("Lift Velocity vs Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
@@ -285,6 +288,7 @@ public class Lift extends NRSubsystem {
     }
 
     public void periodic() {
+        //System.out.println("Platform Sensor: " + EnabledSensors.platformSensor.get());
 
     }
 

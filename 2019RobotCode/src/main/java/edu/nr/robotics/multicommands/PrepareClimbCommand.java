@@ -2,6 +2,8 @@ package edu.nr.robotics.multicommands;
 
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
+import edu.nr.robotics.subsystems.elevator.Elevator;
+import edu.nr.robotics.subsystems.elevator.ElevatorCurrentCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToClimbGearCommand;
 import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanism;
@@ -23,6 +25,8 @@ public class PrepareClimbCommand extends CommandGroup {
         addSequential(new LiftLockMechanismDeployCommand());
 
         addSequential(new ElevatorSwitchToClimbGearCommand());
+
+        addSequential(new ElevatorCurrentCommand(Elevator.CLIMB_PERCENT, Elevator.CLIMB_CURRENT_SPIKE));
     }
  
 }

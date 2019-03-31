@@ -131,8 +131,8 @@ public class HatchMechanism extends NRSubsystem {
 	public void periodic() {
 		if (i % 25 == 0) {
 			i = 1;
-			System.out.println("Hatch Sensor 1: " + EnabledSensors.hatchSensor1.getSensor().getValue());
-			System.out.println("Hatch Sensor 2: " + EnabledSensors.hatchSensor2.getSensor().getValue());
+			//System.out.println("Hatch Sensor 1: " + EnabledSensors.hatchSensor1.getSensor().getValue());
+			//System.out.println("Hatch Sensor 2: " + EnabledSensors.hatchSensor2.getSensor().getValue());
 			//System.out.println("Hatch Sensor 2: " + EnabledSensors.hatchSensor1.get());
 			//System.out.println("Hatch Sensor 1: " + EnabledSensors.hatchSensor2.get());
 		}
