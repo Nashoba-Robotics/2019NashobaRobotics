@@ -107,8 +107,8 @@ public class Robot extends TimedRobot {
     }
 
     public void autoChooserInit() {
-        AutoChoosers.sandstormTypeChooser.addDefault("Auto", SandstormType.auto);
-        AutoChoosers.sandstormTypeChooser.addObject("Driver", SandstormType.driver);
+        AutoChoosers.sandstormTypeChooser.addDefault("Driver", SandstormType.driver);
+        AutoChoosers.sandstormTypeChooser.addObject("Auto", SandstormType.auto);
 
         AutoChoosers.autoStartPosChooser.addDefault("Left", StartPos.left);
         AutoChoosers.autoStartPosChooser.addObject("Middle", StartPos.middle);

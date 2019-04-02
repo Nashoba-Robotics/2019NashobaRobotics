@@ -66,6 +66,9 @@ public class AuxiliaryDrive extends NRSubsystem {
 	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE = 0;
 
 	public static final double HOLD_CLIMB_PERCENT = 0.01;
+	public static final double DRIVE_PERCENT = 0.35;
+
+	public static final Time CLIMB_DELAY = new Time(0.25, Time.Unit.SECOND);
 
 	private Speed motorSetpoint = Speed.ZERO;
 

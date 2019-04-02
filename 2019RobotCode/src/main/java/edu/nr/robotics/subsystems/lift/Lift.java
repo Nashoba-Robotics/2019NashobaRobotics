@@ -14,6 +14,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lift extends NRSubsystem {
@@ -235,6 +236,8 @@ public class Lift extends NRSubsystem {
 
     public void smartDashboardInfo() {
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_BASIC_ENABLED) {
+            SmartDashboard.putBoolean("Platform Sensor", EnabledSensors.platformSensor.get());
+
             SmartDashboard.putNumber("Lift Current: ", getCurrent());
 
             SmartDashboard.putNumberArray("Lift Velocity vs Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});

@@ -23,6 +23,8 @@ public class HatchMechanism extends NRSubsystem {
 
 	public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
 
+	public static final int HATCH_SENSOR_THRESHOLD = 900;
+
 	public enum State {
 		DEPLOYED, RETRACTED;
 		

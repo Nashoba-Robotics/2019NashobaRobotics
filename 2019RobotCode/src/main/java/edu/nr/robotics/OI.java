@@ -1,4 +1,3 @@
-
 package edu.nr.robotics;
 
 import edu.nr.lib.commandbased.CancelAllCommand;
@@ -7,7 +6,9 @@ import edu.nr.lib.gyro.ResetGyroCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Distance;
 import edu.nr.robotics.multicommands.ClimbCommand;
+import edu.nr.robotics.multicommands.ClimbCommandGroup;
 import edu.nr.robotics.multicommands.GetCargoCommand;
 import edu.nr.robotics.multicommands.GetHatchStationCommand;
 import edu.nr.robotics.multicommands.PrepareClimbCommand;
@@ -41,8 +42,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI implements SmartDashboardSource {
 
-    public static final double JOYSTICK_DEAD_ZONE = 0.2;
     public static final double DRIVE_JOYSTICK_DEAD_ZONE = 0.1;
+    public static final double JOYSTICK_DEAD_ZONE = 0.2;
 
     public static final double SPEED_MULTIPLIER = 1.0;
 
@@ -59,6 +60,7 @@ public class OI implements SmartDashboardSource {
     private static final int HATCH_BOTTOM_BUTTON_NUMBER = 10;
     //private static final int ELEVATOR_BOTTOM_BUTTON_NUMBER = 8;
     //private static final int GROUND_PICKUP_HATCH_BUTTON_NUMBER = 9;
+    private static final int PREP_CLIMB_BUTTON = 3;
     private static final int CLIMB_HEIGHT_HIGH_BUTTON_NUMBER = 1;
     private static final int CLIMB_HEIGHT_LOW_BUTTON_NUMBER = 6;
     private static final int CLIMB_BUTTON_NUMBER = 3;
@@ -76,11 +78,11 @@ public class OI implements SmartDashboardSource {
     private static final int GET_HATCH_STATION_NUMBER = 7;
     //private static final int GET_HATCH_GROUND_NUMBER = 20;
     //private static final int GET_CARGO_NUMBER = 21;
-    private static final int RETURN_TO_NEUTRAL_POSITION_NUMBER = 6;
+    private  static final int RETURN_TO_NEUTRAL_POSITION_NUMBER = 6;
     private static final int TOGGLE_LIFT_LOCK_NUMBER = 11;
 
     private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 13;
-    private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
+    //private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
     private static final int DRIVE_TO_TARGET_AUTO_NUMBER = 7;
     private static final int DRIVE_TO_TARGET_HYBRID_NUMBER = 2;
     private static final int TURN_90_LEFT_NUMBER = 3;
@@ -91,11 +93,9 @@ public class OI implements SmartDashboardSource {
     private static final int SNIPER_MODE_FORWARD = 1;
     private static final int SNIPER_MODE_TURN = 1;
     private static final int DUMB_DRIVE_NUMBER = 14;
-    private static final int LINE_SENSOR_LEFT_1_NUMBER = 12;
-    private static final int LINE_SENSOR_LEFT_2_NUMBER = 15;
-    private static final int LINE_SENSOR_RIGHT_1_NUMBER = 11;
-    private static final int LINE_SENSOR_RIGHT_2_NUMBER = 16;
-    private static final int ELEV_ZERO_NUMBER = 14;
+    private static final int LINE_SENSOR_LEFT_1_NUMBER = 3;
+    private static final int LINE_SENSOR_RIGHT_1_NUMBER = 4;
+    private static final int ELEV_ENCODER_RESET_BUTTON_NUMBER = 14;
 
     private double driveSpeedMultiplier = 1;
 
@@ -142,8 +142,8 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         // hybrid track
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Cargo));
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
+        //new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Cargo));
+        //new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
 
         new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Target));
         new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
@@ -164,9 +164,7 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
         
         new JoystickButton(driveLeft, LINE_SENSOR_LEFT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
-        new JoystickButton(driveLeft, LINE_SENSOR_LEFT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
         new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
-        new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
 
     }
 
@@ -190,7 +188,7 @@ public class OI implements SmartDashboardSource {
 
         new JoystickButton(driveRight, TOGGLE_LIFT_LOCK_NUMBER).whenPressed(new LiftLockMechanismToggleCommand());
 
-        new JoystickButton(driveRight, ELEV_ZERO_NUMBER).whenPressed(new ElevatorZeroCommand());
+        new JoystickButton(driveRight, ELEV_ENCODER_RESET_BUTTON_NUMBER).whenPressed(new ElevatorZeroCommand());
     }
 
     public void initOperatorLeft() {
@@ -217,6 +215,8 @@ public class OI implements SmartDashboardSource {
 
         new JoystickButton(operatorLeft, RETURN_TO_NEUTRAL_POSITION_NUMBER).whenPressed(new ReturnToNeutralPositionCommand());
 
+        new JoystickButton(operatorLeft, PREP_CLIMB_BUTTON).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
+
     }
 
     public void initOperatorRight() {
@@ -225,11 +225,11 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(operatorRight, HATCH_BOTTOM_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_LOW_HEIGHT_ELEVATOR));
 
         //climb heights
-        new JoystickButton(operatorRight, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
-        new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
+        new JoystickButton(operatorRight, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
+        new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
 
         //climb
-        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommand());
+        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_END_DISTANCE));
         new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new RetractLiftCommand());
 
         //hatch

@@ -10,6 +10,8 @@ public class IntakeRollersDeployToggleCommand extends NRCommand {
 	}
 	
 	public void onStart() {
+		IntakeRollers.getInstance().disable();
+
         if (IntakeRollers.getInstance().currentDeployState() == State.RETRACTED)
             IntakeRollers.getInstance().deployIntakeRollers();
         else

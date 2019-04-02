@@ -17,16 +17,19 @@ public class RobotMap {
     //public static final int CARGO_INTAKE_SENSOR_PORT_2 = 12;
     //public static final int CARGO_INTAKE_SENSOR_PORT_3 = 11;
 
-    public static final int FLOOR_SENSOR_PORT_1 = 1;
-    public static final int FLOOR_SENSOR_PORT_2 = 6;
-    public static final int FLOOR_SENSOR_PORT_3 = 2;
+    public static final int FLOOR_SENSOR_PORT_1 = 4;
+    public static final int FLOOR_SENSOR_PORT_2 = 5;
+    public static final int FLOOR_SENSOR_PORT_3 = 6;
     public static final int FLOOR_SENSOR_PORT_4 = 7;
-    public static final int FLOOR_SENSOR_PORT_5 = 3;
+    public static final int FLOOR_SENSOR_PORT_5 = 8;
 
     public static final int PLATFORM_SENSOR = 9;
 
-    public static final int FORCE_SENSOR_1 = 4;
-    public static final int FORCE_SENSOR_2 = 5;
+    public static final int HATCH_SENSOR_1 = 2;
+    public static final int HATCH_SENSOR_2 = 3;
+
+    //public static final int FORCE_SENSOR_1 = 4;
+    //public static final int FORCE_SENSOR_2 = 5;
     //public static final int FORCE_SENSOR_3 = 2;
 
     public static final int ELEVATOR_SENSOR_PORT = 1;
