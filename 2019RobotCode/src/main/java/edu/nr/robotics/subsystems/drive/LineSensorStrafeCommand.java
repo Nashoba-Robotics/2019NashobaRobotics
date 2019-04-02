@@ -18,13 +18,13 @@ public class LineSensorStrafeCommand extends NRCommand {
     }
 
     protected void onStart() {
-        sensorStart = !(new SensorVoting(EnabledSensors.floorSensorTwo, EnabledSensors.floorSensorThree, EnabledSensors.floorSensorFour).isTrue());
+        sensorStart = !(new SensorVoting(EnabledSensors.floorSensorTwo.get(), !EnabledSensors.floorSensorThree.get(), EnabledSensors.floorSensorFour.get()).isTrue());
 
         if (!sensorStart) {
-            if (!EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get()) {
+            if (EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get()) {
                 Drive.getInstance().setMotorSpeedInPercent(0, 0, -Drive.getInstance().SENSOR_STRAFE_PERCENT);
                 tracker = 1;
-            } else if (!EnabledSensors.floorSensorFour.get() || !EnabledSensors.floorSensorFive.get()) {
+            } else if (!EnabledSensors.floorSensorFour.get() || EnabledSensors.floorSensorFive.get()) {
                 Drive.getInstance().setMotorSpeedInPercent(0, 0, Drive.getInstance().SENSOR_STRAFE_PERCENT);
                 tracker = 2;
             } else {
@@ -39,7 +39,7 @@ public class LineSensorStrafeCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return !(new SensorVoting(EnabledSensors.floorSensorTwo, EnabledSensors.floorSensorThree, EnabledSensors.floorSensorFour).isTrue());
+        return !(new SensorVoting(EnabledSensors.floorSensorTwo.get(), !EnabledSensors.floorSensorThree.get(), EnabledSensors.floorSensorFour.get()).isTrue());
     }
 
 }

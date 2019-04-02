@@ -6,6 +6,7 @@ import edu.nr.lib.gyro.ResetGyroCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Distance;
 import edu.nr.robotics.multicommands.ClimbCommand;
 import edu.nr.robotics.multicommands.ClimbCommandGroup;
 import edu.nr.robotics.multicommands.GetCargoCommand;
@@ -59,6 +60,7 @@ public class OI implements SmartDashboardSource {
     private static final int HATCH_BOTTOM_BUTTON_NUMBER = 10;
     //private static final int ELEVATOR_BOTTOM_BUTTON_NUMBER = 8;
     //private static final int GROUND_PICKUP_HATCH_BUTTON_NUMBER = 9;
+    private static final int PREP_CLIMB_BUTTON = 3;
     private static final int CLIMB_HEIGHT_HIGH_BUTTON_NUMBER = 1;
     private static final int CLIMB_HEIGHT_LOW_BUTTON_NUMBER = 6;
     private static final int CLIMB_BUTTON_NUMBER = 3;
@@ -213,6 +215,8 @@ public class OI implements SmartDashboardSource {
 
         new JoystickButton(operatorLeft, RETURN_TO_NEUTRAL_POSITION_NUMBER).whenPressed(new ReturnToNeutralPositionCommand());
 
+        new JoystickButton(operatorLeft, PREP_CLIMB_BUTTON).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
+
     }
 
     public void initOperatorRight() {
@@ -225,7 +229,7 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
 
         //climb
-        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommand());
+        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_END_DISTANCE));
         new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new RetractLiftCommand());
 
         //hatch

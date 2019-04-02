@@ -544,7 +544,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             SmartDashboard.putNumber("Elevator Position: ", getPosition().get(Distance.Unit.INCH));
 
             if (EnabledSubsystems.ELEVATOR_SMARTDASHBOARD_BASIC_ENABLED) {
-                SmartDashboard.putBoolean("Hall Effect Value", EnabledSensors.elevatorSensor.get());
+                //SmartDashboard.putBoolean("Hall Effect Value", EnabledSensors.elevatorSensor.get());
                 
                 SmartDashboard.putNumberArray("ElevatorCurrent: ", new double[] {getMasterCurrent(), getFollowOneCurrent(), getFollowTwoCurrent()});
                 SmartDashboard.putNumberArray("Elevator Velocity vs. Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});

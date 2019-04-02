@@ -44,7 +44,9 @@ public class ScoreHatchCommand extends CommandGroup {
             }
         });
 
-        addSequential(new ElevatorPositionCommand(Distance.ZERO));
+        //addSequential(new ElevatorPositionCommand(Distance.ZERO));
+
+        addSequential(new GetHatchStationCommand());
         
     }
 

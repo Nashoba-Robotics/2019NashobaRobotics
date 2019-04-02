@@ -26,7 +26,6 @@ public class PrepareClimbCommand extends CommandGroup {
 
         addSequential(new ElevatorSwitchToClimbGearCommand());
 
-        addSequential(new ElevatorCurrentCommand(Elevator.CLIMB_PERCENT, Elevator.CLIMB_CURRENT_SPIKE));
     }
  
 }
