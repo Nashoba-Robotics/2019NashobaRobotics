@@ -32,7 +32,7 @@ public class ClimbCommand extends NRCommand {
     }
 
     protected void onEnd() {
-        new HoldClimbCommand((Elevator.getInstance().getPosition().sub(initElevPos)).mul(-1).add(Lift.LIFT_LEAD_DISTANCE)).start();
+        new HoldClimbCommand((Elevator.getInstance().getPosition().sub(initElevPos)).mul(-1).add(Lift.LIFT_LEAD_DISTANCE), initElevPos).start();
         AuxiliaryDrive.getInstance().disable();
     }
 

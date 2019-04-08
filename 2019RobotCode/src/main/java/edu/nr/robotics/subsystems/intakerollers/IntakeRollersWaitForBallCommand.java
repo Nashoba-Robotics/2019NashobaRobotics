@@ -19,9 +19,9 @@ public class IntakeRollersWaitForBallCommand extends NRCommand {
 	public boolean isFinishedNR() {
 		finished = false;
 
-		if (IntakeRollers.getInstance().getCurrent() > 40) {
+		if (IntakeRollers.getInstance().getCurrent() > 50) {
 			spiketime = Timer.getFPGATimestamp();
-			if ((spiketime - time) > 0.15) {
+			if ((spiketime - time) > 0.30) {
 				finished = true;
 			} else {
 				time = Timer.getFPGATimestamp();

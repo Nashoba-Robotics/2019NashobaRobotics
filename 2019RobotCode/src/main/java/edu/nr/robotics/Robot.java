@@ -63,7 +63,11 @@ public class Robot extends TimedRobot {
 
     private static Robot singleton;
 
-    private static double period = 0.01;
+    private static double period = 0.02;
+
+    double dt;
+    double dtTot = 0;
+    int count = 0;
 
     private double prevTime = 0;
 
@@ -237,8 +241,16 @@ public class Robot extends TimedRobot {
 
         public void teleopPeriodic() {
 
-            double dt = edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - prevTime;
+            dt = edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - prevTime;
             prevTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+            dtTot += dt;
+            count++;
+
+            if (count % 100 == 0) {
+                System.out.println(dtTot / 100);
+                dtTot = 0;
+                count = 0;
+            }
         
         }
 

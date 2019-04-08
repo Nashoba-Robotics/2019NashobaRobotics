@@ -66,7 +66,7 @@ public class LineSensorStrafeCommandGroup extends CommandGroup {
 
             @Override
             protected boolean condition() {
-                return new SensorVoting(EnabledSensors.floorSensorTwo.get(), !EnabledSensors.floorSensorThree.get(), EnabledSensors.floorSensorFour.get()).isTrue();
+                return !(new SensorVoting(EnabledSensors.floorSensorTwo.get(), EnabledSensors.floorSensorThree.get(), EnabledSensors.floorSensorFour.get()).isTrue());
             }
 
         });

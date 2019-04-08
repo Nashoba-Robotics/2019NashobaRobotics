@@ -13,13 +13,15 @@ import edu.wpi.first.wpilibj.Timer;
 public class HoldClimbCommand extends NRCommand {
 
     Distance liftPos;
+    Distance initClimbElevPos;
 
     double time;
     double startTime;
 
-    public HoldClimbCommand(Distance liftPos) {
+    public HoldClimbCommand(Distance liftPos, Distance initClimbElevPos) {
         super(new NRSubsystem [] {Lift.getInstance(), Elevator.getInstance(), AuxiliaryDrive.getInstance()});
         this.liftPos = liftPos;
+        this.initClimbElevPos = initClimbElevPos;
     }
 
     protected void onStart() {
@@ -43,6 +45,9 @@ public class HoldClimbCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
+        if (initClimbElevPos.lessThan(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR.add(new Distance(3, Distance.Unit.INCH)))) {
+            return false;
+        }
         return EnabledSensors.platformSensor.get();
     }
 

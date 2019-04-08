@@ -28,8 +28,8 @@ public class IntakeRollers extends NRSubsystem {
     public static Time  VOLTAGE_RAMP_RATE_INTAKE_ROLLERS = new Time(0.05, Time.Unit.SECOND);
 
     public static double INTAKE_PERCENT = 1; //find all
-    public static double OUTTAKE_PERCENT = -0.75; 
-    public static double HOLD_PERCENT = 0.10;
+    public static double OUTTAKE_PERCENT = -0.85; 
+    public static double HOLD_PERCENT = 0.2;
 
     public static final int PEAK_CURRENT_INTAKE_ROLLERS = 80;
     public static final int PEAK_CURRENT_DURATION_INTAKE_ROLLERS = 250;
@@ -151,6 +151,8 @@ public class IntakeRollers extends NRSubsystem {
 
 	@Override
 	public void smartDashboardInfo() {
+        SmartDashboard.putBoolean("Intake Rollers Running: ", (intakeRollers.getMotorOutputPercent() == INTAKE_PERCENT));
+
 		if (EnabledSubsystems.INTAKE_ROLLERS_SMARTDASHBOARD_BASIC_ENABLED) {
             SmartDashboard.putString("Intake Rollers Deploy Position: ", currentDeployState().toString());
             SmartDashboard.putNumber("Intake Rollers Current: ", getCurrent());

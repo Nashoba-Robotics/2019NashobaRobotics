@@ -225,7 +225,7 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(operatorRight, HATCH_BOTTOM_BUTTON_NUMBER).whenPressed(new ElevatorPositionCommand(Elevator.HATCH_PLACE_LOW_HEIGHT_ELEVATOR));
 
         //climb heights
-        new JoystickButton(operatorRight, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
+        new JoystickButton(operatorRight, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
         new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
 
         //climb

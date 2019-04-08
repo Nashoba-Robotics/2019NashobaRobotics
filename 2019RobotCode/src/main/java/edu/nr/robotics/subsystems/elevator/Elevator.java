@@ -144,20 +144,20 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance TOP_HEIGHT_ELEVATOR = new Distance(82, Distance.Unit.INCH);//find these
     public static final Distance HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(17, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);//20.5
-    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(47, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(74.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(46, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(73.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(38.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(66.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance CARGO_SHIP_HEIGHT = new Distance(51, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance CARGO_SHIP_HEIGHT = new Distance(52, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PICKUP_HEIGHT_ELEVATOR = new Distance(17, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);//18
-    public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = new Distance(17, Distance.Unit.INCH).add(new Distance(3, Distance.Unit.INCH));
+    public static final Distance CLIMB_LOW_HEIGHT_ELEVATOR = new Distance(16, Distance.Unit.INCH).add(new Distance(3, Distance.Unit.INCH));
     public static final Distance CLIMB_HIGH_HEIGHT_ELEVATOR = new Distance(29, Distance.Unit.INCH).add(new Distance(3, Distance.Unit.INCH));
     public static final Distance REST_HEIGHT_ELEVATOR = Distance.ZERO;
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-    public static final Distance CLIMB_END_DISTANCE = new Distance(2.5,  Distance.Unit.INCH);
+    public static final Distance CLIMB_END_DISTANCE = new Distance(4.5,  Distance.Unit.INCH);
 
-    public static final double CLIMB_CURRENT_SPIKE = 0.7;
+    public static final double CLIMB_CURRENT_SPIKE = 0.9;
 
    /*public static final Distance[] Counter_Heights = { HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR, REST_HEIGHT_ELEVATOR,
             CARGO_PLACE_LOW_HEIGHT_ELEVATOR, HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR, CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR,

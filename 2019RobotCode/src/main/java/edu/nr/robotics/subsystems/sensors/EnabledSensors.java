@@ -22,11 +22,11 @@ public class EnabledSensors {
     //public static DigitalInput cargoIntakeSensorTwo = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_2);
     //public static DigitalInput cargoIntakeSensorThree = new DigitalInput(RobotMap.CARGO_INTAKE_SENSOR_PORT_3);
 
-    public static DigitalSensor floorSensorOne = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_1);
-    public static DigitalSensor floorSensorTwo = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_2);
-    public static DigitalSensor floorSensorThree = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_3);
-    public static DigitalSensor floorSensorFour = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_4);
-    public static DigitalSensor floorSensorFive = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_5);
+    public static DigitalSensor floorSensorOne = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_1, true);
+    public static DigitalSensor floorSensorTwo = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_2, true);
+    public static DigitalSensor floorSensorThree = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_3, false);
+    public static DigitalSensor floorSensorFour = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_4, true);
+    public static DigitalSensor floorSensorFive = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_5, true);
 
     public static DigitalSensor platformSensor = new DigitalSensor(RobotMap.PLATFORM_SENSOR);
 

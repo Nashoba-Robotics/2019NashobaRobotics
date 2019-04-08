@@ -115,6 +115,8 @@ public class HatchMechanism extends NRSubsystem {
 
 	@Override
 	public void smartDashboardInfo() {
+		SmartDashboard.putBoolean("Has Hatch", hasHatch());
+
 		if(EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_BASIC_ENABLED){
             SmartDashboard.putString("Hatch Deploy Mechanism Position: ", currentDeployState().toString());
             SmartDashboard.putString("Hatch Mechanism State: ", currentHatchState().toString());
@@ -134,9 +136,9 @@ public class HatchMechanism extends NRSubsystem {
 	public void disable() {
 	}
 
-	/*public boolean hasHatch() {
-		return (new SensorVoting(EnabledSensors.forceSensorOne, EnabledSensors.forceSensorTwo, EnabledSensors.forceSensorThree).isTrue());
-	}*/
+	public boolean hasHatch() {
+		return !EnabledSensors.hatchSensor1.get() && !EnabledSensors.hatchSensor2.get();
+	}
 
 	public boolean isHatchMechanismDeployed() {
 		return currentDeployState() == State.DEPLOYED;
