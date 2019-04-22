@@ -15,6 +15,7 @@ public class WaitForHatchCommand extends NRCommand {
 
     protected void onEnd() {
         HatchMechanism.getInstance().grabHatch();
+        new VerifyHatchGrabbedCommand().start();
     }
 
     protected boolean isFinishedNR() {

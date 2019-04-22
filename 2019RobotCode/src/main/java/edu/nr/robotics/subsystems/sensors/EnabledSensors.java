@@ -32,6 +32,8 @@ public class EnabledSensors {
 
     public static AnalogSensor hatchSensor1 = new AnalogSensor(RobotMap.HATCH_SENSOR_1, HatchMechanism.HATCH_SENSOR_THRESHOLD, false);
     public static AnalogSensor hatchSensor2 = new AnalogSensor(RobotMap.HATCH_SENSOR_2, HatchMechanism.HATCH_SENSOR_THRESHOLD, false);
+    public static DigitalSensor hatchLimitSwitch1 = new DigitalSensor(RobotMap.HATCH_LIMIT_SWITCH_1, true);
+    public static DigitalSensor hatchLimitSwitch2 = new DigitalSensor(RobotMap.HATCH_LIMIT_SWITCH_2, true);
 
     //public static DigitalSensor forceSensorOne = new DigitalSensor(RobotMap.FORCE_SENSOR_1);
     //public static DigitalSensor forceSensorTwo = new DigitalSensor(RobotMap.FORCE_SENSOR_2);

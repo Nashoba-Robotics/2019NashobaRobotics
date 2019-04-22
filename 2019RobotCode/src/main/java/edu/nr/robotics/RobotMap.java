@@ -28,6 +28,9 @@ public class RobotMap {
     public static final int HATCH_SENSOR_1 = 2;
     public static final int HATCH_SENSOR_2 = 1;
 
+    public static final int HATCH_LIMIT_SWITCH_1 = 7;
+    public static final int HATCH_LIMIT_SWITCH_2 = 9;
+
     //public static final int FORCE_SENSOR_1 = 4;
     //public static final int FORCE_SENSOR_2 = 5;
     //public static final int FORCE_SENSOR_3 = 2;
