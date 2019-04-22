@@ -4,7 +4,6 @@ import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismReleaseCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.HatchMechanismRetractCommand;
-import edu.nr.robotics.subsystems.hatchmechanism.WaitForHatchCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersRetractCommand;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -19,6 +18,6 @@ public class GetHatchStationCommand extends CommandGroup {
 
         addSequential(new HatchMechanismReleaseCommand());
 
-        addSequential(new WaitForHatchCommand());
+        addSequential(new CallWaitForHatchCommand());
     }
 }

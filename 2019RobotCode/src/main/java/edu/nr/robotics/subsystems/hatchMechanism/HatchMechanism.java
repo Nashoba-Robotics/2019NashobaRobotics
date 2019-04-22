@@ -137,7 +137,7 @@ public class HatchMechanism extends NRSubsystem {
 	}
 
 	public boolean hasHatch() {
-		return !EnabledSensors.hatchSensor1.get() && !EnabledSensors.hatchSensor2.get();
+		return EnabledSensors.hatchSensor1.get() && EnabledSensors.hatchSensor2.get();
 	}
 
 	public boolean isHatchMechanismDeployed() {

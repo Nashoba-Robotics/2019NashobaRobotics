@@ -52,7 +52,7 @@ public class Lift extends NRSubsystem {
     //public static final int PEAK_CURRENT_DURATION_LIFT = 250;
     public static final int CONTINUOUS_CURRENT_LIMIT_LIFT = 40;
 
-    public static double profilePercent = 0.3;
+    public static double profilePercent = 0.5;//0.3;
 
     public static final Distance PROFILE_END_THRESHOLD_LIFT = new Distance(1, Distance.Unit.INCH);
     public static final Speed PROFILE_STOP_SPEED_THRESHOLD = new Speed(0.1, Distance.Unit.INCH, Time.Unit.SECOND);

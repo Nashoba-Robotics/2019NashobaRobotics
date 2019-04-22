@@ -11,11 +11,12 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class ClimbCommandGroup extends CommandGroup {
 
     public ClimbCommandGroup(Distance elevHeight) {
+
         addSequential(new ConditionalCommand(new AnonymousCommandGroup(){
 
             @Override
             public void commands() {
-                new PrepareClimbCommand(elevHeight);
+                addSequential(new PrepareClimbCommand(elevHeight));
 
                 addSequential(new WaitCommand(0.5));
             }
@@ -24,7 +25,8 @@ public class ClimbCommandGroup extends CommandGroup {
 
             @Override
             protected boolean condition() {
-                return Elevator.getInstance().getPosition().lessThan(elevHeight);
+                //System.out.println("Elevator Position above: " + Elevator.getInstance().getPosition().lessThan(elevHeight));
+                return Elevator.getInstance().getPosition().lessThan(elevHeight.sub(new Distance(2, Distance.Unit.INCH)));
             }
 
         });

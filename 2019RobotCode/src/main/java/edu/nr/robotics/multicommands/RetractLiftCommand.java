@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 public class RetractLiftCommand extends CommandGroup {
 
     public RetractLiftCommand() {
-        addSequential(new ElevatorMoveBasicCommand(new Distance(5, Distance.Unit.INCH), 0.5));
+        addParallel(new ElevatorMoveBasicCommand(new Distance(5, Distance.Unit.INCH), 0.5));
 
-        addSequential(new WaitCommand(0.25));
+        //addSequential(new WaitCommand(0.25));
 
         addSequential(new LiftSetPositionCommand(Lift.TOP_POSITION, Lift.profilePercent));
     }

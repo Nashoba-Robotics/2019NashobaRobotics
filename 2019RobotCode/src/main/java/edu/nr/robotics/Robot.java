@@ -23,6 +23,7 @@ import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDrive;
+import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDriveSetMotorPercentRawSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -192,6 +193,10 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new LiftLockMechanismRetractCommand());
         }
 
+        if (EnabledSubsystems.AUX_DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new AuxiliaryDriveSetMotorPercentRawSmartDashboardCommand());
+        }
+
     }
 
         @Override
@@ -247,7 +252,7 @@ public class Robot extends TimedRobot {
             count++;
 
             if (count % 100 == 0) {
-                System.out.println(dtTot / 100);
+                //System.out.println(dtTot / 100);
                 dtTot = 0;
                 count = 0;
             }

@@ -29,7 +29,7 @@ public class IntakeRollers extends NRSubsystem {
 
     public static double INTAKE_PERCENT = 1; //find all
     public static double OUTTAKE_PERCENT = -0.85; 
-    public static double HOLD_PERCENT = 0.2;
+    public static double HOLD_PERCENT = 0.25;
 
     public static final int PEAK_CURRENT_INTAKE_ROLLERS = 80;
     public static final int PEAK_CURRENT_DURATION_INTAKE_ROLLERS = 250;

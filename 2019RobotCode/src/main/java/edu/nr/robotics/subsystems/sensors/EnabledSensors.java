@@ -13,7 +13,7 @@ public class EnabledSensors {
 
     //more sensors, way more sensors
 
-    public static DigitalSensor elevatorSensor = new DigitalSensor(RobotMap.ELEVATOR_SENSOR_PORT);
+    public static DigitalSensor elevatorSensor = new DigitalSensor(RobotMap.ELEVATOR_SENSOR_PORT, false);
     //public static DigitalInput elevatorSensor2 = new DigitalInput(RobotMap.ELEVATOR_SENSOR_PORT_2);
     //public static DigitalInput elevatorSensor3 = new DigitalInput(RobotMap.ELEVATOR_SENSOR_PORT_3);
     //public static DigitalInput elevatorSensor4 = new DigitalInput(RobotMap.ELEVATOR_SENSOR_PORT_4);
@@ -28,10 +28,10 @@ public class EnabledSensors {
     public static DigitalSensor floorSensorFour = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_4, true);
     public static DigitalSensor floorSensorFive = new DigitalSensor(RobotMap.FLOOR_SENSOR_PORT_5, true);
 
-    public static DigitalSensor platformSensor = new DigitalSensor(RobotMap.PLATFORM_SENSOR);
+    public static DigitalSensor platformSensor = new DigitalSensor(RobotMap.PLATFORM_SENSOR, false);
 
-    public static AnalogSensor hatchSensor1 = new AnalogSensor(RobotMap.HATCH_SENSOR_1, HatchMechanism.HATCH_SENSOR_THRESHOLD);
-    public static AnalogSensor hatchSensor2 = new AnalogSensor(RobotMap.HATCH_SENSOR_2, HatchMechanism.HATCH_SENSOR_THRESHOLD);
+    public static AnalogSensor hatchSensor1 = new AnalogSensor(RobotMap.HATCH_SENSOR_1, HatchMechanism.HATCH_SENSOR_THRESHOLD, false);
+    public static AnalogSensor hatchSensor2 = new AnalogSensor(RobotMap.HATCH_SENSOR_2, HatchMechanism.HATCH_SENSOR_THRESHOLD, false);
 
     //public static DigitalSensor forceSensorOne = new DigitalSensor(RobotMap.FORCE_SENSOR_1);
     //public static DigitalSensor forceSensorTwo = new DigitalSensor(RobotMap.FORCE_SENSOR_2);
