@@ -42,4 +42,12 @@ public class AnalogSensor implements Sensor {
         return (sensor.getValue() > threshold);
     }
 
+    public void setThreshold(int threshold) {
+        this.threshold = threshold;
+    }
+
+    public int getThreshold() {
+        return threshold;
+    }
+
 }

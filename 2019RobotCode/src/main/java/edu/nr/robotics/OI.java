@@ -229,7 +229,7 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
 
         //climb
-        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_END_DISTANCE));
+        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(new Distance(-1, Distance.Unit.FOOT)));
         new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new RetractLiftCommand());
 
         //hatch

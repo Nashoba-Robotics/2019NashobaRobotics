@@ -146,7 +146,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     public static final Distance HATCH_PICKUP_GROUND_HEIGHT_ELEVATOR = Distance.ZERO;
     public static final Distance HATCH_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(17, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);//20.5
     public static final Distance HATCH_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(44, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
-    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(71.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
+    public static final Distance HATCH_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(72.5, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_LOW_HEIGHT_ELEVATOR = new Distance(37, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_MIDDLE_HEIGHT_ELEVATOR = new Distance(65, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
     public static final Distance CARGO_PLACE_TOP_HEIGHT_ELEVATOR = new Distance(95, Distance.Unit.INCH).sub(GROUND_TO_HATCH_MANIPULATOR_NEUTRAL_HEIGHT);
@@ -208,15 +208,15 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     
     private Elevator() {
         if(EnabledSubsystems.ELEVATOR_ENABLED) {
-            if (encoderTalon == EncoderTalon.master) {   
+            //if (encoderTalon == EncoderTalon.master) {   
                 elevatorTalon = CTRECreator.createMasterTalon(RobotMap.ELEVATOR_TALON);
                 elevatorFollowOne = CTRECreator.createFollowerTalon(RobotMap.ELEVATOR_FOLLOW_ONE, elevatorTalon);
                 elevatorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
-            } else if (encoderTalon == EncoderTalon.followOne) {   
+            /*} else if (encoderTalon == EncoderTalon.followOne) {   
                 elevatorTalon = CTRECreator.createMasterTalon(RobotMap.ELEVATOR_FOLLOW_ONE);
                 elevatorFollowOne = CTRECreator.createFollowerTalon(RobotMap.ELEVATOR_TALON, elevatorTalon);
                 elevatorFollowTwo = CTRECreator.createFollowerVictor(RobotMap.ELEVATOR_FOLLOW_TWO, elevatorTalon);
-            }
+            }*/
 
             pdp = new PowerDistributionPanel(RobotMap.PDP_ID);
 
@@ -645,7 +645,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
     protected void zeroElevEncoder() {
         elevatorTalon.getSensorCollection().setQuadraturePosition(0, DEFAULT_TIMEOUT);
     }
-
+/*
     protected void switchEncoderTalon() {
         if(EnabledSubsystems.ELEVATOR_ENABLED) {
             elevatorTalon.DestroyObject();
@@ -717,7 +717,7 @@ public class Elevator extends NRSubsystem implements PIDOutput, PIDSource {
             }
 
         } 
-    }
+    }*/
 
     /*public Distance getApproxHeight() {
         if ((heightCounter < Counter_Heights.length) && (heightCounter >= 0))

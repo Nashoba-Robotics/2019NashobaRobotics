@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import jdk.jfr.Enabled;
 
 public class HatchMechanism extends NRSubsystem {
 	public static HatchMechanism singleton;
@@ -23,7 +24,7 @@ public class HatchMechanism extends NRSubsystem {
 
 	public static final Time ACTUATION_TIME = new Time(0.5, Time.Unit.SECOND);
 
-	public static final int HATCH_SENSOR_THRESHOLD = 900;
+	public static int hatchSensorThreshold = 1160;
 
 	public enum State {
 		DEPLOYED, RETRACTED;
@@ -69,7 +70,9 @@ public class HatchMechanism extends NRSubsystem {
 	private HatchMechanism() {
 		if (EnabledSubsystems.HATCH_MECHANISM_ENABLED) {
 			deploySolenoid = new Solenoid(RobotMap.PCM_ID, RobotMap.HATCH_MECHANISM_DEPLOY_PCM_PORT);
-            hatchSolenoid = new Solenoid(RobotMap.PCM_ID ,RobotMap.HATCH_MECHANISM_HATCH_PCM_PORT);
+			hatchSolenoid = new Solenoid(RobotMap.PCM_ID ,RobotMap.HATCH_MECHANISM_HATCH_PCM_PORT);
+			
+			SmartDashboardInit();
 		}
 	}
 
@@ -111,18 +114,27 @@ public class HatchMechanism extends NRSubsystem {
 			System.out.println("109");
             hatchSolenoid.set(State.RETRACTED_VALUE_HATCH);
         }
-    }
+	}
+	
+
+	public void SmartDashboardInit() {
+		if (EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_DEBUG_ENABLED) {
+			SmartDashboard.putNumber("Hatch Sensor Threshold: ", hatchSensorThreshold);
+		}
+	}
 
 	@Override
 	public void smartDashboardInfo() {
 		SmartDashboard.putBoolean("Has Hatch", hasHatch());
 
-		if(EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_BASIC_ENABLED){
+		if(EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_BASIC_ENABLED) {
             SmartDashboard.putString("Hatch Deploy Mechanism Position: ", currentDeployState().toString());
             SmartDashboard.putString("Hatch Mechanism State: ", currentHatchState().toString());
 		}
-		if(EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_BASIC_ENABLED){
-			
+		if(EnabledSubsystems.HATCH_MECHANISM_SMARTDASHBOARD_DEBUG_ENABLED) {
+			hatchSensorThreshold = (int) SmartDashboard.getNumber("Hatch Sensor Threshold: ", hatchSensorThreshold);
+			EnabledSensors.hatchSensor1.setThreshold(hatchSensorThreshold);
+			EnabledSensors.hatchSensor2.setThreshold(hatchSensorThreshold);
 		}
 
 	}

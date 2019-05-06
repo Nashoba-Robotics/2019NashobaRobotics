@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.nr.lib.commandbased.DoNothingCommand;
 import edu.nr.lib.commandbased.NRSubsystem;
 import edu.nr.lib.motorcontrollers.CTRECreator;
 import edu.nr.lib.units.Time;
@@ -29,7 +30,7 @@ public class IntakeRollers extends NRSubsystem {
 
     public static double INTAKE_PERCENT = 1; //find all
     public static double OUTTAKE_PERCENT = -0.85; 
-    public static double HOLD_PERCENT = 0.25;
+    public static double HOLD_PERCENT = 0.27;
 
     public static final int PEAK_CURRENT_INTAKE_ROLLERS = 80;
     public static final int PEAK_CURRENT_DURATION_INTAKE_ROLLERS = 250;
@@ -170,6 +171,7 @@ public class IntakeRollers extends NRSubsystem {
 	@Override
 	public void disable() {
         setMotorPercent(0);
+        new DoNothingCommand(getInstance()).start();
     }
 
     public boolean isRunning() {

@@ -10,7 +10,7 @@ public class SwitchElevatorEncoderCommand extends NRCommand {
 
     protected void onStart() {
         Elevator.getInstance().setMotorPercentRaw(0);
-        Elevator.getInstance().switchEncoderTalon();
+        //Elevator.getInstance().switchEncoderTalon();
     }
 
     protected boolean isFinishedNR() {
