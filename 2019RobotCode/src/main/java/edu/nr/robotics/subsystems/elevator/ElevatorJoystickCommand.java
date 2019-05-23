@@ -44,16 +44,16 @@ public class ElevatorJoystickCommand extends JoystickCommand {
             }
 
         } else if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED) {
-            motorPercent = OI.getInstance().getElevatorJoystickValue();
+            motorPercent = OI.getInstance().getElevatorJoystickValue() * OI.getInstance().getElevatorSpeedMultiplier();
             Elevator.getInstance().setMotorPercentRaw(motorPercent * MAX_ELEV_JOYSTICK_PERCENT_UP);
       
         } else if (OI.getInstance().getElevatorJoystickValue() > 0) {
-			motorPercent = OI.getInstance().getElevatorJoystickValue() * (MAX_ELEV_JOYSTICK_PERCENT_UP - MIN_ELEV_JOYSTICK_PERCENT) + MIN_ELEV_JOYSTICK_PERCENT;
+			motorPercent = OI.getInstance().getElevatorJoystickValue() * OI.getInstance().getElevatorSpeedMultiplier() * (MAX_ELEV_JOYSTICK_PERCENT_UP - MIN_ELEV_JOYSTICK_PERCENT) + MIN_ELEV_JOYSTICK_PERCENT;
             Elevator.getInstance().setMotorSpeedPercent(motorPercent);
            // System.out.println("50" + motorPercent);
             
 		} else if (OI.getInstance().getElevatorJoystickValue() < 0) {
-			motorPercent = OI.getInstance().getElevatorJoystickValue() * (MAX_ELEV_JOYSTICK_PERCENT_DOWN - MIN_ELEV_JOYSTICK_PERCENT) - MIN_ELEV_JOYSTICK_PERCENT;
+			motorPercent = OI.getInstance().getElevatorJoystickValue() * OI.getInstance().getElevatorSpeedMultiplier() * (MAX_ELEV_JOYSTICK_PERCENT_DOWN - MIN_ELEV_JOYSTICK_PERCENT) - MIN_ELEV_JOYSTICK_PERCENT;
             Elevator.getInstance().setMotorSpeedPercent(motorPercent);
             //System.out.println("55");
         }

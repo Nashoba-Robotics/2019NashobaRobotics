@@ -16,6 +16,7 @@ import edu.nr.robotics.multicommands.RetractLiftCommand;
 import edu.nr.robotics.multicommands.ReturnToNeutralPositionCommand;
 import edu.nr.robotics.multicommands.ScoreHatchCommand;
 import edu.nr.robotics.multicommands.ToggleIntakeCommand;
+import edu.nr.robotics.multicommands.ToggleKidModeCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
@@ -96,8 +97,10 @@ public class OI implements SmartDashboardSource {
     private static final int LINE_SENSOR_LEFT_1_NUMBER = 3;
     private static final int LINE_SENSOR_RIGHT_1_NUMBER = 4;
     private static final int ELEV_ENCODER_RESET_BUTTON_NUMBER = 14;
+    private static final int TOGGLE_KID_MODE_NUMBER = 5;
 
     private double driveSpeedMultiplier = 1;
+    private double elevatorSpeedMultiplier = 1;
 
     private static OI singleton;
 
@@ -165,6 +168,8 @@ public class OI implements SmartDashboardSource {
         
         new JoystickButton(driveLeft, LINE_SENSOR_LEFT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
         new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
+
+        new JoystickButton(driveLeft, TOGGLE_KID_MODE_NUMBER).whenPressed(new ToggleKidModeCommand());
 
     }
 
@@ -308,6 +313,18 @@ public class OI implements SmartDashboardSource {
 
     public double getDriveSpeedMultiplier(){
         return driveSpeedMultiplier;
+    }
+
+    public void setDriveSpeedMultiplier(double mult) {
+        driveSpeedMultiplier = mult;
+    }
+
+    public double getElevatorSpeedMultiplier(){
+        return elevatorSpeedMultiplier;
+    }
+
+    public void setElevatorSpeedMultiplier(double mult) {
+        elevatorSpeedMultiplier = mult;
     }
 
     private static double snapDriveJoysticks(double value, double deadZone) {
