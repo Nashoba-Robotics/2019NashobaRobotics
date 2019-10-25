@@ -77,8 +77,8 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	public static final Jerk MAX_JERK_DRIVE = new Jerk(100, Distance.Unit.FOOT, Time.Unit.SECOND, Time.Unit.SECOND,
 			Time.Unit.SECOND);
 
-	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.0907;
-	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.089;
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_LEFT = 0.065;//0.0907
+	public static final double MIN_MOVE_VOLTAGE_PERCENT_RIGHT = 0.095;
 
 	//public static final double MIN_MOVE_VOLTAGE_PERCENT_H = 0;
 
@@ -162,7 +162,7 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 	public static final int VOLTAGE_COMPENSATION_LEVEL = 12;
 
-	public static final NeutralMode NEUTRAL_MODE = NeutralMode.Brake;
+	public static final NeutralMode NEUTRAL_MODE = NeutralMode.Coast;
 
 	// Type of PID. 0 = primary. 1 = cascade
 	public static final int PID_TYPE = 0;
@@ -213,9 +213,12 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 
 			leftDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, leftDrive);
 			leftDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.LEFT_DRIVE_FOLLOW_2, leftDrive);
+			//leftDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_1, RobotMap.LEFT_DRIVE);
+			//leftDriveFollow2 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_2);
+			//leftDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.LEFT_DRIVE_FOLLOW_1);
 
-			rightDriveFollow1 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1, rightDrive);
-			rightDriveFollow2 = CTRECreator.createFollowerVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2, rightDrive);
+			rightDriveFollow1 = CTRECreator.createMasterVictor(RobotMap.RIGHT_DRIVE_FOLLOW_1);
+			rightDriveFollow2 = CTRECreator.createMasterVictor(RobotMap.RIGHT_DRIVE_FOLLOW_2);
 
 			if (EnabledSubsystems.DRIVE_DUMB_ENABLED) {
 				leftDrive.set(ControlMode.PercentOutput, 0);
@@ -630,6 +633,9 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 	}
 
 	private void smartDashboardInit() {
+
+		SmartDashboard.putNumber("MOTOR RUNNING", 0);////test
+
 		if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 			SmartDashboard.putData(new ResetGyroCommand());
 		}
@@ -692,6 +698,16 @@ public class Drive extends NRSubsystem implements DoublePIDOutput, DoublePIDSour
 			SmartDashboard.putBoolean("Line Sensor 5", EnabledSensors.floorSensorFive.get());
 
 			if (EnabledSubsystems.DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
+
+				leftDriveFollow2.set(ControlMode.PercentOutput, SmartDashboard.getNumber("MOTOR RUNNING", 0));
+				//leftDrive working at 20%, 1.75 amps
+				//leftDriveFollow1 barely working at 20%, 3 amps
+				//LeftDriveFollow2 barely working at 20%, 3.5 amps
+
+				//rightDrive working at 20%, 1.5 amps
+				//rightDriveFollow1 barely working at 20%, 1.8 amps
+				//rightDriveFollow2 barely working at 20%, 2.2 amps
+				
 
 				SmartDashboard.putNumberArray("Drive Left Current",
 						new double[] { getLeftCurrent(), getLeftFollow1Current(), getLeftFollow2Current() });

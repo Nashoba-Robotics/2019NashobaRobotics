@@ -1,8 +1,8 @@
 package edu.nr.robotics;
 
 public class RobotMap {
-    public static final int RIGHT_DRIVE = 7;  //define these
-    public static final int LEFT_DRIVE = 8;
+    public static final int RIGHT_DRIVE = 7;  //define these, should be going to 12
+    public static final int LEFT_DRIVE = 8;  // should be 0
     public static final int H_DRIVE = 11;
     public static final int RIGHT_DRIVE_FOLLOW_1 = 9;  //define these
     public static final int RIGHT_DRIVE_FOLLOW_2 = 3;  

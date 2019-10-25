@@ -1,10 +1,12 @@
 package edu.nr.lib.network;
 
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Time;
+import edu.nr.lib.units.Angle.Unit;
 import edu.wpi.first.networktables.*;
 
 /**
@@ -23,6 +25,9 @@ public class LimelightNetworkTable extends TimerTask {
 	
 	private static final Time IMAGE_CAPTURE_LATENCY = new Time(11, Time.Unit.MILLISECOND);
 	
+	private static double [] camtranHolder;
+	private static int count = 0;
+
 	private Angle horizOffsetAngle = Angle.ZERO;
 	private Angle vertOffsetAngle = Angle.ZERO;
 	private Time pipelineLatency = Time.ZERO;
@@ -68,7 +73,15 @@ public class LimelightNetworkTable extends TimerTask {
 			vertOffsetAngle = new Angle(limelightTable.getEntry("ty").getDouble(0), Angle.Unit.DEGREE);
 			pipelineLatency = new Time(limelightTable.getEntry("tl").getDouble(0), Time.Unit.MILLISECOND);
 			boxHeight = limelightTable.getEntry("tvert").getDouble(0);
-		//}
+
+			if(count % 10 == 0){
+			//camtranHolder = limelightTable.getEntry("camtran").getDoubleArray(new double []{});
+			//System.out.println("CamTran: " + Arrays.toString(camtranHolder));
+			//System.out.println("camtran" + NetworkTableInstance.getDefault().getTable("limelight").getEntry("camtran").getDouble(0));
+			//System.out.println(horizOffsetAngle.get(Unit.DEGREE));
+			}
+			count ++;
+	//}
 	}
 	
 	/**

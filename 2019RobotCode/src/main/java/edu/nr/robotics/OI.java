@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI implements SmartDashboardSource {
 
     public static final double DRIVE_JOYSTICK_DEAD_ZONE = 0.1;
-    public static final double JOYSTICK_DEAD_ZONE = 0.2;
+    public static final double JOYSTICK_DEAD_ZONE = 0.25;
 
     public static final double SPEED_MULTIPLIER = 1.0;
 
@@ -116,13 +116,13 @@ public class OI implements SmartDashboardSource {
     private JoystickButton kidModeSwitch;
     private JoystickButton elevGearSwitcherSwitch;
 
-    private static final int STICK_LEFT = 0; //find these
+    private static final int STICK_LEFT = 0; 
     private static final int STICK_RIGHT = 1; 
     private static final int STICK_OPERATOR_LEFT = 2;
     private static final int STICK_OPERATOR_RIGHT = 3;
 
     public static final Drive.DriveMode driveMode = Drive.DriveMode.cheesyDrive; // set default type of drive here
-
+///////LEARNING HERE
     private OI() {
         driveLeft = new Joystick(STICK_LEFT);
         driveRight = new Joystick(STICK_RIGHT);

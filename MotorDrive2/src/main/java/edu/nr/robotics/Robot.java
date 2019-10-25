@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
+//import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.nr.lib.motorcontrollers.*;
 
@@ -28,11 +28,11 @@ import edu.nr.lib.motorcontrollers.*;
  */
 public class Robot extends TimedRobot {
 	TalonSRX talon;
-	TalonSRX carriageTalon;
+	/*TalonSRX carriageTalon;
 	TalonSRX intakeRoller1;
-	TalonSRX intakeRoller2;
-	CANSparkMax spark1;
-	CANSparkMax spark2;
+	TalonSRX intakeRoller2;*/
+	//CANSparkMax spark1;
+	//CANSparkMax spark2;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -40,9 +40,9 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		talon = CTRECreator.createMasterTalon(10);
-		carriageTalon = CTRECreator.createFollowerTalon(1, talon);
-		intakeRoller1 = CTRECreator.createFollowerTalon(6, talon);
+		talon = CTRECreator.createMasterTalon(12);
+		//carriageTalon = CTRECreator.createFollowerTalon(1, talon);
+		//intakeRoller1 = CTRECreator.createFollowerTalon(6, talon);
 		//intakeRoller2 = CTRECreator.createMasterTalon(4);
 
 		talon.configContinuousCurrentLimit(40, 0);
@@ -51,13 +51,13 @@ public class Robot extends TimedRobot {
 
 		talon.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
 
-		carriageTalon.configContinuousCurrentLimit(40, 0);
+		/*carriageTalon.configContinuousCurrentLimit(40, 0);
 		carriageTalon.configPeakCurrentLimit(50, 0);
 		carriageTalon.configPeakCurrentDuration(1000, 0);
 
 		intakeRoller1.configContinuousCurrentLimit(40, 0);
 		intakeRoller1.configPeakCurrentLimit(50, 0);
-		intakeRoller1.configPeakCurrentDuration(1000, 0);
+		intakeRoller1.configPeakCurrentDuration(1000, 0);*/
 
 		//intakeRoller2.configContinuousCurrentLimit(40, 0);
 		///intakeRoller2.configPeakCurrentLimit(50, 0);
@@ -129,6 +129,7 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		talon.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
+		System.out.println( SmartDashboard.getNumber("Motor Percent: ", 0));
 		//carriageTalon.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
 		//intakeRoller1.set(ControlMode.PercentOutput, -SmartDashboard.getNumber("Motor Percent 2: ", 0));
 		//intakeRoller2.set(ControlMode.PercentOutput, SmartDashboard.getNumber("Motor Percent: ", 0));
@@ -148,8 +149,8 @@ public class Robot extends TimedRobot {
 //		SmartDashboard.putNumber("Spark2 Position: ", spark2.getEncoder().getPosition());
 //		SmartDashboard.putNumber("Spark2 Current: ", spark2.getOutputCurrent());
 		SmartDashboard.putNumber("main Current: ", talon.getOutputCurrent());
-		SmartDashboard.putNumber("Follow1 Current: ", carriageTalon.getOutputCurrent());
-		SmartDashboard.putNumber("Follow2 current: ", intakeRoller1.getOutputCurrent());
+		//SmartDashboard.putNumber("Follow1 Current: ", carriageTalon.getOutputCurrent());
+		//SmartDashboard.putNumber("Follow2 current: ", intakeRoller1.getOutputCurrent());
 
 		SmartDashboard.putNumber("Encoder", talon.getSelectedSensorPosition());
 
