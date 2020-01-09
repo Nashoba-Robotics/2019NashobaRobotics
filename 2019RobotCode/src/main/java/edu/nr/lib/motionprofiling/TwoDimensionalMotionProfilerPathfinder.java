@@ -12,6 +12,7 @@ import edu.nr.lib.interfaces.DoublePIDSource;
 import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Time;
+import edu.nr.robotics.Robot;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.wpi.first.wpilibj.PIDSourceType;
@@ -27,7 +28,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 	
 	//In milliseconds
 	private final long period;
-	private static final long defaultPeriod = 10; //100 Hz 
+	private static final long defaultPeriod = (long) (1000 * Robot.getInstance().getPeriod()); //100 Hz 
 		
 	private boolean enabled = true;
 	private DoublePIDOutput out;
@@ -155,7 +156,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 				double headingAdjustment = -kp_theta * angleDifference;
 				
 				outputLeft = prelimOutputLeft + headingAdjustment;
-				outputRight = prelimOutputRight + headingAdjustment;
+				outputRight = prelimOutputRight - headingAdjustment;
 								
 				out.pidWrite(outputLeft, outputRight);
 				
@@ -215,9 +216,9 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 	public void setTrajectory(Waypoint[] points) {
         if (profileFile.exists()) {
 			try {
-				trajectory = Pathfinder.readFromCSV(profileFile);
+				trajectory = Pathfinder.readFromFile(profileFile);
 			} catch (IOException e) {
-				System.out.println("error reading from csv");
+				System.out.println("error reading from binary file");
 			}
         } else {
         	this.points = points;
@@ -229,7 +230,7 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 		this.right = new DistanceFollower(modifier.getRightTrajectory());
 		
 		if (!profileFile.exists()) {
-			Pathfinder.writeToCSV(profileFile, trajectory);	
+			Pathfinder.writeToFile(profileFile, trajectory);	
 		}
 		
 		/*for(int i = 0; i < modifier.getLeftTrajectory().segments.length; i += 25) {
@@ -268,6 +269,10 @@ public class TwoDimensionalMotionProfilerPathfinder extends TimerTask  {
 
 	public void setKP_theta(double kp_theta) {
 		this.kp_theta = kp_theta;
+	}
+
+	public boolean isFinished() {
+		return left.isFinished() && right.isFinished();
 	}
 	
 	//SmartDashboard.putNumber("Output Left", outputLeft);

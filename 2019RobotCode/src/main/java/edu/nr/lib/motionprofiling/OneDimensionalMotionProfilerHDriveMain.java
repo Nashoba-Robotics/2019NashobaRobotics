@@ -7,6 +7,7 @@ import java.util.TimerTask;
 import edu.nr.lib.gyro.GyroCorrection;
 import edu.nr.lib.interfaces.TriplePIDOutput;
 import edu.nr.lib.interfaces.TriplePIDSource;
+import edu.nr.robotics.Robot;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class OneDimensionalMotionProfilerHDriveMain extends TimerTask implements OneDimensionalMotionProfiler  {
@@ -15,7 +16,7 @@ public class OneDimensionalMotionProfilerHDriveMain extends TimerTask implements
 	
 	//In milliseconds
 	private final long period;
-	private static final long defaultPeriod = 20; //50 Hz 
+	private static final long defaultPeriod = (long) (1000 * Robot.getInstance().getPeriod()); //100 Hz 
 	
 	private double prevTime;
 	private double startTime;

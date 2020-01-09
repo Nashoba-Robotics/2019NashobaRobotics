@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.command.ConditionalCommand;
 public class RightRocketBackToCargoProfilingCommand extends CommandGroup{
 
     public RightRocketBackToCargoProfilingCommand() {
-        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.PROFILE_DRIVE_PERCENT, Drive.ACCEL_PERCENT, "RightRocketBackToCargo"));
+        addSequential(new EnableTwoDMotionProfile(Distance.ZERO, Distance.ZERO, Angle.ZERO, Distance.ZERO, Distance.ZERO, Angle.ZERO, Drive.TWO_D_PROFILE_DRIVE_PERCENT, Drive.TWO_D_ACCEL_PERCENT, "RightRocketBackToCargo"));
     
         addSequential(new ConditionalCommand(new ElevatorPositionCommand(Elevator.getInstance().CARGO_PICKUP_HEIGHT_ELEVATOR)){
 

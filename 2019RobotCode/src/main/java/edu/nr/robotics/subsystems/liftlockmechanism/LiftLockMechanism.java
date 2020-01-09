@@ -1,9 +1,9 @@
 package edu.nr.robotics.subsystems.liftlockmechanism;
 
 import edu.nr.lib.commandbased.NRSubsystem;
+import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
-import edu.nr.robotics.subsystems.lift.Lift;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -11,6 +11,8 @@ public class LiftLockMechanism extends NRSubsystem {
     public static LiftLockMechanism singleton;
 
     private Solenoid lockSolenoid;
+
+    public static final Time ACTUATION_TIME = new Time(1.1, Time.Unit.SECOND);
 
     public enum State {
         DEPLOYED, RETRACTED;

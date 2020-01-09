@@ -22,7 +22,7 @@ public class AuxiliaryDriveJoystickCommand extends JoystickCommand {
 
     @Override
     protected boolean shouldSwitchToJoystick() {
-        return Lift.getInstance().deployed;
+        return Lift.getInstance().deployed && AuxiliaryDrive.getInstance().getCurrentCommand() == null;
     }
 
     @Override

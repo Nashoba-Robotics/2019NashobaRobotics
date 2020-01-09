@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 
 public class AutoChoosers {
 
+    public static SendableChooser<SandstormType> sandstormTypeChooser = new SendableChooser<>();
     public static SendableChooser<StartPos> autoStartPosChooser = new SendableChooser<>();
     public static SendableChooser<GamePiece> autoGamePiece1Chooser = new SendableChooser<>();
     public static SendableChooser<GamePiece> autoGamePiece2Chooser = new SendableChooser<>();
@@ -11,6 +12,10 @@ public class AutoChoosers {
     public static SendableChooser<Destination> autoDestination1Chooser = new SendableChooser<>();
     public static SendableChooser<Destination2> autoDestination2Chooser = new SendableChooser<>();
 
+
+    public enum SandstormType {
+        auto, driver;
+    }
 
     public enum StartPos {
         left, middle, right;

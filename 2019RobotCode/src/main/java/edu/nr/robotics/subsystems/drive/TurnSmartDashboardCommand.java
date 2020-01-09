@@ -23,7 +23,7 @@ public class TurnSmartDashboardCommand extends NRCommand {
     }
 
     public void onStart() {
-        gyro = new GyroCorrection(Drive.angleToTurn, Drive.drivePercent);
+        gyro = new GyroCorrection(Drive.angleToTurn, Drive.oneDDrivePercent);
         out.pidWrite(0,0);
         initialAngle = gyro.getAngleError().sub(Drive.angleToTurn);
         reachedSetVel = false;

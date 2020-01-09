@@ -10,6 +10,7 @@ import edu.nr.robotics.auton.AutoChoosers.Destination;
 import edu.nr.robotics.auton.AutoChoosers.Destination2;
 import edu.nr.robotics.auton.AutoChoosers.GamePiece;
 import edu.nr.robotics.auton.AutoChoosers.Platform;
+import edu.nr.robotics.auton.AutoChoosers.SandstormType;
 import edu.nr.robotics.auton.AutoChoosers.StartPos;
 import edu.nr.robotics.auton.DriveOverBaselineAutoCommand;
 import edu.nr.robotics.auton.automap.StartPosLeftCargoShipSideCommand;
@@ -22,6 +23,7 @@ import edu.nr.robotics.auton.automap.StartPosRightRocketBackCommand;
 import edu.nr.robotics.auton.automap.StartPosRightRocketFrontCommand;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
 import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDrive;
+import edu.nr.robotics.subsystems.auxiliarydrive.AuxiliaryDriveSetMotorPercentRawSmartDashboardCommand;
 import edu.nr.robotics.subsystems.drive.CSVSaverDisable;
 import edu.nr.robotics.subsystems.drive.CSVSaverEnable;
 import edu.nr.robotics.subsystems.drive.Drive;
@@ -60,11 +62,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends TimedRobot {
 
-    private double prevTime = 0;
-
     private static Robot singleton;
 
+    private static double period = 0.02;
+
+    double dt;
+    double dtTot = 0;
+    int count = 0;
+
+    private double prevTime = 0;
+
     private Command autonomousCommand;
+    public AutoChoosers.SandstormType selectedSandstormType;
     public AutoChoosers.StartPos selectedStartPos;
     public AutoChoosers.GamePiece selectedGamePiece;
     public AutoChoosers.GamePiece selectedGamePiece2;
@@ -81,7 +90,7 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         singleton = this;
 
-        m_period = 0.01; // period that code runs at
+        m_period = period; // period that code runs at
 
         smartDashboardInit();
         autoChooserInit();
@@ -98,32 +107,43 @@ public class Robot extends TimedRobot {
         // CameraInit();
 
         LimelightNetworkTable.getInstance().lightLED(false);
-        System.out.println("end of robot init");
+        //System.out.println("end of robot init");
 
     }
 
     public void autoChooserInit() {
-        AutoChoosers.autoStartPosChooser.addDefault("Start Pos Left", StartPos.left);
-        AutoChoosers.autoStartPosChooser.addObject("Start Pos Middle", StartPos.middle);
-        AutoChoosers.autoStartPosChooser.addObject("Start Pos Right", StartPos.right);
+        AutoChoosers.sandstormTypeChooser.addDefault("Driver", SandstormType.driver);
+        AutoChoosers.sandstormTypeChooser.addObject("Auto", SandstormType.auto);
 
-        AutoChoosers.autoGamePiece1Chooser.addDefault("Game Piece", GamePiece.hatch);
-        AutoChoosers.autoGamePiece1Chooser.addObject("Game Piece", GamePiece.cargo);
+        AutoChoosers.autoStartPosChooser.addDefault("Left", StartPos.left);
+        AutoChoosers.autoStartPosChooser.addObject("Middle", StartPos.middle);
+        AutoChoosers.autoStartPosChooser.addObject("Right", StartPos.right);
 
-        AutoChoosers.autoGamePiece2Chooser.addDefault("Game Piece", GamePiece.hatch);
-        AutoChoosers.autoGamePiece2Chooser.addObject("Game Piece", GamePiece.cargo);
+        AutoChoosers.autoGamePiece1Chooser.addDefault("Hatch", GamePiece.hatch);
+        AutoChoosers.autoGamePiece1Chooser.addObject("Cargo", GamePiece.cargo);
 
-        AutoChoosers.autoPlatformChooser.addDefault("Platform", Platform.no);
-        AutoChoosers.autoPlatformChooser.addObject("Platform", Platform.yes);
+        AutoChoosers.autoGamePiece2Chooser.addDefault("Hatch", GamePiece.hatch);
+        AutoChoosers.autoGamePiece2Chooser.addObject("Cargo", GamePiece.cargo);
 
-        AutoChoosers.autoDestination1Chooser.addDefault("Destination", Destination.rocketFront);
-        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.rocketBack);
-        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.cargoShipFrontLeft);
-        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.cargoShipFrontRight);
-        AutoChoosers.autoDestination1Chooser.addObject("Destination", Destination.cargoShipSide);
+        AutoChoosers.autoPlatformChooser.addDefault("No", Platform.no);
+        AutoChoosers.autoPlatformChooser.addObject("Yes", Platform.yes);
 
-        AutoChoosers.autoDestination2Chooser.addDefault("Destination 2", Destination2.rocket);
-        AutoChoosers.autoDestination2Chooser.addObject("Destination 2", Destination2.cargoShip);
+        AutoChoosers.autoDestination1Chooser.addDefault("Rocket Front", Destination.rocketFront);
+        AutoChoosers.autoDestination1Chooser.addObject("Rocket Back", Destination.rocketBack);
+        AutoChoosers.autoDestination1Chooser.addObject("Cargo Ship Front Left", Destination.cargoShipFrontLeft);
+        AutoChoosers.autoDestination1Chooser.addObject("Cargo Ship Front Right", Destination.cargoShipFrontRight);
+        AutoChoosers.autoDestination1Chooser.addObject("Cargo Ship Side", Destination.cargoShipSide);
+
+        AutoChoosers.autoDestination2Chooser.addDefault("Rocket", Destination2.rocket);
+        AutoChoosers.autoDestination2Chooser.addObject("Cargo Ship", Destination2.cargoShip);
+
+        SmartDashboard.putData("Sandstorm Type", AutoChoosers.sandstormTypeChooser);
+        SmartDashboard.putData("Start Pos", AutoChoosers.autoStartPosChooser);
+        //SmartDashboard.putData("Starting Game Piece", AutoChoosers.autoGamePiece1Chooser);
+        SmartDashboard.putData("2nd Game Piece", AutoChoosers.autoGamePiece2Chooser);
+        SmartDashboard.putData("Platform Start", AutoChoosers.autoPlatformChooser);
+        SmartDashboard.putData("1st Destination", AutoChoosers.autoDestination1Chooser);
+        SmartDashboard.putData("2nd Destination", AutoChoosers.autoDestination2Chooser);
 
     }
 
@@ -173,6 +193,10 @@ public class Robot extends TimedRobot {
             SmartDashboard.putData(new LiftLockMechanismRetractCommand());
         }
 
+        if (EnabledSubsystems.AUX_DRIVE_SMARTDASHBOARD_DEBUG_ENABLED) {
+            SmartDashboard.putData(new AuxiliaryDriveSetMotorPercentRawSmartDashboardCommand());
+        }
+
     }
 
         @Override
@@ -193,6 +217,7 @@ public class Robot extends TimedRobot {
         public void autonomousInit() {
             enabledInit();
 
+            selectedSandstormType = AutoChoosers.sandstormTypeChooser.getSelected();
             selectedStartPos = AutoChoosers.autoStartPosChooser.getSelected();
             selectedDestination = AutoChoosers.autoDestination1Chooser.getSelected();
             selectedDestination2 = AutoChoosers.autoDestination2Chooser.getSelected();
@@ -221,8 +246,16 @@ public class Robot extends TimedRobot {
 
         public void teleopPeriodic() {
 
-            double dt = edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - prevTime;
+            dt = edu.wpi.first.wpilibj.Timer.getFPGATimestamp() - prevTime;
             prevTime = edu.wpi.first.wpilibj.Timer.getFPGATimestamp();
+            dtTot += dt;
+            count++;
+
+            if (count % 100 == 0) {
+                //System.out.println(dtTot / 100);
+                dtTot = 0;
+                count = 0;
+            }
         
         }
 
@@ -248,12 +281,13 @@ public class Robot extends TimedRobot {
         }
 
         public void enabledInit() {
-            new LiftLockMechanismRetractCommand().start();
+            //new LiftLockMechanismRetractCommand().start();
         }
     
         public Command getAutoCommand() {
-
-            if(selectedStartPos == StartPos.left && selectedDestination == Destination.rocketBack) {
+            if (selectedSandstormType == SandstormType.driver) {
+                return new DoNothingCommand();
+            } else if(selectedStartPos == StartPos.left && selectedDestination == Destination.rocketBack) {
                 return new StartPosLeftRocketBackCommand();
             } else if(selectedStartPos == StartPos.left && selectedDestination == Destination.rocketFront) {
                 return new StartPosLeftRocketFrontCommand();
@@ -273,6 +307,9 @@ public class Robot extends TimedRobot {
             return new DriveOverBaselineAutoCommand();
         }
 
+        public double getPeriod() {
+            return period;
+        }
 
     }
 

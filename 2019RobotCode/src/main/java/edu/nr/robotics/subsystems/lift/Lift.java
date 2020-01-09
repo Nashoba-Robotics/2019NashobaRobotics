@@ -14,6 +14,7 @@ import edu.nr.lib.units.Time;
 import edu.nr.lib.units.Time.Unit;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Lift extends NRSubsystem {
@@ -51,7 +52,7 @@ public class Lift extends NRSubsystem {
     //public static final int PEAK_CURRENT_DURATION_LIFT = 250;
     public static final int CONTINUOUS_CURRENT_LIMIT_LIFT = 40;
 
-    public static double profilePercent = 0.5;
+    public static double profilePercent = 0.5;//0.3;
 
     public static final Distance PROFILE_END_THRESHOLD_LIFT = new Distance(1, Distance.Unit.INCH);
     public static final Speed PROFILE_STOP_SPEED_THRESHOLD = new Speed(0.1, Distance.Unit.INCH, Time.Unit.SECOND);
@@ -72,7 +73,7 @@ public class Lift extends NRSubsystem {
     public static final int VEL_SLOT = 0;
     public static final int POS_SLOT = 1;
 
-    public static final Distance LIFT_LEAD_DISTANCE = new Distance(1, Distance.Unit.INCH);
+    public static final Distance LIFT_LEAD_DISTANCE = new Distance(-3, Distance.Unit.INCH);
 
     public static final Distance TOP_POSITION = Distance.ZERO;
     public static final Distance LEVEL1_POS = Distance.ZERO;
@@ -235,6 +236,8 @@ public class Lift extends NRSubsystem {
 
     public void smartDashboardInfo() {
         if (EnabledSubsystems.LIFT_SMARTDASHBOARD_BASIC_ENABLED) {
+            SmartDashboard.putBoolean("Platform Sensor", EnabledSensors.platformSensor.get());
+
             SmartDashboard.putNumber("Lift Current: ", getCurrent());
 
             SmartDashboard.putNumberArray("Lift Velocity vs Set Velocity: ", new double[] {getVelocity().get(Distance.Unit.FOOT, Time.Unit.SECOND), velSetpoint.get(Distance.Unit.FOOT, Time.Unit.SECOND)});
@@ -279,10 +282,12 @@ public class Lift extends NRSubsystem {
     }
 
     public void setLiftOutputRange(double low, double high) {
-        lift.getPIDController().setOutputRange(low, high);
+        lift.getPIDController().setOutputRange(low, high, VEL_SLOT);
+        lift.getPIDController().setOutputRange(low, high, POS_SLOT);
     }
 
     public void periodic() {
+        //System.out.println("lift deployed: " + deployed);
 
     }
 

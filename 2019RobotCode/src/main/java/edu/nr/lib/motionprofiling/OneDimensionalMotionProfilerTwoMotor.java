@@ -8,6 +8,7 @@ import edu.nr.lib.gyro.GyroCorrection;
 import edu.nr.lib.interfaces.DoublePIDOutput;
 import edu.nr.lib.interfaces.DoublePIDSource;
 import edu.nr.lib.interfaces.SmartDashboardSource;
+import edu.nr.robotics.Robot;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 public class OneDimensionalMotionProfilerTwoMotor extends TimerTask implements OneDimensionalMotionProfiler, SmartDashboardSource {
@@ -16,7 +17,7 @@ public class OneDimensionalMotionProfilerTwoMotor extends TimerTask implements O
 	
 	//In milliseconds
 	private final long period;
-	private static final long defaultPeriod = 10; //100 Hz 
+	private static final long defaultPeriod = (long) (1000 * Robot.getInstance().getPeriod()); //100 Hz 
 	
 	private double prevTime;
 	

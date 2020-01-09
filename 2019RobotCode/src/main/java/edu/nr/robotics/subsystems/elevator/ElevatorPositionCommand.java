@@ -2,7 +2,6 @@ package edu.nr.robotics.subsystems.elevator;
 
 import edu.nr.lib.commandbased.NRCommand;
 import edu.nr.lib.units.Distance;
-import edu.nr.lib.units.Distance.Unit;
 import edu.wpi.first.wpilibj.Timer;
 
 public class ElevatorPositionCommand extends NRCommand {
@@ -37,7 +36,7 @@ public class ElevatorPositionCommand extends NRCommand {
 			stoptime = Timer.getFPGATimestamp();
 			if ((stoptime - time) < 0.5) {
 				finished = Elevator.getInstance().getVelocity().lessThan(Elevator.PROFILE_STOP_SPEED_THRESHOLD) && (Elevator.getInstance().getPosition().sub(height)).abs().lessThan(Elevator.PROFILE_END_POS_THRESHOLD_ELEVATOR.mul(2));
-				System.out.println("finished: " + finished);
+				//System.out.println("finished: " + finished);
 			} else
 				time = Timer.getFPGATimestamp();
 		} else {

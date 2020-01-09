@@ -7,6 +7,7 @@ import edu.nr.lib.units.Angle;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
+import edu.nr.robotics.Robot;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,7 +64,7 @@ public class EnableReverseTwoDMotionProfile extends NRCommand {
 				profileStartTime = Timer.getFPGATimestamp();
 				profileStartTimeMs = (profileStartTime * 1000);
 			} else if (TwoDimensionalMotionProfilerPathfinder.twoDEnabled) {
-				index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / 20.0);
+				index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / (1000 * Robot.getInstance().getPeriod()));
 
 				if (index < TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length()) {
 					Drive.getInstance().setPIDSourceType(PIDSourceType.kRate);
@@ -121,23 +122,7 @@ public class EnableReverseTwoDMotionProfile extends NRCommand {
 
 		@Override
 		public boolean isFinishedNR() {
-
-			boolean finished;
-
-			finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
-				TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
-					.get(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length() - 1).position,
-				Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
-			
-				&& (Drive.getInstance().getRightPosition().sub(initialRightPosition)).sub(new Distance(
-				TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
-					.get(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory().length() - 1).position,
-				Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
-			
-				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
-
-			return finished;
+			return Drive.getInstance().twoDProfiler.isFinished();
 			
 		}
 

@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import edu.nr.lib.gyro.GyroCorrection;
 import edu.nr.lib.interfaces.DoublePIDOutput;
 import edu.nr.lib.interfaces.DoublePIDSource;
+import edu.nr.robotics.Robot;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -15,7 +16,7 @@ public class TwoDimensionalMotionProfilerBasic extends TimerTask implements TwoD
 	
 	//In milliseconds
 	private final long period;
-	private static final long defaultPeriod = 5; //200 Hz 
+	private static final long defaultPeriod = (long) (1000 * Robot.getInstance().getPeriod()); //100 Hz 
 	
 	private double prevTime;
 	private double startTime;

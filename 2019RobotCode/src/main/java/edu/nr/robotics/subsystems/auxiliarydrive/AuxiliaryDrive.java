@@ -15,6 +15,7 @@ import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
 import edu.nr.robotics.RobotMap;
 import edu.nr.robotics.subsystems.EnabledSubsystems;
+import edu.nr.robotics.subsystems.sensors.EnabledSensors;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,6 +64,11 @@ public class AuxiliaryDrive extends NRSubsystem {
 
 	public static final double MIN_MOVE_VOLTAGE_PERCENT = 0;
 	public static final double VOLTAGE_PERCENT_VELOCITY_SLOPE = 0;
+
+	public static final double HOLD_CLIMB_PERCENT = 0.01;
+	public static final double DRIVE_PERCENT = 0.35;
+
+	public static final Time CLIMB_DELAY = new Time(0.25, Time.Unit.SECOND);
 
 	private Speed motorSetpoint = Speed.ZERO;
 
@@ -209,6 +215,8 @@ public class AuxiliaryDrive extends NRSubsystem {
 	@Override
 	public void smartDashboardInfo() {
 		if(auxDrive != null){
+			SmartDashboard.putBoolean("Platform Sensor", !EnabledSensors.platformSensor.get());
+
 			if(EnabledSubsystems.AUX_DRIVE_SMARTDASHBOARD_BASIC_ENABLED) {
 				SmartDashboard.putNumber("Aux Drive Current", getCurrent());
 

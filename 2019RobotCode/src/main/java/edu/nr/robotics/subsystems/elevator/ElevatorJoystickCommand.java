@@ -33,7 +33,7 @@ public class ElevatorJoystickCommand extends JoystickCommand {
         
         if(!OI.getInstance().isElevatorNonZero()) {
 
-            if (Elevator.getInstance().getPosition().lessThan(new Distance(1, Distance.Unit.INCH))) {
+            if (Elevator.getInstance().getPosition().lessThan(new Distance(4, Distance.Unit.INCH))) {
 				Elevator.getInstance().setMotorPercentRaw(0);
             } else if (Elevator.getInstance().getCurrentGear() == Elevator.Gear.elevator) { //if (!EnabledSensors.elevatorSensor.get())
                 //new ElevatorHoldPositionCommand().start();
@@ -44,16 +44,16 @@ public class ElevatorJoystickCommand extends JoystickCommand {
             }
 
         } else if (EnabledSubsystems.ELEVATOR_DUMB_ENABLED) {
-            motorPercent = OI.getInstance().getElevatorJoystickValue();
+            motorPercent = OI.getInstance().getElevatorJoystickValue() * OI.getInstance().getElevatorSpeedMultiplier();
             Elevator.getInstance().setMotorPercentRaw(motorPercent * MAX_ELEV_JOYSTICK_PERCENT_UP);
       
         } else if (OI.getInstance().getElevatorJoystickValue() > 0) {
-			motorPercent = OI.getInstance().getElevatorJoystickValue() * (MAX_ELEV_JOYSTICK_PERCENT_UP - MIN_ELEV_JOYSTICK_PERCENT) + MIN_ELEV_JOYSTICK_PERCENT;
+			motorPercent = OI.getInstance().getElevatorJoystickValue() * OI.getInstance().getElevatorSpeedMultiplier() * (MAX_ELEV_JOYSTICK_PERCENT_UP - MIN_ELEV_JOYSTICK_PERCENT) + MIN_ELEV_JOYSTICK_PERCENT;
             Elevator.getInstance().setMotorSpeedPercent(motorPercent);
            // System.out.println("50" + motorPercent);
             
 		} else if (OI.getInstance().getElevatorJoystickValue() < 0) {
-			motorPercent = OI.getInstance().getElevatorJoystickValue() * (MAX_ELEV_JOYSTICK_PERCENT_DOWN - MIN_ELEV_JOYSTICK_PERCENT) - MIN_ELEV_JOYSTICK_PERCENT;
+			motorPercent = OI.getInstance().getElevatorJoystickValue() * OI.getInstance().getElevatorSpeedMultiplier() * (MAX_ELEV_JOYSTICK_PERCENT_DOWN - MIN_ELEV_JOYSTICK_PERCENT) - MIN_ELEV_JOYSTICK_PERCENT;
             Elevator.getInstance().setMotorSpeedPercent(motorPercent);
             //System.out.println("55");
         }

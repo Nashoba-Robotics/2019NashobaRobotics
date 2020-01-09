@@ -14,7 +14,7 @@ public class LineSensorStrafeLargeCommand extends NRCommand {
     }
 
     protected void onStart() {
-        sensorStart = !EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get() || !EnabledSensors.floorSensorThree.get() || !EnabledSensors.floorSensorFour.get() || !EnabledSensors.floorSensorFive.get();
+        sensorStart = EnabledSensors.floorSensorOne.get() || EnabledSensors.floorSensorTwo.get() || EnabledSensors.floorSensorThree.get() || EnabledSensors.floorSensorFour.get() || EnabledSensors.floorSensorFive.get();
         
         if(!sensorStart)
             Drive.getInstance().setMotorSpeedInPercent(0, 0, percent);
@@ -25,7 +25,7 @@ public class LineSensorStrafeLargeCommand extends NRCommand {
     }
 
     protected boolean isFinishedNR() {
-        return !EnabledSensors.floorSensorOne.get() || !EnabledSensors.floorSensorTwo.get() || !EnabledSensors.floorSensorThree.get() || !EnabledSensors.floorSensorFour.get() || !EnabledSensors.floorSensorFive.get();
+        return EnabledSensors.floorSensorOne.get() || EnabledSensors.floorSensorTwo.get() || EnabledSensors.floorSensorThree.get() || EnabledSensors.floorSensorFour.get() || EnabledSensors.floorSensorFive.get();
     }
 
 }

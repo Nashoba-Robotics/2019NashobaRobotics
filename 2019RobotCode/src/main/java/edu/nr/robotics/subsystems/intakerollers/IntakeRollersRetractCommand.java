@@ -9,6 +9,8 @@ public class IntakeRollersRetractCommand extends NRCommand {
 	}
 	
 	public void onStart() {
+		IntakeRollers.getInstance().disable();
+
 		IntakeRollers.getInstance().retractIntakeRollers();
 	}
 	

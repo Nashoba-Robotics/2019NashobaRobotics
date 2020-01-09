@@ -6,6 +6,7 @@ import edu.nr.lib.motionprofiling.TwoDimensionalMotionProfilerPathfinder;
 import edu.nr.lib.units.Distance;
 import edu.nr.lib.units.Speed;
 import edu.nr.lib.units.Time;
+import edu.nr.robotics.Robot;
 import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,8 +28,8 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 	@Override
 	public void onStart() {
-		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.drivePercent,
-				Drive.accelPercent, Drive.profileName);
+		Drive.getInstance().enableTwoDMotionProfiler(Drive.endX, Drive.endY, Drive.endAngle, Drive.xPoint1, Drive.yPoint1, Drive.anglePoint1, Drive.twoDDrivePercent,
+				Drive.twoDAccelPercent, Drive.profileName);
 		initialLeftPosition = Drive.getInstance().getLeftPosition();
 		initialRightPosition = Drive.getInstance().getRightPosition();
 		profileStartTime = 0;
@@ -41,7 +42,7 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 			profileStartTime = Timer.getFPGATimestamp();
 			profileStartTimeMs = (profileStartTime * 1000);
 		} else if (TwoDimensionalMotionProfilerPathfinder.twoDEnabled) {
-			index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / 10.0);
+			index = (int) Math.round(((Timer.getFPGATimestamp() * 1000) - profileStartTimeMs) / (1000 * Robot.getInstance().getPeriod()));
 
 			if (index < TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length()) {
 				Drive.getInstance().setPIDSourceType(PIDSourceType.kRate);
@@ -90,33 +91,7 @@ public class EnableTwoDMotionProfileSmartDashboardCommand extends NRCommand {
 
 	@Override
 	public boolean isFinishedNR() {
-
-		boolean finished;
-
-		System.out.println("left error: " + (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
-			TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
-				.get(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length() - 1).position,
-			Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).get(Distance.Unit.INCH));
-
-		System.out.println("right error: " + (Drive.getInstance().getRightPosition().sub(initialRightPosition)).sub(new Distance(
-			TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
-				.get(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory().length() - 1).position,
-			Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).get(Distance.Unit.INCH));
-
-		finished = (Drive.getInstance().getLeftPosition().sub(initialLeftPosition)).sub(new Distance(
-				TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory()
-					.get(TwoDimensionalMotionProfilerPathfinder.modifier.getLeftTrajectory().length() - 1).position,
-				Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
-			
-				&& (Drive.getInstance().getRightPosition().sub(initialRightPosition)).sub(new Distance(
-				TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory()
-					.get(TwoDimensionalMotionProfilerPathfinder.modifier.getRightTrajectory().length() - 1).position,
-				Distance.Unit.MAGNETIC_ENCODER_TICK_DRIVE)).abs().lessThan(Drive.getInstance().END_THRESHOLD)
-			
-				&& Drive.getInstance().getLeftVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD)
-				&& Drive.getInstance().getRightVelocity().lessThan(Drive.PROFILE_END_SPEED_THRESHOLD);
-				
-		return finished;
+		return Drive.getInstance().twoDProfiler.isFinished();
 	}
 
 }

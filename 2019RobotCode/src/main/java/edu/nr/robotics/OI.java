@@ -1,4 +1,3 @@
-
 package edu.nr.robotics;
 
 import edu.nr.lib.commandbased.CancelAllCommand;
@@ -7,12 +6,17 @@ import edu.nr.lib.gyro.ResetGyroCommand;
 import edu.nr.lib.interfaces.SmartDashboardSource;
 import edu.nr.lib.network.LimelightNetworkTable.Pipeline;
 import edu.nr.lib.units.Angle;
+import edu.nr.lib.units.Distance;
 import edu.nr.robotics.multicommands.ClimbCommand;
+import edu.nr.robotics.multicommands.ClimbCommandGroup;
 import edu.nr.robotics.multicommands.GetCargoCommand;
 import edu.nr.robotics.multicommands.GetHatchStationCommand;
-import edu.nr.robotics.multicommands.IntakeToggleCommand;
 import edu.nr.robotics.multicommands.PrepareClimbCommand;
+import edu.nr.robotics.multicommands.RetractLiftCommand;
 import edu.nr.robotics.multicommands.ReturnToNeutralPositionCommand;
+import edu.nr.robotics.multicommands.ScoreHatchCommand;
+import edu.nr.robotics.multicommands.ToggleIntakeCommand;
+import edu.nr.robotics.multicommands.ToggleKidModeCommand;
 import edu.nr.robotics.subsystems.drive.Drive;
 import edu.nr.robotics.subsystems.drive.DriveToBallCommand;
 import edu.nr.robotics.subsystems.drive.DriveToSomethingJoystickCommand;
@@ -22,27 +26,24 @@ import edu.nr.robotics.subsystems.drive.EnableSniperForwardMode;
 import edu.nr.robotics.subsystems.drive.EnableSniperTurnMode;
 import edu.nr.robotics.subsystems.drive.LineSensorStrafeCommandGroup;
 import edu.nr.robotics.subsystems.drive.TurnCommand;
-import edu.nr.robotics.subsystems.drive.TurnToAngleCommand;
 import edu.nr.robotics.subsystems.elevator.Elevator;
 import edu.nr.robotics.subsystems.elevator.ElevatorPositionCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToClimbGearCommand;
 import edu.nr.robotics.subsystems.elevator.ElevatorSwitchToElevatorGearCommand;
+import edu.nr.robotics.subsystems.elevator.ElevatorZeroCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.DeployHatchToggleCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchFromStationCommand;
 import edu.nr.robotics.subsystems.hatchmechanism.GrabHatchToggleCommand;
-import edu.nr.robotics.subsystems.hatchmechanism.ScoreHatchCommand;
-import edu.nr.robotics.subsystems.intakerollers.IntakeRollersDeployToggleCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersScoreCommand;
 import edu.nr.robotics.subsystems.intakerollers.IntakeRollersToggleCommand;
-import edu.nr.robotics.subsystems.lift.Lift;
-import edu.nr.robotics.subsystems.lift.LiftSetPositionCommand;
+import edu.nr.robotics.subsystems.liftlockmechanism.LiftLockMechanismToggleCommand;
 import edu.nr.robotics.subsystems.sensors.ToggleLimelightCommand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.command.PrintCommand;
 
 public class OI implements SmartDashboardSource {
 
+    public static final double DRIVE_JOYSTICK_DEAD_ZONE = 0.1;
     public static final double JOYSTICK_DEAD_ZONE = 0.2;
 
     public static final double SPEED_MULTIPLIER = 1.0;
@@ -60,6 +61,7 @@ public class OI implements SmartDashboardSource {
     private static final int HATCH_BOTTOM_BUTTON_NUMBER = 10;
     //private static final int ELEVATOR_BOTTOM_BUTTON_NUMBER = 8;
     //private static final int GROUND_PICKUP_HATCH_BUTTON_NUMBER = 9;
+    private static final int PREP_CLIMB_BUTTON = 3;
     private static final int CLIMB_HEIGHT_HIGH_BUTTON_NUMBER = 1;
     private static final int CLIMB_HEIGHT_LOW_BUTTON_NUMBER = 6;
     private static final int CLIMB_BUTTON_NUMBER = 3;
@@ -78,9 +80,10 @@ public class OI implements SmartDashboardSource {
     //private static final int GET_HATCH_GROUND_NUMBER = 20;
     //private static final int GET_CARGO_NUMBER = 21;
     private  static final int RETURN_TO_NEUTRAL_POSITION_NUMBER = 6;
+    private static final int TOGGLE_LIFT_LOCK_NUMBER = 11;
 
     private static final int DRIVE_TO_CARGO_AUTO_NUMBER = 13;
-    private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
+    //private static final int DRIVE_TO_CARGO_HYBRID_NUMBER = 4;
     private static final int DRIVE_TO_TARGET_AUTO_NUMBER = 7;
     private static final int DRIVE_TO_TARGET_HYBRID_NUMBER = 2;
     private static final int TURN_90_LEFT_NUMBER = 3;
@@ -91,12 +94,13 @@ public class OI implements SmartDashboardSource {
     private static final int SNIPER_MODE_FORWARD = 1;
     private static final int SNIPER_MODE_TURN = 1;
     private static final int DUMB_DRIVE_NUMBER = 14;
-    private static final int LINE_SENSOR_LEFT_1_NUMBER = 12;
-    private static final int LINE_SENSOR_LEFT_2_NUMBER = 15;
-    private static final int LINE_SENSOR_RIGHT_1_NUMBER = 11;
-    private static final int LINE_SENSOR_RIGHT_2_NUMBER = 16;
+    private static final int LINE_SENSOR_LEFT_1_NUMBER = 3;
+    private static final int LINE_SENSOR_RIGHT_1_NUMBER = 4;
+    private static final int ELEV_ENCODER_RESET_BUTTON_NUMBER = 14;
+    private static final int TOGGLE_KID_MODE_NUMBER = 5;
 
     private double driveSpeedMultiplier = 1;
+    private double elevatorSpeedMultiplier = 1;
 
     private static OI singleton;
 
@@ -141,8 +145,8 @@ public class OI implements SmartDashboardSource {
 
     public void initDriveLeft() {
         // hybrid track
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Cargo));
-        new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
+        //new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Cargo));
+        //new JoystickButton(driveLeft, DRIVE_TO_CARGO_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
 
         new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenPressed(new DriveToSomethingJoystickCommand(Pipeline.Target));
         new JoystickButton(driveLeft, DRIVE_TO_TARGET_HYBRID_NUMBER).whenReleased(new DoNothingCommand(Drive.getInstance()));
@@ -163,9 +167,9 @@ public class OI implements SmartDashboardSource {
         new JoystickButton(driveLeft, DUMB_DRIVE_NUMBER).whenPressed(new DumbDriveToggleCommand());
         
         new JoystickButton(driveLeft, LINE_SENSOR_LEFT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
-        new JoystickButton(driveLeft, LINE_SENSOR_LEFT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(-Drive.SENSOR_STRAFE_PERCENT));
         new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_1_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
-        new JoystickButton(driveLeft, LINE_SENSOR_RIGHT_2_NUMBER).whenPressed(new LineSensorStrafeCommandGroup(Drive.SENSOR_STRAFE_PERCENT));
+
+        new JoystickButton(driveLeft, TOGGLE_KID_MODE_NUMBER).whenPressed(new ToggleKidModeCommand());
 
     }
 
@@ -186,6 +190,10 @@ public class OI implements SmartDashboardSource {
         //sniper mode
         new JoystickButton(driveRight, SNIPER_MODE_TURN).whenPressed(new EnableSniperTurnMode(true));
         new JoystickButton(driveRight, SNIPER_MODE_TURN).whenReleased(new EnableSniperTurnMode(false));
+
+        new JoystickButton(driveRight, TOGGLE_LIFT_LOCK_NUMBER).whenPressed(new LiftLockMechanismToggleCommand());
+
+        new JoystickButton(driveRight, ELEV_ENCODER_RESET_BUTTON_NUMBER).whenPressed(new ElevatorZeroCommand());
     }
 
     public void initOperatorLeft() {
@@ -206,11 +214,13 @@ public class OI implements SmartDashboardSource {
 
         //intake
         new JoystickButton(operatorLeft, TOGGLE_INTAKE_NUMBER).whenPressed(new IntakeRollersToggleCommand());
-        new JoystickButton(operatorLeft, TOGGLE_INTAKE_DEPLOY_NUMBER).whenPressed(new IntakeRollersDeployToggleCommand());
+        new JoystickButton(operatorLeft, TOGGLE_INTAKE_DEPLOY_NUMBER).whenPressed(new ToggleIntakeCommand());
         new JoystickButton(operatorLeft, INTAKE_ROLLERS_PUKE_NUMBER).whenPressed(new IntakeRollersScoreCommand());
         //new JoystickButton(operatorLeft, INTAKE_ROLLERS_DEPLOY_TOGGLE_NUMBER).whenPressed(new IntakeToggleCommand());
 
         new JoystickButton(operatorLeft, RETURN_TO_NEUTRAL_POSITION_NUMBER).whenPressed(new ReturnToNeutralPositionCommand());
+
+        new JoystickButton(operatorLeft, PREP_CLIMB_BUTTON).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
 
     }
 
@@ -221,11 +231,11 @@ public class OI implements SmartDashboardSource {
 
         //climb heights
         new JoystickButton(operatorRight, CLIMB_HEIGHT_LOW_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_LOW_HEIGHT_ELEVATOR));
-        new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new PrepareClimbCommand(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
+        new JoystickButton(operatorRight, CLIMB_HEIGHT_HIGH_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(Elevator.CLIMB_HIGH_HEIGHT_ELEVATOR));
 
         //climb
-        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommand());
-        new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new LiftSetPositionCommand(Lift.TOP_POSITION));
+        new JoystickButton(operatorRight, CLIMB_BUTTON_NUMBER).whenPressed(new ClimbCommandGroup(new Distance(-1, Distance.Unit.FOOT)));
+        new JoystickButton(operatorRight, LIFT_RETRACT_NUMBER).whenPressed(new RetractLiftCommand());
 
         //hatch
         new JoystickButton(operatorRight, HATCH_DEPLOY_TOGGLE_NUMBER).whenPressed(new DeployHatchToggleCommand());
@@ -253,67 +263,79 @@ public class OI implements SmartDashboardSource {
     }
 
     public double getArcadeMoveValue() {
-        return -snapDriveJoysticks(driveLeft.getY()) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
+        return -snapDriveJoysticks(driveLeft.getY(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
     }
 
     public double getArcadeTurnValue() {
-        return -snapDriveJoysticks(driveRight.getX()) * Drive.TURN_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
+        return -snapDriveJoysticks(driveRight.getX(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.TURN_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
     }
 
 
     public double getArcadeHValue() {
-        return snapDriveJoysticks(driveLeft.getX()) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE) * Drive.MOVE_JOYSTICK_MULTIPLIER * SPEED_MULTIPLIER;
     }
 
     public double getTankLeftValue() {
-        return snapDriveJoysticks(driveLeft.getY());
+        return snapDriveJoysticks(driveLeft.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getTankRightValue() {
-        return snapDriveJoysticks(driveRight.getY());
+        return snapDriveJoysticks(driveRight.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getTankHValue() {
-        return snapDriveJoysticks(driveLeft.getX());
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveLeftXValue() {
-        return snapDriveJoysticks(driveLeft.getX());
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveRightXValue() {
-        return snapDriveJoysticks(driveRight.getX());
+        return snapDriveJoysticks(driveRight.getX(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveLeftYValue() {
-        return snapDriveJoysticks(driveLeft.getY());
+        return snapDriveJoysticks(driveLeft.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveRightYValue() {
-        return snapDriveJoysticks(driveRight.getY());
+        return snapDriveJoysticks(driveRight.getY(), DRIVE_JOYSTICK_DEAD_ZONE);
     }
 
     public double getElevatorJoystickValue() {
-		return -snapDriveJoysticks(-elevatorStick.getX());
+		return -snapDriveJoysticks(-elevatorStick.getX(), JOYSTICK_DEAD_ZONE);
     }
     
     public double getLiftJoystickValue() {
-        return snapDriveJoysticks(-liftStick.getX());
+        return snapDriveJoysticks(-liftStick.getX(), JOYSTICK_DEAD_ZONE);
     }
 
     public double getDriveSpeedMultiplier(){
         return driveSpeedMultiplier;
     }
 
-    private static double snapDriveJoysticks(double value) {
-        if(Math.abs(value) < JOYSTICK_DEAD_ZONE) {
+    public void setDriveSpeedMultiplier(double mult) {
+        driveSpeedMultiplier = mult;
+    }
+
+    public double getElevatorSpeedMultiplier(){
+        return elevatorSpeedMultiplier;
+    }
+
+    public void setElevatorSpeedMultiplier(double mult) {
+        elevatorSpeedMultiplier = mult;
+    }
+
+    private static double snapDriveJoysticks(double value, double deadZone) {
+        if(Math.abs(value) < deadZone) {
             value = 0;
         }else if (value > 0) {
-            value -= JOYSTICK_DEAD_ZONE;
+            value -= deadZone;
         } else {
-            value += JOYSTICK_DEAD_ZONE;
+            value += deadZone;
         }
-        value /= 1 - JOYSTICK_DEAD_ZONE;
+        value /= 1 - deadZone;
         return value;
     }
 
@@ -356,7 +378,7 @@ public class OI implements SmartDashboardSource {
     }
     
     public boolean isHDriveZero() {
-        return snapDriveJoysticks(driveLeft.getX()) == 0;
+        return snapDriveJoysticks(driveLeft.getX(), DRIVE_JOYSTICK_DEAD_ZONE) == 0;
     }
 
     public boolean isKidModeOn(){
