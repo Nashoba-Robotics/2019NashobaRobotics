@@ -1,0 +1,9 @@
+[
+  {
+    "artifact": "frcJava (in project MotorDrive2-Imported)",
+    "target": "roborio",
+    "debugfile": "frcJava_roborio.debugconfig",
+    "project": "MotorDrive2-Imported",
+    "language": "java"
+  }
+]
